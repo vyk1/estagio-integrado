@@ -1,0 +1,9 @@
+tiem picker set interval:
+minuteInterval={15}
+
+https://mongoosejs.com/docs/guide.html
+
+https://docs.mongodb.com/manual/reference/operator/aggregation/sum/
+
+https://mongoosejs.com/docs/populate.html
+
