@@ -1,38 +1,32 @@
 import React, { Component } from 'react';
 
-import { AppRegistry, StyleSheet, FlatList, Text, View, Alert, Platform } from 'react-native';
+import { StyleSheet, FlatList, Text, View, Platform } from 'react-native';
 
 
-export default class StudentMain extends Component {
+export default class RegisterActivity extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: `Olá ${navigation.getParam('type')}`,
+            title: 'Registro de Atividades - ' + navigation.getParam('user').name,
         }
     };
-
 
     constructor(props) {
         super(props);
 
         this.state = {
             GridViewItems: [
-                { key: 'Informações Sobre o Estágio', page: 'InfoStage' },
-                { key: 'Registrar Atividade', page: 'RegisterActivity' },
-                { key: 'Relatório Geral', page: 'GenReport' },
-                { key: 'Chat', page: 'Chat' },
-                { key: 'Ei! Fique Ligado', page: 'StayOn' },
-                { key: 'Para Refletir', page: 'ToThink' }
+                { key: 'Aluno', page: 'StudentMain' },
+                { key: 'Orientador', page: 'VisorMain' },
+                { key: 'Supervisor', page: 'VisorMain' }
             ]
         }
     }
 
     GetGridViewItem(page, key) {
-        // this.props.navigation.push('About');
         this.props.navigation.navigate(page, {
-            title: key,
-            // pegar info do user logado
-            user: { name: 'Alumni', type: 0, id: 'stringloucona' }
+            type: key
         });
+
     }
     render() {
         return (
@@ -40,10 +34,9 @@ export default class StudentMain extends Component {
                 <FlatList
                     data={this.state.GridViewItems}
                     renderItem={({ item }) => <View style={styles.GridViewBlockStyle}>
-                        {/* <Text style={styles.Grind2} onPress={this.GetGridViewItem.bind(this, item.key)} > {item.key} </Text> */}
-                        <Text style={styles.GridViewInsideTextItemStyle} onPress={this.GetGridViewItem.bind(this, item.page)} > {item.key} </Text>
+                        <Text style={styles.GridViewInsideTextItemStyle} onPress={this.GetGridViewItem.bind(this, item.page, item.key)} > {item.key} </Text>
                     </View>}
-                    numColumns={2}
+                    numColumns={1}
                 />
                 {/* <Text>Você está logado como 'Nome da Pessoa da Silva'</Text> */}
             </View>

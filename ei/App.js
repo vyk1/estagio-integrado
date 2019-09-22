@@ -6,15 +6,16 @@ import Main from "./src/pages/Main";
 import About from "./src/pages/About";
 import StudentMain from "./src/pages/StudentMain";
 import VisorMain from "./src/pages/VisorMain";
-
+import RegisterActivity from "./src/pages/RegisterActivity";
 const AppNavigator = createStackNavigator({
     Main,
     About,
     StudentMain,
     VisorMain,
+    RegisterActivity
 
 }, {
-    initialRouteName: 'Main'
+    initialRouteName: 'StudentMain'
 }
 );
 
