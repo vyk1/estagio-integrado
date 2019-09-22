@@ -15,9 +15,9 @@ const AppNavigator = createStackNavigator({
     RegisterActivity
 
 }, {
-    initialRouteName: 'StudentMain'
+    initialRouteName: 'RegisterActivity'
 }
-);
+); 
 
 const AppContainer = createAppContainer(AppNavigator);
 //title do lugar onde stá

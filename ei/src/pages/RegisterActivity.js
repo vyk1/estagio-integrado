@@ -1,89 +1,164 @@
-import React, { Component } from 'react';
+import React from 'react'
+import { View, Text, Image, Button, StyleSheet } from 'react-native'
+import ImagePicker from 'react-native-image-picker'
+import t from 'tcomb-form-native';
+import { ScrollView } from 'react-native-gesture-handler';
+const Form = t.form.Form;
 
-import { StyleSheet, FlatList, Text, View, Platform } from 'react-native';
+const Activity = t.struct({
+    description: t.String,
+    date: t.Date,
+    inputTime: t.Date,
+    outputTime: t.Date,
+});
 
-
-export default class RegisterActivity extends Component {
-    static navigationOptions = ({ navigation }) => {
-        return {
-            title: 'Registro de Atividades - ' + navigation.getParam('user').name,
+const formStyles = {
+    ...Form.stylesheet,
+    formGroup: {
+        normal: {
+            marginBottom: 10
+        },
+    },
+    controlLabel: {
+        normal: {
+            color: 'blue',
+            fontSize: 18,
+            marginBottom: 7,
+            fontWeight: '600'
+        },
+        // the style applied when a validation error occours
+        error: {
+            color: 'red',
+            fontSize: 18,
+            marginBottom: 7,
+            fontWeight: '600'
         }
-    };
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            GridViewItems: [
-                { key: 'Aluno', page: 'StudentMain' },
-                { key: 'Orientador', page: 'VisorMain' },
-                { key: 'Supervisor', page: 'VisorMain' }
-            ]
-        }
-    }
-
-    GetGridViewItem(page, key) {
-        this.props.navigation.navigate(page, {
-            type: key
-        });
-
-    }
-    render() {
-        return (
-            <View style={styles.MainContainer}>
-                <FlatList
-                    data={this.state.GridViewItems}
-                    renderItem={({ item }) => <View style={styles.GridViewBlockStyle}>
-                        <Text style={styles.GridViewInsideTextItemStyle} onPress={this.GetGridViewItem.bind(this, item.page, item.key)} > {item.key} </Text>
-                    </View>}
-                    numColumns={1}
-                />
-                {/* <Text>Você está logado como 'Nome da Pessoa da Silva'</Text> */}
-            </View>
-        );
     }
 }
 
-const styles = StyleSheet.create({
-
-    MainContainer: {
-
-        justifyContent: 'center',
-        flex: 1,
-        margin: 10,
-        paddingTop: (Platform.OS) === 'ios' ? 20 : 0
-
+const options = {
+    // auto: 'placeholders',
+    fields: {
+        description: {
+            label: "Descrição",
+            help: 'Você pode colocar aqui o que realizou neste dia',
+            error: 'Descrição vazia! Por favor, preencher.',
+            multiline: true,
+            stylesheet: {
+                ...Form.stylesheet,
+                textbox: {
+                    ...Form.stylesheet.textbox,
+                    normal: {
+                        ...Form.stylesheet.textbox.normal,
+                        height: 200,
+                        textAlignVertical: 'top',
+                    },
+                    error: {
+                        ...Form.stylesheet.textbox.error,
+                        height: 200,
+                    },
+                },
+            },
+        },
+        date: {
+            label: "Dia da Atividade",
+            error: 'Data vazia! Por favor, preencher.',
+            mode: 'date',
+        },
+        inputTime: {
+            label: "Hora de Entrada",
+            help: 'Pode ser um valor estimado',
+            mode: 'time',
+            error: 'Hora de entrada vazia! Por favor, preencher.',
+        },
+        outputTime: {
+            label: "Hora de Saída",
+            help: 'Pode ser um valor estimado',
+            mode: 'time',
+            defaultValueText: "ACOHO sassaas",
+            error: 'Hora de saída vazia! Por favor, preencher.',
+        },
     },
+    stylesheet: formStyles,
+};
 
-    GridViewBlockStyle: {
-
-        justifyContent: 'center',
-        flex: 1,
-        alignItems: 'center',
-        height: 100,
-        margin: 5,
-        backgroundColor: '#00BCD4'
-
+export default class RegisterActivity extends React.Component {
+    handleSubmit = () => {
+        const value = this.form.getValue();
+        console.log('value: ', value);
     }
-    ,
 
-    GridViewInsideTextItemStyle: {
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: 'Registro de Atividades - fulano'
+            // title: 'Registro de Atividades - ' + navigation.getParam('user').name,
+        }
+    };
 
-        color: '#fff',
-        padding: 18,
+    state = {
+        photo: null,
+    }
+
+    handleChoosePhoto = () => {
+        const options = {
+            noData: true,
+        }
+        ImagePicker.launchImageLibrary(options, response => {
+            if (response.uri) {
+                this.setState({ photo: response })
+            }
+        })
+    }
+
+    render() {
+        const { photo } = this.state
+        return (
+            <ScrollView>
+                <View style={styles.container}>
+                    {/* display */}
+                    <Form
+                        ref="form"
+                        type={Activity}
+                        options={options}
+                    />
+                    {photo && (
+                        <Image
+                            source={{ uri: photo.uri }}
+                            style={{ width: 300, height: 300 }}
+                        />
+                    )}
+                    <Button title="Choose Photo" onPress={this.handleChoosePhoto} />
+                    <Button
+                        title="Sign Up!"
+                        onPress={this.handleSubmit}
+                    />
+                </View>
+
+            </ScrollView>
+
+        )
+    }
+}
+var styles = StyleSheet.create({
+    container: {
+        justifyContent: 'center',
+        marginTop: 25,
+        padding: 20,
+        backgroundColor: '#ffffff',
+    },
+    buttonText: {
         fontSize: 18,
-        justifyContent: 'center',
-        textAlign: 'center',
-
+        color: 'white',
+        alignSelf: 'center'
     },
-    Grind2: {
-        // flex: 1,
-        // margin: 20,
-        // backgroundColor: 'orange',
-        // margin: 10,
-        textAlign: 'center',
-        fontSize: 20,
-        //paddingTop: 70,
+    button: {
+        height: 36,
+        backgroundColor: '#48BBEC',
+        borderColor: '#48BBEC',
+        borderWidth: 1,
+        borderRadius: 8,
+        marginBottom: 10,
+        alignSelf: 'stretch',
+        justifyContent: 'center'
     }
-
 });
