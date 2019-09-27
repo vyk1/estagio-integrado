@@ -1,103 +1,42 @@
-import React from 'react'
-import { View, Text, Image, Button, StyleSheet } from 'react-native'
+import React, { Component } from 'react';
+import {
+    StyleSheet,
+    KeyboardAvoidingView,
+    Text,
+    Keyboard,
+    View,
+    TouchableOpacity,
+    Alert,
+    Image,
+    DatePickerAndroid,
+    TimePickerAndroid,
+} from 'react-native';
+
 import ImagePicker from 'react-native-image-picker'
-import t from 'tcomb-form-native';
-import { ScrollView } from 'react-native-gesture-handler';
-const Form = t.form.Form;
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
 
-const Activity = t.struct({
-    description: t.String,
-    date: t.Date,
-    inputTime: t.Date,
-    outputTime: t.Date,
-});
+import FormButton from '../components/FormButton';
+import FormTextInput from '../components/FormTextInput';
+import DateInput from '../components/DateInput';
+import HourInput from '../components/HourInput';
 
-const formStyles = {
-    ...Form.stylesheet,
-    formGroup: {
-        normal: {
-            marginBottom: 10
-        },
-    },
-    controlLabel: {
-        normal: {
-            color: 'blue',
-            fontSize: 18,
-            marginBottom: 7,
-            fontWeight: '600'
-        },
-        // the style applied when a validation error occours
-        error: {
-            color: 'red',
-            fontSize: 18,
-            marginBottom: 7,
-            fontWeight: '600'
-        }
-    }
-}
+export default class App extends Component {
 
-const options = {
-    // auto: 'placeholders',
-    fields: {
-        description: {
-            label: "Descrição",
-            help: 'Você pode colocar aqui o que realizou neste dia',
-            error: 'Descrição vazia! Por favor, preencher.',
-            multiline: true,
-            stylesheet: {
-                ...Form.stylesheet,
-                textbox: {
-                    ...Form.stylesheet.textbox,
-                    normal: {
-                        ...Form.stylesheet.textbox.normal,
-                        height: 200,
-                        textAlignVertical: 'top',
-                    },
-                    error: {
-                        ...Form.stylesheet.textbox.error,
-                        height: 200,
-                    },
-                },
-            },
-        },
-        date: {
-            label: "Dia da Atividade",
-            error: 'Data vazia! Por favor, preencher.',
-            mode: 'date',
-        },
-        inputTime: {
-            label: "Hora de Entrada",
-            help: 'Pode ser um valor estimado',
-            mode: 'time',
-            error: 'Hora de entrada vazia! Por favor, preencher.',
-        },
-        outputTime: {
-            label: "Hora de Saída",
-            help: 'Pode ser um valor estimado',
-            mode: 'time',
-            defaultValueText: "ACOHO sassaas",
-            error: 'Hora de saída vazia! Por favor, preencher.',
-        },
-    },
-    stylesheet: formStyles,
-};
+    constructor(props) {
+        super(props);
 
-export default class RegisterActivity extends React.Component {
-    handleSubmit = () => {
-        const value = this.form.getValue();
-        console.log('value: ', value);
+        // define the initial state, so we can use it later
+        // when we'll need to reset the form
+        this.initialState = { dataDaAtividade: '', photo: null, studentId: 'stringIDEstudante', descricao: '', horaE: '', horaS: '' };
+
+        this.state = this.initialState;
     }
 
     static navigationOptions = ({ navigation }) => {
         return {
-            title: 'Registro de Atividades - fulano'
-            // title: 'Registro de Atividades - ' + navigation.getParam('user').name,
+            title: 'Registro de Atividades'
         }
     };
-
-    state = {
-        photo: null,
-    }
 
     handleChoosePhoto = () => {
         const options = {
@@ -109,56 +48,113 @@ export default class RegisterActivity extends React.Component {
             }
         })
     }
+    setDataAtividade = async () => {
+        try {
+            const {
+                action, year, month, day,
+            } = await DatePickerAndroid.open({
+                date: new Date(),
+                minDate: new Date(),
+            });
+            if (action !== DatePickerAndroid.dismissedAction) {
+                this.setState({ dataDaAtividade: `${day}/${month + 1}/${year}` });
+            }
+        } catch ({ code, message }) {
+            console.warn('Cannot open date picker', message);
+        }
+    };
 
+    setHoraE = async () => {
+        try {
+            const { action, hour, minute } = await TimePickerAndroid.open({
+                hour: 8,
+                minute: 0,
+                is24Hour: true, // Will display '14h'
+            });
+            if (action !== TimePickerAndroid.dismissedAction) {
+                // Selected hour (0-23), minute (0-59)
+                const m = (minute < 10) ? `0${minute}` : minute;
+                const h = (hour < 10) ? `0${hour}` : hour;
+                console.log(`time: ${hour}:${minute}`);
+                this.setState({ horaE: `${h}:${m}` });
+            }
+        } catch ({ code, message }) {
+            console.warn('Cannot open time picker', message);
+        }
+    };
+    setHoraS = async () => {
+        try {
+            const { action, hour, minute } = await TimePickerAndroid.open({
+                hour: 8,
+                minute: 0,
+                is24Hour: true, // Will display '14h'
+            });
+            if (action !== TimePickerAndroid.dismissedAction) {
+                // Selected hour (0-23), minute (0-59)
+                const m = (minute < 10) ? `0${minute}` : minute;
+                const h = (hour < 10) ? `0${hour}` : hour;
+                console.log(`time: ${hour}:${minute}`);
+                this.setState({ horaS: `${h}:${m}` });
+            }
+        } catch ({ code, message }) {
+            console.warn('Cannot open time picker', message);
+        }
+    };
     render() {
-        const { photo } = this.state
+        const { horaE, horaS, dataDaAtividade, photo, descricao } = this.state;
         return (
-            <ScrollView>
-                <View style={styles.container}>
-                    {/* display */}
-                    <Form
-                        ref="form"
-                        type={Activity}
-                        options={options}
+            <KeyboardAvoidingView style={styles.container}>
+                <ScrollView>
+                    <DateInput
+                        onPress={() => this.setDataAtividade()}
+                        labelText="Data da Atividade"
+                        value={dataDaAtividade}
                     />
+
+                    <HourInput
+                        onPress={() => this.setHoraE()}
+                        value={horaE}
+                        labelText="Hora de entrada" />
+
+                    <HourInput
+                        onPress={() => this.setHoraS()}
+                        value={horaS}
+                        labelText="Hora de saída" />
+
+{/* aqui entra a descricao:
+ */}
+
                     {photo && (
-                        <Image
-                            source={{ uri: photo.uri }}
-                            style={{ width: 300, height: 300 }}
-                        />
+                        <View>
+                            <Text>Foto Carregada:</Text>
+                            <Image
+                                source={{ uri: photo.uri }}
+                                style={{ width: 300, height: 300 }}
+                            />
+                        </View>
                     )}
-                    <Button title="Choose Photo" onPress={this.handleChoosePhoto} />
-                    <Button
-                        title="Sign Up!"
-                        onPress={this.handleSubmit}
-                    />
-                </View>
-
-            </ScrollView>
-
-        )
+                    <FormButton onPress={this.handleChoosePhoto}>
+                        Carregar Foto
+                    </FormButton>
+                    <FormButton onPress={() => { console.log('Button pressed!'); }}>
+                        Registrar Atividade
+                </FormButton>
+                </ScrollView>
+            </KeyboardAvoidingView>
+        );
     }
 }
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
+        flex: 1,
         justifyContent: 'center',
-        marginTop: 25,
-        padding: 20,
-        backgroundColor: '#ffffff',
+        paddingHorizontal: 20,
+        backgroundColor: '#51a9b0',
     },
-    buttonText: {
-        fontSize: 18,
-        color: 'white',
-        alignSelf: 'center'
+    screenTitle: {
+        fontSize: 35,
+        textAlign: 'center',
+        margin: 10,
+        color: '#FFF',
     },
-    button: {
-        height: 36,
-        backgroundColor: '#48BBEC',
-        borderColor: '#48BBEC',
-        borderWidth: 1,
-        borderRadius: 8,
-        marginBottom: 10,
-        alignSelf: 'stretch',
-        justifyContent: 'center'
-    }
 });
