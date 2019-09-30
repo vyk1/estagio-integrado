@@ -15,6 +15,7 @@ import {
 import ImagePicker from 'react-native-image-picker'
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 
+import server from '../config/server'
 import FormButton from '../components/FormButton';
 import FormTextInput from '../components/FormTextInput';
 import DateInput from '../components/DateInput';
@@ -27,7 +28,7 @@ export default class App extends Component {
 
         // define the initial state, so we can use it later
         // when we'll need to reset the form
-        this.initialState = { dataDaAtividade: '', photo: null, studentId: 'stringIDEstudante', descricao: '', horaE: '', horaS: '' };
+        this.initialState = { date: '', file: null, id_internship: '5d797c6f7f7e0718dc115ec8', studentId: '5d72603dcc169444900b2402', description: 'DESCCRICAIN', inputTime: '', outputTime: '' };
 
         this.state = this.initialState;
     }
@@ -38,13 +39,13 @@ export default class App extends Component {
         }
     };
 
-    handleChoosePhoto = () => {
+    handleChooseFile = () => {
         const options = {
             noData: true,
         }
         ImagePicker.launchImageLibrary(options, response => {
             if (response.uri) {
-                this.setState({ photo: response })
+                this.setState({ file: response })
             }
         })
     }
@@ -57,14 +58,14 @@ export default class App extends Component {
                 minDate: new Date(),
             });
             if (action !== DatePickerAndroid.dismissedAction) {
-                this.setState({ dataDaAtividade: `${day}/${month + 1}/${year}` });
+                this.setState({ date: `${day}-${month + 1}-${year}` });
             }
         } catch ({ code, message }) {
             console.warn('Cannot open date picker', message);
         }
     };
 
-    setHoraE = async () => {
+    setinputTime = async () => {
         try {
             const { action, hour, minute } = await TimePickerAndroid.open({
                 hour: 8,
@@ -76,16 +77,17 @@ export default class App extends Component {
                 const m = (minute < 10) ? `0${minute}` : minute;
                 const h = (hour < 10) ? `0${hour}` : hour;
                 console.log(`time: ${hour}:${minute}`);
-                this.setState({ horaE: `${h}:${m}` });
+                this.setState({ inputTime: `${h}:${m}` });
             }
         } catch ({ code, message }) {
             console.warn('Cannot open time picker', message);
         }
-    };
-    setHoraS = async () => {
+    }
+
+    setoutputTime = async () => {
         try {
             const { action, hour, minute } = await TimePickerAndroid.open({
-                hour: 8,
+                hour: 12,
                 minute: 0,
                 is24Hour: true, // Will display '14h'
             });
@@ -94,49 +96,91 @@ export default class App extends Component {
                 const m = (minute < 10) ? `0${minute}` : minute;
                 const h = (hour < 10) ? `0${hour}` : hour;
                 console.log(`time: ${hour}:${minute}`);
-                this.setState({ horaS: `${h}:${m}` });
+                this.setState({ outputTime: `${h}:${m}` });
             }
         } catch ({ code, message }) {
             console.warn('Cannot open time picker', message);
         }
+    }
+
+    createFormData = (photo, body) => {
+        const data = new FormData();
+
+        data.append("image", {
+            name: photo.fileName,
+            type: photo.type,
+            uri:
+                Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
+        });
+
+        Object.keys(body).forEach(key => {
+            data.append(key, body[key]);
+        });
+
+        return data;
     };
+
+    handleSubmit = async () => {
+        const config = {
+            method: 'POST',
+            body: this.createFormData(this.state.file, this.state)
+        }
+
+        console.log(config.body);
+
+        // adicionar waiter
+        alert('Espere um pouco...')
+        // return false
+        fetch(`${server}/activity`, config)
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+                alert(res.message)
+                // this.setState({this.initialState})
+            }).catch(e => {
+                console.log('deu ruim', e);
+                alert('algoderrado :(')
+            })
+    }
+
     render() {
-        const { horaE, horaS, dataDaAtividade, photo, descricao } = this.state;
+        const { inputTime, outputTime, date, file, description } = this.state;
         return (
             <KeyboardAvoidingView style={styles.container}>
                 <ScrollView>
                     <DateInput
                         onPress={() => this.setDataAtividade()}
                         labelText="Data da Atividade"
-                        value={dataDaAtividade}
+                        value={date}
                     />
 
                     <HourInput
-                        onPress={() => this.setHoraE()}
-                        value={horaE}
+                        onPress={() => this.setinputTime()}
+                        value={inputTime}
                         labelText="Hora de entrada" />
 
                     <HourInput
-                        onPress={() => this.setHoraS()}
-                        value={horaS}
+                        onPress={() => this.setoutputTime()}
+                        value={outputTime}
                         labelText="Hora de saída" />
 
-{/* aqui entra a descricao:
- */}
+                    <FormTextInput value={description} />
+                    {/* <FormTextInput value={file.uri ? file.uri : "Vazio"} /> */}
+                    {/* aqui entra a description: */}
 
-                    {photo && (
+                    {file && (
                         <View>
                             <Text>Foto Carregada:</Text>
                             <Image
-                                source={{ uri: photo.uri }}
+                                source={{ uri: file.uri }}
                                 style={{ width: 300, height: 300 }}
                             />
                         </View>
                     )}
-                    <FormButton onPress={this.handleChoosePhoto}>
+                    <FormButton onPress={this.handleChooseFile}>
                         Carregar Foto
                     </FormButton>
-                    <FormButton onPress={() => { console.log('Button pressed!'); }}>
+                    <FormButton onPress={this.handleSubmit}>
                         Registrar Atividade
                 </FormButton>
                 </ScrollView>

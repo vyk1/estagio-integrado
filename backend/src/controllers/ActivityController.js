@@ -1,3 +1,4 @@
+const moment = require('moment')
 const Activity = require('../models/Activity');
 const Internship = require('../models/Internship');
 
@@ -14,8 +15,24 @@ module.exports = {
     async store(req, res) {
         // store é obrigatório o estágio
         // validar req.body
+        // formato do date tem que converter para isostring
+        console.log(req.file);
+        let { date, description, inputTime, outputTime, id_internship } = req.body
+        date = moment(date, 'DD-MM-YYYY').toISOString()
+        
+        const obj = {
+            date,
+            description,
+            inputTime,
+            outputTime,
+            id_internship,
+            image: req.file.filename
+        }
 
-        const activity = new Activity(req.body);
+        const activity = new Activity(obj);
+        console.log(activity);
+        // return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
+        
 
         await activity.save((err, activity) => {
             if (err) {

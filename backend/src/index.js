@@ -6,9 +6,9 @@ const cors = require('cors');
 //cria inst do  servidor
 const app = express();
 
-//acessar o o http e websocket
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+//acessar o websocket
+// const io = require('socket.io')(server);
 
 // mongoose.connect('mongodb+srv://developer:developer@cluster0-vca3f.mongodb.net/eiDB?retryWrites=true&w=majority', {
 mongoose.connect('mongodb+srv://developer:developer@cluster0-dqw7t.mongodb.net/eiDB', {
@@ -21,11 +21,11 @@ mongoose.connect('mongodb+srv://developer:developer@cluster0-dqw7t.mongodb.net/e
 app.use(cors());
 
 //disponibilizar io para todo app
-app.use((req, res, next) => {
-     req.io = io;
+// app.use((req, res, next) => {
+//      req.io = io;
 
-     next();
-})
+//      next();
+// })
 
 //alias para o caminho relativo dos arquivos
 app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads', 'resized')))

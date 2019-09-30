@@ -17,7 +17,9 @@ var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json();
 
 routes.get('/', (req, res) => {
-     return res.send("Ei, DB");
+     // console.log(req);
+     return res.status(200).send({ status: 200, message: "Ei, DB" });
+
 })
 
 routes.get('/internship', InternshipController.index);
@@ -60,7 +62,7 @@ routes.get('/internship/user/:id_student/:id_dvisor', jsonParser, InternshipCont
 
 
 routes.get('/activity', jsonParser, ActivityController.index);
-routes.post('/activity', jsonParser, ActivityController.store);
+routes.post('/activity', upload.single('image'), ActivityController.store);
 routes.put('/activity/:id', jsonParser, ActivityController.update);
 
 

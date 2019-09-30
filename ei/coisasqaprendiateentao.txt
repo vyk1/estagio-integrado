@@ -3,3 +3,6 @@ Para utilizar uma font-family customizada:
 1.é só colocá-lo na pasta do android/src/main/fonts
 2.e referenciar tranquilamente com aspas
 
+yarn é bão, usa yarn!
+
+
