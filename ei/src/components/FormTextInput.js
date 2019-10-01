@@ -47,10 +47,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         paddingHorizontal: 10,
         fontSize: 18,
-        color: '#3F4EA5',
+        color: '#0f1226',
     },
     label: {
-        color: '#FFF',
+        color: '#000',
         marginBottom: 5,
     },
     textarea: {

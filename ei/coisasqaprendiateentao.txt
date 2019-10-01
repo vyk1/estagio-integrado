@@ -4,5 +4,5 @@ Para utilizar uma font-family customizada:
 2.e referenciar tranquilamente com aspas
 
 yarn é bão, usa yarn!
-
+https://heartbeat.fritz.ai/how-to-upload-images-in-a-react-native-app-4cca03ded855
 

@@ -28,7 +28,7 @@ export default class App extends Component {
 
         // define the initial state, so we can use it later
         // when we'll need to reset the form
-        this.initialState = { date: '', file: null, id_internship: '5d797c6f7f7e0718dc115ec8', studentId: '5d72603dcc169444900b2402', description: 'DESCCRICAIN', inputTime: '', outputTime: '' };
+        this.initialState = { date: '', file: null, id_internship: '5d797c6f7f7e0718dc115ec8', studentId: '5d72603dcc169444900b2402', description: '', inputTime: '', outputTime: '' };
 
         this.state = this.initialState;
     }
@@ -153,7 +153,6 @@ export default class App extends Component {
                         labelText="Data da Atividade"
                         value={date}
                     />
-
                     <HourInput
                         onPress={() => this.setinputTime()}
                         value={inputTime}
@@ -163,10 +162,13 @@ export default class App extends Component {
                         onPress={() => this.setoutputTime()}
                         value={outputTime}
                         labelText="Hora de saída" />
-
-                    <FormTextInput value={description} />
-                    {/* <FormTextInput value={file.uri ? file.uri : "Vazio"} /> */}
-                    {/* aqui entra a description: */}
+                    <FormTextInput
+                        placeholder="..."
+                        onChangeText={() => this.setState({ description })}
+                        value={description}
+                        labelText="Descrição"
+                        multiline={true}
+                    />
 
                     {file && (
                         <View>
@@ -193,7 +195,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         paddingHorizontal: 20,
-        backgroundColor: '#51a9b0',
+        backgroundColor: '#ebebeb',
     },
     screenTitle: {
         fontSize: 35,

@@ -17,7 +17,7 @@ class HourInput extends React.Component {
                         {labelText}
                     </Text>
                     <FormTextInput
-                        placeholder="Toque no texto acima para inserir a data"
+                        placeholder="Clique aqui p/ inserir a hora"
                         editable={false}
                         blurOnSubmit
                         onPress={onPress}
@@ -38,10 +38,9 @@ HourInput.defaultProps = {
 };
 
 const styles = StyleSheet.create({
-    inputWrapper: {
-        marginBottom: 15,
-        flexDirection: 'column',
-    },
+    // inputWrapper: {
+    //     marginBottom: 15,
+    // },
     textInput: {
         height: 40,
         borderColor: '#FFF',

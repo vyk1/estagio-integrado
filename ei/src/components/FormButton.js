@@ -28,7 +28,7 @@ FormButton.defaultProps = {
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: '#FD6592',
+        backgroundColor: '#5846b0',
         borderRadius: 3,
         height: 40,
         marginBottom: 15,

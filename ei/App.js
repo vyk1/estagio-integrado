@@ -15,7 +15,7 @@ const AppNavigator = createStackNavigator({
     RegisterActivity
 
 }, {
-    initialRouteName: 'RegisterActivity'
+    initialRouteName: 'Main'
 }
 ); 
 

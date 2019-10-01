@@ -22,7 +22,7 @@ class DateInput extends React.Component {
                         {labelText}
                     </Text>
                     <FormTextInput
-                        placeholder="Toque no texto acima para inserir a data"
+                        placeholder="Clique aqui p/ inserir data"
                         editable={false}
                         blurOnSubmit
                         onPress={onPress}
@@ -43,10 +43,10 @@ DateInput.defaultProps = {
 };
 
 const styles = StyleSheet.create({
-    inputWrapper: {
-        // marginBottom: 15,
-        flexDirection: 'row',
-    },
+    // inputWrapper: {
+    //     marginBottom: 15,
+    //     flexDirection: 'row',
+    // },
     textInput: {
         height: 40,
         borderColor: '#FFF',
