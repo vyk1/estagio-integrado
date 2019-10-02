@@ -7,12 +7,15 @@ import About from "./src/pages/About";
 import StudentMain from "./src/pages/StudentMain";
 import VisorMain from "./src/pages/VisorMain";
 import RegisterActivity from "./src/pages/RegisterActivity";
+import Contacts from "./src/pages/Contacts";
+
 const AppNavigator = createStackNavigator({
     Main,
     About,
     StudentMain,
     VisorMain,
-    RegisterActivity
+    RegisterActivity,
+    Contacts
 
 }, {
     initialRouteName: 'Main'

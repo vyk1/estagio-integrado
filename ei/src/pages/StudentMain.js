@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 
-import { AppRegistry, StyleSheet, FlatList, Text, View, Alert, Platform } from 'react-native';
-
+import { ActivityIndicator, StyleSheet, FlatList, Text, View, Platform } from 'react-native';
+import server from "../config/server";
+import Esperador from '../components/Esperador';
 
 export default class StudentMain extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: `Olá ${navigation.getParam('type')}`,
+            title: `${navigation.getParam('title')}`,
+            // title: texto,
         }
     };
 
@@ -15,46 +17,78 @@ export default class StudentMain extends Component {
         super(props);
 
         this.state = {
+            user: { id: '5d72603dcc169444900b2402' },
+            logado: {},
             GridViewItems: [
                 { key: 'Informações Sobre o Estágio', page: 'InfoStage' },
                 { key: 'Registrar Atividade', page: 'RegisterActivity' },
                 { key: 'Relatório Geral', page: 'GenReport' },
-                { key: 'Chat', page: 'Chat' },
+                { key: 'Contatos', page: 'Contacts' },
                 { key: 'Ei! Fique Ligado', page: 'StayOn' },
                 { key: 'Para Refletir', page: 'ToThink' }
-            ]
+            ],
         }
     }
 
+    getUser() {
+
+        // console.log(`${server}/user/${this.state.user.id}`);
+        fetch(`${server}/user/${this.state.user.id}`)
+
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({ logado: responseJson })
+                console.log(responseJson);
+                this.props.navigation.setParams({ title: `Olá ${this.state.logado.user.name}` })
+
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
+    }
+
+    componentDidMount() {
+        this.getUser()
+    }
+
     GetGridViewItem(page, key) {
-        // this.props.navigation.push('About');
+        const { logado } = this.state;
         this.props.navigation.navigate(page, {
             title: key,
-            // pegar info do user logado
-            user: { name: 'Alumni', type: 0, id: 'stringloucona' }
+            logado
+
         });
     }
+    renderiza() {
+        const { logado } = this.state;
+
+        if (!Object.keys(logado).length) {
+            return (
+                <Esperador />
+            )
+        } else {
+            return (
+                <View style={styles.MainContainer}>
+                    <FlatList
+                        data={this.state.GridViewItems}
+                        renderItem={({ item }) => <View style={styles.GridViewBlockStyle}>
+                            <Text style={styles.GridViewInsideTextItemStyle} onPress={this.GetGridViewItem.bind(this, item.page)} > {item.key} </Text>
+                        </View>}
+                        numColumns={2}
+                    />
+                </View>
+            );
+        }
+    }
+
     render() {
-        return (
-            <View style={styles.MainContainer}>
-                <FlatList
-                    data={this.state.GridViewItems}
-                    renderItem={({ item }) => <View style={styles.GridViewBlockStyle}>
-                        {/* <Text style={styles.Grind2} onPress={this.GetGridViewItem.bind(this, item.key)} > {item.key} </Text> */}
-                        <Text style={styles.GridViewInsideTextItemStyle} onPress={this.GetGridViewItem.bind(this, item.page)} > {item.key} </Text>
-                    </View>}
-                    numColumns={2}
-                />
-                {/* <Text>Você está logado como 'Nome da Pessoa da Silva'</Text> */}
-            </View>
-        );
+        return (this.renderiza())
     }
 }
-
 const styles = StyleSheet.create({
 
     MainContainer: {
-
         justifyContent: 'center',
         flex: 1,
         margin: 10,
@@ -84,13 +118,8 @@ const styles = StyleSheet.create({
 
     },
     Grind2: {
-        // flex: 1,
-        // margin: 20,
-        // backgroundColor: 'orange',
-        // margin: 10,
         textAlign: 'center',
         fontSize: 20,
-        //paddingTop: 70,
-    }
+    },
 
 });

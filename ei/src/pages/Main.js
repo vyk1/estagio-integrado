@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { AppRegistry, StyleSheet, FlatList, Text, View, Alert, Platform } from 'react-native';
+import { StyleSheet, FlatList, Text, View, Platform } from 'react-native';
 
 
 export default class Main extends Component {
@@ -22,7 +22,8 @@ export default class Main extends Component {
 
     GetGridViewItem(page, key) {
         this.props.navigation.navigate(page, {
-            type: key
+            type: key,
+            title:''
         });
 
     }
@@ -45,7 +46,6 @@ export default class Main extends Component {
 const styles = StyleSheet.create({
 
     MainContainer: {
-
         justifyContent: 'center',
         flex: 1,
         margin: 10,
@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
     },
 
     GridViewBlockStyle: {
-
         justifyContent: 'center',
         flex: 1,
         alignItems: 'center',
@@ -62,9 +61,7 @@ const styles = StyleSheet.create({
         margin: 5,
         backgroundColor: '#00BCD4'
 
-    }
-    ,
-
+    },
     GridViewInsideTextItemStyle: {
 
         color: '#fff',
@@ -75,13 +72,8 @@ const styles = StyleSheet.create({
 
     },
     Grind2: {
-        // flex: 1,
-        // margin: 20,
-        // backgroundColor: 'orange',
-        // margin: 10,
         textAlign: 'center',
         fontSize: 20,
-        //paddingTop: 70,
     }
 
 });
