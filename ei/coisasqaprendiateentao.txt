@@ -6,3 +6,4 @@ Para utilizar uma font-family customizada:
 yarn é bão, usa yarn!
 https://heartbeat.fritz.ai/how-to-upload-images-in-a-react-native-app-4cca03ded855
 
+mongodb+srv://developer:<password>@cluster0-dqw7t.mongodb.net/admin

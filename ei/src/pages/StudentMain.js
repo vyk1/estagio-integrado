@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { ActivityIndicator, StyleSheet, FlatList, Text, View, Platform } from 'react-native';
+import { StyleSheet, FlatList, Text, View, Platform } from 'react-native';
 import server from "../config/server";
 import Esperador from '../components/Esperador';
 
@@ -30,13 +30,13 @@ export default class StudentMain extends Component {
         }
     }
 
-    getUser() {
+    async getUser() {
 
-        // console.log(`${server}/user/${this.state.user.id}`);
-        fetch(`${server}/user/${this.state.user.id}`)
-
+        return fetch(`${server}/user/${this.state.user.id}`)
             .then((response) => response.json())
             .then((responseJson) => {
+                console.log('rodou');
+
                 this.setState({ logado: responseJson })
                 console.log(responseJson);
                 this.props.navigation.setParams({ title: `Olá ${this.state.logado.user.name}` })
@@ -44,11 +44,25 @@ export default class StudentMain extends Component {
             })
             .catch((error) => {
                 console.error(error);
+                return false
             });
+    }
 
+    async teste() {
+        return fetch('http://192.168.1.101:4444/user/5d72603dcc169444900b2402')
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log(responseJson);
+
+                return responseJson.movies;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     componentDidMount() {
+        // this.getUser()
         this.getUser()
     }
 
