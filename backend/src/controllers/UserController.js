@@ -20,10 +20,20 @@ module.exports = {
           return res.json(users);
      },
 
-     async getById(id_user){
-          // const id_user = req.params.id_user;
-          const user = await User.findById(id_user);
-          return user
+     async getById(req, res) {
+          // console.log(req);
+
+          const { id } = req.params;
+          await User.findById(id, (err, user) => {
+
+               if (user) {
+                    return res.status(200).send({ status: 200, user })
+               } else {
+                    console.log(err);
+                    return res.status(404).send({ status: 404, message: "Não foi encontrado." });
+               }
+
+          });
      },
 
      async store(req, res) {

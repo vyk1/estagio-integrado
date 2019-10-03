@@ -71,6 +71,7 @@ routes.put('/activity/:id', jsonParser, ActivityController.update);
 // ou
 // get para trazer tipo de um user
 routes.get('/user', jsonParser, UserController.index);
+routes.get('/user/:id', jsonParser, UserController.getById);
 routes.post('/user/register', jsonParser, UserController.store);
 routes.post('/user/auth', jsonParser, UserController.auth);
 routes.post('/user/forgot', jsonParser, UserController.recovery);

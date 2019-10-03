@@ -20,20 +20,13 @@ mongoose.connect('mongodb+srv://developer:developer@cluster0-dqw7t.mongodb.net/e
 //habilita o cors
 app.use(cors());
 
-//disponibilizar io para todo app
-// app.use((req, res, next) => {
-//      req.io = io;
-
-//      next();
-// })
-
 //alias para o caminho relativo dos arquivos
 app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads', 'resized')))
 
 app.use(require('./routes'))
 
 // server.listen(3333);
-server.listen(3333);
+server.listen(4444);
 
 
 

@@ -112,9 +112,9 @@ module.exports = {
                     '_id': {
                          $in: unique
                     }
-               }, (err, doc) => {
-                    if (doc) {
-                         return res.status(200).send({ status: 200, doc })
+               }, (err, contacts) => {
+                    if (contacts) {
+                         return res.status(200).send({ status: 200, contacts })
                     } else {
                          console.log(err);
                          return res.status(404).send({ status: 404, message: "Não foram encontrados Estágios para este Usuário." });

@@ -30,7 +30,7 @@ module.exports = {
         }
 
         const activity = new Activity(obj);
-        console.log(activity);
+        // console.log(activity);
         // return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
         
 
