@@ -64,7 +64,7 @@ routes.get('/internship/user/:id_student/:id_dvisor', jsonParser, InternshipCont
 routes.get('/activity', jsonParser, ActivityController.index);
 routes.post('/activity', upload.single('image'), ActivityController.store);
 routes.put('/activity/:id', jsonParser, ActivityController.update);
-
+// mongodb+srv://developer:<password>@cluster0-dqw7t.mongodb.net/test?retryWrites=true&w=majority
 
 
 //get para where tipo = students 

@@ -8,6 +8,7 @@ import StudentMain from "./src/pages/StudentMain";
 import VisorMain from "./src/pages/VisorMain";
 import RegisterActivity from "./src/pages/RegisterActivity";
 import Contacts from "./src/pages/Contacts";
+import GenReport from "./src/pages/GenReport";
 
 const AppNavigator = createStackNavigator({
     Main,
@@ -15,7 +16,8 @@ const AppNavigator = createStackNavigator({
     StudentMain,
     VisorMain,
     RegisterActivity,
-    Contacts
+    Contacts,
+    GenReport
 
 }, {
     initialRouteName: 'Main'

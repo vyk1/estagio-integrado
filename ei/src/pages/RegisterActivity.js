@@ -28,7 +28,7 @@ export default class App extends Component {
 
         // define the initial state, so we can use it later
         // when we'll need to reset the form
-        this.initialState = { date: '', file: null, id_internship: '5d797c6f7f7e0718dc115ec8', studentId: '5d72603dcc169444900b2402', description: 'descrição', inputTime: '', outputTime: '' };
+        this.initialState = { date: '', file: null, id_internship: '5d7260bdcc169444900b2403', studentId: '5d72603dcc169444900b2402', description: 'descrição', inputTime: '', outputTime: '' };
 
         this.state = this.initialState;
     }

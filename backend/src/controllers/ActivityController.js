@@ -3,6 +3,11 @@ const Activity = require('../models/Activity');
 const Internship = require('../models/Internship');
 
 module.exports = {
+
+    async getActivityByUID(req, res) {
+
+    },
+
     async index(req, res) {
         const activity = await Activity.find().sort('-createdAt');
         if (activity.length) {
@@ -19,7 +24,7 @@ module.exports = {
         console.log(req.file);
         let { date, description, inputTime, outputTime, id_internship } = req.body
         date = moment(date, 'DD-MM-YYYY').toISOString()
-        
+
         const obj = {
             date,
             description,
@@ -32,7 +37,7 @@ module.exports = {
         const activity = new Activity(obj);
         // console.log(activity);
         // return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
-        
+
 
         await activity.save((err, activity) => {
             if (err) {
@@ -42,9 +47,9 @@ module.exports = {
             } else {
                 // console.log(activity.id);
                 // $ pull para fazer um pop ou remove https://boostlog.io/@vithalreddy/push-and-pop-items-into-mongodb-array-via-mongoose-in-nodejs-5a8c3a95a7e5b7008ae1d809
-                Internship.findByIdAndUpdate(req.body.id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
-                    // console.log(internship);
-                    if (err) {
+                Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
+                    console.log(internship);
+                    if (err || internship == null) {
                         // console.log(err);
                         return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
                     } else {

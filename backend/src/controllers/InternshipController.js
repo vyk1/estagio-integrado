@@ -62,12 +62,15 @@ module.exports = {
 
                // Internship.find({ id_advisor: id_user }, (err, internships) => {
                if (internships.length > 0) {
+                    // console.log('====================================');
+                    // console.log(internships);
+                    // console.log('====================================');
                     return res.status(200).send({ status: 200, internships });
                } else {
                     console.log(err);
                     return res.status(404).send({ status: 404, message: "Não foram encontrados Estágios para este usuário." });
                }
-          })
+          }).populate('id_activities')
 
      },
      async getContacts(req, res) {

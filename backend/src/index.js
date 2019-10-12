@@ -21,7 +21,9 @@ mongoose.connect('mongodb+srv://developer:developer@cluster0-dqw7t.mongodb.net/e
 app.use(cors());
 
 //alias para o caminho relativo dos arquivos
-app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads', 'resized')))
+console.log(express.static(path.resolve(__dirname, '..', 'uploads')));
+
+app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads')))
 
 app.use(require('./routes'))
 
