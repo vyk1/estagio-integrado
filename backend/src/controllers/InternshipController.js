@@ -70,7 +70,7 @@ module.exports = {
                     console.log(err);
                     return res.status(404).send({ status: 404, message: "Não foram encontrados Estágios para este usuário." });
                }
-          }).populate('id_activities')
+          }).populate('id_activities').populate('id_advisor').populate('id_supervisor')
 
      },
      async getContacts(req, res) {

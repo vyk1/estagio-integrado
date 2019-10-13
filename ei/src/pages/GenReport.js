@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Container, Image, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
-import { StyleSheet, Linking, ScrollView } from 'react-native';
+import { Container, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
+import { StyleSheet, Image, Linking, ScrollView } from 'react-native';
 import server from "../config/server";
 import moment from "moment";
 import Esperador from '../components/Esperador';
+import logo from '../assets/logo_transp2.png';
 
 export default class GenReport extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -109,7 +110,7 @@ export default class GenReport extends Component {
         //filter para soma no array de horas
     }
     render() {
-        const { internship } = this.state;
+        const { internship, nroDias, horasTotais } = this.state;
         console.log(internship);
 
         if (!Object.keys(internship).length) {
@@ -120,35 +121,61 @@ export default class GenReport extends Component {
             return (
                 <Container style={styles.teste}>
                     <ScrollView>
-                    <Content>
-          <Card style={{flex: 0}}>
-            <CardItem>
-              <Left>
-                {/* <Thumbnail source={{uri: 'http://localhost:4444/files/1570716886013.jpg'}} /> */}
-                <Body>
-                  <Text>NativeBase</Text>
-                  <Text note>April 15, 2016</Text>
-                </Body>
-              </Left>
-            </CardItem>
-            <CardItem>
-              <Body>
-                {/* <Image source={{uri: 'http://localhost:4444/files/1570716886013.jpg'}} style={{height: 200, width: 200, flex: 1}}/> */}
-                <Text>
-                  //Your text here
-                </Text>
-              </Body>
-            </CardItem>
-            <CardItem>
-              <Left>
-                <Button transparent textStyle={{color: '#87838B'}}>
-                  <Icon name="logo-github" />
-                  <Text>1,926 stars</Text>
-                </Button>
-              </Left>
-            </CardItem>
-          </Card>
-        </Content>
+                        <Content >
+                            <Card key={0}>
+                                <CardItem header bordered >
+                                    <Text note>Empresa</Text>
+                                    <Left>
+                                        <Text>{internship.internships[0].company}</Text>
+                                    </Left>
+                                </CardItem>
+                                <CardItem >
+                                    <Body>
+                                        <Text note>Dias de Estágio:</Text>
+                                        <Text>{nroDias}</Text>
+                                        <Text note>Horas:</Text>
+                                        <Text>{horasTotais}</Text>
+                                    </Body>
+                                </CardItem>
+                                <CardItem bordered footer>
+                                    <Text>Responsáveis por este estágio:</Text>
+                                </CardItem>
+                                <CardItem >
+                                    <Body>
+                                        <Text note>Supervisor</Text>
+                                        <Text>{internship.internships[0].id_supervisor.name}</Text>
+                                    </Body>
+                                </CardItem>
+                                <CardItem >
+                                    <Body>
+                                        <Text note>Orientador:</Text>
+                                        <Text>{internship.internships[0].id_advisor.name}</Text>
+                                    </Body>
+                                </CardItem>
+                            </Card>
+                            <Card style={{ flex: 0 }} key={1}>
+                                {internship.internships[0].id_activities.map((rowData, i) => (
+
+                                    <CardItem>
+                                        <Body>
+                                        <Text note>Foto da Atividade</Text>
+                                            <Image source={{ uri: server + '/files/' + rowData.image }} loadingIndicatorSource={() => Esperador} style={styles.image} />
+                                            <Text note>Descrição</Text>
+                                            <Text>{rowData.description}</Text>
+                                        </Body>
+                                    </CardItem>
+                                ))}
+                                <CardItem>
+                                    <Left>
+                                        <Button transparent textStyle={{ color: '#87838B' }}>
+                                            <Icon name="logo-github" />
+                                            <Text>1,926 stars</Text>
+                                        </Button>
+                                    </Left>
+                                </CardItem>
+                            </Card>
+
+                        </Content>
                     </ScrollView>
                 </Container >
             );
@@ -158,16 +185,15 @@ export default class GenReport extends Component {
 const styles = StyleSheet.create({
     image: {
         alignSelf: 'center',
-        width: 150,
-        height: 150,
-        resizeMode: 'stretch'
-        // borderWi: 1
+        width: 200,
+        height: 200,
+        resizeMode: 'contain',
+        flex: 1
     },
     teste: {
         fontSize: 18,
-        // fontFamily: 'monospace',
+        fontFamily: 'monospace',
         fontFamily: 'RobotoMono-Light',
-        // textalign justify apenas para ios
         textAlign: 'justify',
         margin: 2,
     }

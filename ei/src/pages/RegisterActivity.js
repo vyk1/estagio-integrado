@@ -12,6 +12,7 @@ import {
     TimePickerAndroid,
 } from 'react-native';
 
+import { DatePicker } from 'native-base';
 import ImagePicker from 'react-native-image-picker'
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 
@@ -20,19 +21,24 @@ import FormButton from '../components/FormButton';
 import FormTextInput from '../components/FormTextInput';
 import DateInput from '../components/DateInput';
 import HourInput from '../components/HourInput';
+import TextArea from '../components/TextArea';
+import Date from '../components/Date';
 
 export default class App extends Component {
 
     constructor(props) {
         super(props);
-
+        this.state = { chosenDate: new Date() };
+        this.setDate = this.setDate.bind(this);
         // define the initial state, so we can use it later
         // when we'll need to reset the form
         this.initialState = { date: '', file: null, id_internship: '5d7260bdcc169444900b2403', studentId: '5d72603dcc169444900b2402', description: 'descrição', inputTime: '', outputTime: '' };
 
         this.state = this.initialState;
     }
-
+    setDate(newDate) {
+        this.setState({ chosenDate: newDate });
+    }
     static navigationOptions = ({ navigation }) => {
         return {
             title: 'Registro de Atividades'
@@ -146,7 +152,9 @@ export default class App extends Component {
     render() {
         const { inputTime, outputTime, date, file, description } = this.state;
         return (
-            <KeyboardAvoidingView style={styles.container}>
+            <KeyboardAvoidingView >
+                {/* https://docs.nativebase.io/Components.html#date-picker-def-headref */}
+                <Date></Date>
                 <ScrollView>
                     <DateInput
                         onPress={() => this.setDataAtividade()}
@@ -170,12 +178,14 @@ export default class App extends Component {
                         multiline={true}
                     />
 
+                    <TextArea></TextArea>
+
                     {file && (
                         <View>
                             <Text>Foto Carregada:</Text>
                             <Image
                                 source={{ uri: file.uri }}
-                                style={{ width: 300, height: 300 }}
+                            // style={{ width: 300, height: 300 }}
                             />
                         </View>
                     )}
@@ -187,14 +197,14 @@ export default class App extends Component {
                 </FormButton>
                 </ScrollView>
             </KeyboardAvoidingView>
-        );
+        )
     }
 }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         backgroundColor: '#ebebeb',
     },
     screenTitle: {
