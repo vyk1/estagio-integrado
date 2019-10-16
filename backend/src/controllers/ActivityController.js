@@ -35,7 +35,6 @@ module.exports = {
         }
 
         const activity = new Activity(obj);
-        // console.log(activity);
         // return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
 
 
@@ -45,15 +44,12 @@ module.exports = {
                 return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
 
             } else {
-                // console.log(activity.id);
                 // $ pull para fazer um pop ou remove https://boostlog.io/@vithalreddy/push-and-pop-items-into-mongodb-array-via-mongoose-in-nodejs-5a8c3a95a7e5b7008ae1d809
                 Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
-                    console.log(internship);
                     if (err || internship == null) {
-                        // console.log(err);
+                        console.log(err);
                         return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
                     } else {
-                        // console.log(internship);
                         return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
                     }
                 });
@@ -65,15 +61,13 @@ module.exports = {
 
         await Activity.findByIdAndDelete(id, (err, act) => {
             if (err) {
-                // console.log(err);
+                console.log(err);
                 return res.status(500).send(err);
             } else {
                 // continuar daqui
                 Internship.findByIdAndUpdate(req.body.id_internship, { $pull: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
-                    // console.log(doc);
-                    // internship
                     if (err) {
-                        // console.log(err);
+                        console.log(err);
                         return res.status(200).send({ status: 200, message: "Estágio apagado com sucesso!" })
                     } else {
                         return res.status(500).send(err);
@@ -86,7 +80,6 @@ module.exports = {
     async update(req, res) {
 
         const { id } = req.params;
-        console.log(req.body);
         // validar req.body
         // para parar de dar erro de deprecation põe o useFindAndModify junto do new!
         // é possivel colocar junto das configs do mongoose.connect,
@@ -97,7 +90,6 @@ module.exports = {
             if (doc) {
                 // se new é true traz doc updateado
                 // dá pra por na url e direcionar!
-                console.log(doc);
                 return res.status(200).send({ status: 200, message: "Atualizado com sucesso." })
 
             } else {

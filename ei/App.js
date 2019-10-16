@@ -9,6 +9,8 @@ import VisorMain from "./src/pages/VisorMain";
 import RegisterActivity from "./src/pages/RegisterActivity";
 import Contacts from "./src/pages/Contacts";
 import GenReport from "./src/pages/GenReport";
+import ViewReports from "./src/pages/ViewReports";
+import Inicial from "./src/pages/Inicial";
 
 const AppNavigator = createStackNavigator({
     Main,
@@ -17,10 +19,11 @@ const AppNavigator = createStackNavigator({
     VisorMain,
     RegisterActivity,
     Contacts,
-    GenReport
-
+    GenReport,
+    ViewReports,
+    Inicial
 }, {
-    initialRouteName: 'Main'
+    initialRouteName: 'Inicial'
 }
 ); 
 

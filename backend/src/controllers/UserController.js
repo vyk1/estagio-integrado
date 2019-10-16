@@ -21,8 +21,6 @@ module.exports = {
      },
 
      async getById(req, res) {
-          // console.log(req);
-
           const { id } = req.params;
           await User.findById(id, (err, user) => {
 
@@ -92,8 +90,6 @@ module.exports = {
                          passwordResetExpires: expires
                     }
                })
-
-               console.log(user);
 
                mensagem = `Hey there! Here's your token:  ${token}. It'll expires in 1 hour.`;
 

@@ -7,11 +7,9 @@ import Esperador from '../components/Esperador';
 export default class StudentMain extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: `${navigation.getParam('title')}`,
-            // title: texto,
+            title: `${navigation.getParam('title')}`
         }
     };
-
 
     constructor(props) {
         super(props);
@@ -25,7 +23,8 @@ export default class StudentMain extends Component {
                 { key: 'Relatório Geral', page: 'GenReport' },
                 { key: 'Contatos', page: 'Contacts' },
                 { key: 'Ei! Fique Ligado', page: 'StayOn' },
-                { key: 'Para Refletir', page: 'ToThink' }
+                { key: 'Para Refletir', page: 'ToThink' },
+                { key: "Sobre o App", page: "About" },
             ],
         }
     }
@@ -47,22 +46,7 @@ export default class StudentMain extends Component {
                 return false
             });
     }
-
-    async teste() {
-        return fetch('http://192.168.1.101:4444/user/5d72603dcc169444900b2402')
-            .then((response) => response.json())
-            .then((responseJson) => {
-                console.log(responseJson);
-
-                return responseJson.movies;
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
-
     componentDidMount() {
-        // this.getUser()
         this.getUser()
     }
 
@@ -86,9 +70,10 @@ export default class StudentMain extends Component {
                 <View style={styles.MainContainer}>
                     <FlatList
                         data={this.state.GridViewItems}
-                        renderItem={({ item }) => <View style={styles.GridViewBlockStyle}>
-                            <Text style={styles.GridViewInsideTextItemStyle} onPress={this.GetGridViewItem.bind(this, item.page)} > {item.key} </Text>
-                        </View>}
+                        renderItem={({ item }) =>
+                            <View style={styles.GridViewBlockStyle}>
+                                <Text style={styles.GridViewInsideTextItemStyle} onPress={this.GetGridViewItem.bind(this, item.page)} > {item.key} </Text>
+                            </View>}
                         numColumns={2}
                     />
                 </View>

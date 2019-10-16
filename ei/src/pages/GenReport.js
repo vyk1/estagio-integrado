@@ -4,12 +4,11 @@ import { StyleSheet, Image, Linking, ScrollView } from 'react-native';
 import server from "../config/server";
 import moment from "moment";
 import Esperador from '../components/Esperador';
-import logo from '../assets/logo_transp2.png';
 
 export default class GenReport extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: `Relatório Geral`,
+            title: `${navigation.getParam('title')}`,
             headerStyle: {
                 backgroundColor: '#5f98e3',
             },
@@ -26,26 +25,24 @@ export default class GenReport extends Component {
         this.state = {
             internship: {},
             horasTotais: '',
-            nroDias: ''
+            nroDias: '',
         }
     }
     componentDidMount() {
-        console.log(this.props.navigation.state.params.logado.user);
         this.getContacts()
     }
 
-    getContacts() {
-        const { user } = this.props.navigation.state.params.logado;
+    async getContacts() {
+        const { student_id } = this.props.navigation.state.params;
+        console.log(student_id);
 
-        fetch(`${server}/internship/user/${user._id}`)
+        return fetch(`${server}/internship/user/${student_id}`)
             .then((response) => response.json())
             .then((responseJson) => {
                 this.setState({ internship: responseJson })
                 console.log(responseJson);
                 console.log('chegou aqui');
                 this.CALC()
-                // this.props.navigation.setParams({ title: `Contatos de ${user.name}` })
-
             })
             .catch((error) => {
                 console.error(error);
@@ -96,19 +93,11 @@ export default class GenReport extends Component {
                 sum = sum.add(h[0], "hours")
             }
         }
-        console.log(inicial.toString());
-        //contar dias
-        //subtrair
-        console.log('====================================');
-        console.log(sum.toString());
-        console.log('====================================');
         this.setState({ nroDias, horasTotais: sum.diff(inicial, 'hours') })
-        console.log(this.state);
+        this.props.navigation.setParams({ title: `Relatório de ${this.state.internship.internships[0].id_student.name}` })
 
-
-        //filtrar e dias = arrayDatas.length
-        //filter para soma no array de horas
     }
+
     render() {
         const { internship, nroDias, horasTotais } = this.state;
         console.log(internship);
@@ -152,27 +141,26 @@ export default class GenReport extends Component {
                                         <Text>{internship.internships[0].id_advisor.name}</Text>
                                     </Body>
                                 </CardItem>
+                                <CardItem >
+                                    <Body>
+                                        <Text note>Estagiário:</Text>
+                                        <Text>{internship.internships[0].id_student.name}</Text>
+                                    </Body>
+                                </CardItem>
                             </Card>
                             <Card style={{ flex: 0 }} key={1}>
                                 {internship.internships[0].id_activities.map((rowData, i) => (
 
-                                    <CardItem>
+                                    <CardItem key={i}>
                                         <Body>
-                                        <Text note>Foto da Atividade</Text>
-                                            <Image source={{ uri: server + '/files/' + rowData.image }} loadingIndicatorSource={() => Esperador} style={styles.image} />
+                                            <Text note>Foto da Atividade</Text>
+                                            <Image source={{ uri: server + '/files/' + rowData.image }} style={styles.image}>
+                                            </Image>
                                             <Text note>Descrição</Text>
                                             <Text>{rowData.description}</Text>
                                         </Body>
                                     </CardItem>
                                 ))}
-                                <CardItem>
-                                    <Left>
-                                        <Button transparent textStyle={{ color: '#87838B' }}>
-                                            <Icon name="logo-github" />
-                                            <Text>1,926 stars</Text>
-                                        </Button>
-                                    </Left>
-                                </CardItem>
                             </Card>
 
                         </Content>

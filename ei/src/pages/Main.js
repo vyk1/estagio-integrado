@@ -23,7 +23,7 @@ export default class Main extends Component {
     GetGridViewItem(page, key) {
         this.props.navigation.navigate(page, {
             type: key,
-            title:''
+            title: ''
         });
 
     }

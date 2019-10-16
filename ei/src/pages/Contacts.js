@@ -24,7 +24,7 @@ export default class Contacts extends Component {
         this.getContacts()
     }
 
-    getContacts() {
+    async getContacts() {
         const { user } = this.props.navigation.state.params.logado;
 
         fetch(`${server}/internship/user/${user._id}/contacts/${user.type}`)

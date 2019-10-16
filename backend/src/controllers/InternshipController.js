@@ -62,15 +62,12 @@ module.exports = {
 
                // Internship.find({ id_advisor: id_user }, (err, internships) => {
                if (internships.length > 0) {
-                    // console.log('====================================');
-                    // console.log(internships);
-                    // console.log('====================================');
                     return res.status(200).send({ status: 200, internships });
                } else {
                     console.log(err);
                     return res.status(404).send({ status: 404, message: "Não foram encontrados Estágios para este usuário." });
                }
-          }).populate('id_activities').populate('id_advisor').populate('id_supervisor')
+          }).populate('id_activities').populate('id_advisor').populate('id_supervisor').populate('id_student')
 
      },
      async getContacts(req, res) {
@@ -130,10 +127,9 @@ module.exports = {
 
           await Internship.findByIdAndDelete(id, (err, doc) => {
                if (err) {
-                    // console.log(err);
+                    console.log(err);
                     return res.status(500).send(err);
                } else {
-                    // console.log(doc);
                     return res.status(200).send({ status: 200, message: "Estágio apagado com sucesso!" })
                }
 
@@ -142,15 +138,12 @@ module.exports = {
      async update(req, res) {
 
           const { id } = req.params;
-          console.log(req.body);
           // para parar de dar erro de deprecation põe o useFindAndModify junto do new!
           // é possivel colocar junto das configs do mongoose.connect,
           await Internship.findOneAndUpdate({ '_id': id }, req.body, { new: true, useFindAndModify: false }, (err, doc) => {
                if (doc) {
                     // se new é true traz doc updateado
                     // dá pra por na url e direcionar!
-                    console.log(doc);
-
                     return res.status(200).send({ status: 200, message: "Atualizado com sucesso." })
 
                } else {
@@ -195,10 +188,10 @@ module.exports = {
 
           internship.save((err, doc) => {
                if (err) {
+                    console.log(err);
                     return res.status(400).send({ status: 400, message: "Não foi possível salvar." });
                }
                else {
-                    console.log(doc);
                     return res.status(201).send({ status: 201, message: "Estágio Cadastrado!" });
                }
           })
