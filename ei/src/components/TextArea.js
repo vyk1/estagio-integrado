@@ -1,11 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, View } from "react";
 import { Container, Header, Content, Textarea, Form } from "native-base";
 export default class TextArea extends Component {
   render() {
+    const { onChangeText } = this.props;
     return (
-      <Container>
-        <Textarea rowSpan={5} bordered placeholder="Descrição..." />
-      </Container>
+      <>
+        <Textarea rowSpan={5} onChangeText={onChangeText} bordered placeholder="Descrição..." />
+      </>
     );
   }
 }

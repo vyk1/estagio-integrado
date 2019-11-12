@@ -12,7 +12,7 @@ class HourInput extends React.Component {
         const { labelText, dataDaAtividade, onPress, value, ...inputProps } = this.props;
 
         return (
-            <Container style={styles.inputWrapper}>
+            <View>
                 <TouchableOpacity onPress={onPress}>
                     <Text style={styles.label}>
                         {labelText}
@@ -25,7 +25,7 @@ class HourInput extends React.Component {
                         value={value}
                     />
                 </TouchableOpacity>
-            </Container>
+            </View>
         );
     }
 }

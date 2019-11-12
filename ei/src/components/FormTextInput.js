@@ -6,18 +6,20 @@ import {
 
 class FormTextInput extends React.Component {
     render() {
-        const { labelText, multiline, onChangeText,...inputProps } = this.props;
+        const { placeholder, labelText, multiline, onChangeText, numberOfLines, ...inputProps } = this.props;
 
         return (
             <View style={styles.inputWrapper}>
-                {labelText && <Text style={styles.label}>{labelText}</Text>}
+                {/* {labelText && <Text style={styles.label}>{labelText}</Text>} */}
 
                 <TextInput
                     style={[styles.textInput, multiline && styles.textarea]}
                     blurOnSubmit
                     multiline={multiline}
+                    numberOfLines={numberOfLines}
                     onChangeText={onChangeText}
                     {...inputProps}
+                    placeholder={placeholder}
                 />
             </View>
         );
@@ -38,23 +40,23 @@ const styles = StyleSheet.create({
     inputWrapper: {
         flex: 1,
         marginBottom: 15,
-    },
-    textInput: {
-        height: 40,
-        borderColor: '#FFF',
+        borderColor: 'grey',
         borderWidth: 1,
-        borderRadius: 3,
-        backgroundColor: '#FFF',
-        paddingHorizontal: 10,
-        fontSize: 18,
-        color: '#0f1226',
+        padding: 5
     },
-    label: {
-        color: '#000',
-        marginBottom: 5,
-    },
+    // textInput: {dsadsada
+    //     height: 40,
+    //     borderColor: '#FFF',
+    //     borderWidth: 1,
+    //     borderRadius: 3,
+    //     backgroundColor: '#FFF',
+    //     paddingHorizontal: 10,
+    //     fontSize: 18,
+    //     color: '#0f1226',
+    // },
     textarea: {
-        height: 80,
+        height: 150,
+        justifyContent: "flex-start"
     },
 });
 
