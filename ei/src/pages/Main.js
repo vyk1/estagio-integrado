@@ -37,7 +37,6 @@ export default class Main extends Component {
                     </View>}
                     numColumns={1}
                 />
-                {/* <Text>Você está logado como 'Nome da Pessoa da Silva'</Text> */}
             </View>
         );
     }
@@ -70,10 +69,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center',
 
-    },
-    Grind2: {
-        textAlign: 'center',
-        fontSize: 20,
     }
 
 });

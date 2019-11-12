@@ -57,6 +57,8 @@ module.exports = {
      },
      // relatorio geral
      async getInternshipsByUserId(req, res) {
+          console.log(req);
+
           const { id_user } = req.params;
           await Internship.find({ $or: [{ id_student: id_user }, { id_advisor: id_user }, { id_supervisor: id_user }] }, (err, internships) => {
 

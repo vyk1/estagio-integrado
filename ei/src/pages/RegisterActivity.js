@@ -3,23 +3,16 @@ import {
     StyleSheet,
     KeyboardAvoidingView,
     Text,
-    Keyboard,
     View,
-    TouchableOpacity,
-    Alert,
     Image,
-    DatePickerAndroid,
     TimePickerAndroid,
 } from 'react-native';
 
-import { DatePicker } from 'native-base';
+import { DatePicker, Content, Container } from 'native-base';
 import ImagePicker from 'react-native-image-picker'
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
 
 import server from '../config/server'
-import FormButton from '../components/FormButton';
-import FormTextInput from '../components/FormTextInput';
-import DateInput from '../components/DateInput';
+import BlueButton from '../components/BlueButton';
 import HourInput from '../components/HourInput';
 import TextArea from '../components/TextArea';
 import Date from '../components/Date';
@@ -28,17 +21,18 @@ export default class App extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { chosenDate: new Date() };
-        this.setDate = this.setDate.bind(this);
-        // define the initial state, so we can use it later
-        // when we'll need to reset the form
-        this.initialState = { date: '', file: null, id_internship: '5d7260bdcc169444900b2403', studentId: '5d72603dcc169444900b2402', description: 'descrição', inputTime: '', outputTime: '' };
+        this.initialState = { date: '', file: null, id_internship: '5d7260bdcc169444900b2403', studentId: '5d72603dcc169444900b2402', description: '', inputTime: '', outputTime: '', chosenDate: new Date() };
 
         this.state = this.initialState;
     }
-    setDate(newDate) {
-        this.setState({ chosenDate: newDate });
+
+    toStr = (e) => {
+        console.log('====================================');
+        console.log(e);
+        console.log('====================================');
+        // this.setState({ date: e })
     }
+
     static navigationOptions = ({ navigation }) => {
         return {
             title: 'Registro de Atividades'
@@ -55,21 +49,7 @@ export default class App extends Component {
             }
         })
     }
-    setDataAtividade = async () => {
-        try {
-            const {
-                action, year, month, day,
-            } = await DatePickerAndroid.open({
-                date: new Date(),
-                minDate: new Date(),
-            });
-            if (action !== DatePickerAndroid.dismissedAction) {
-                this.setState({ date: `${day}-${month + 1}-${year}` });
-            }
-        } catch ({ code, message }) {
-            console.warn('Cannot open date picker', message);
-        }
-    };
+
 
     setinputTime = async () => {
         try {
@@ -132,55 +112,51 @@ export default class App extends Component {
             body: this.createFormData(this.state.file, this.state)
         }
 
-        console.log(config.body);
+        // this.setState({ date: this.state.chosenDate.state.chosenDate })
+        console.log(this.state);
 
+        // VERIFICAR SE JÁ NÃO HÁ UMA ATIVIDADE CADASTRADA PARA ESTA HORA!
+        // CHECAR SE HE>HS
+        // 
         // adicionar waiter
-        alert('Espere um pouco...')
-        // return false
-        fetch(`${server}/activity`, config)
-            .then(res => res.json())
-            .then(res => {
-                console.log(res);
-                alert(res.message)
-                // this.setState({this.initialState})
-            }).catch(e => {
-                console.log('deu ruim', e);
-                alert('algoderrado :(')
-            })
+        // alert('Espere um pouco...')
+        // // return false
+        // fetch(`${server}/activity`, config)
+        //     .then(res => res.json())
+        //     .then(res => {
+        //         console.log(res);
+        //         alert(res.message)
+        //     }).catch(e => {
+        //         console.log('deu ruim', e);
+        //         alert('algoderrado :(')
+        //     })
     }
 
     render() {
         const { inputTime, outputTime, date, file, description } = this.state;
         return (
-            <KeyboardAvoidingView >
-                {/* https://docs.nativebase.io/Components.html#date-picker-def-headref */}
-                <Date></Date>
-                <ScrollView>
-                    <DateInput
-                        onPress={() => this.setDataAtividade()}
-                        labelText="Data da Atividade"
-                        value={date}
-                    />
-                    <HourInput
-                        onPress={() => this.setinputTime()}
-                        value={inputTime}
-                        labelText="Hora de entrada" />
+            <Container>
+                {/* <KeyboardAvoidingView behavior="padding" enabled> */}
+                {/* <Date minimumDate={new Date(2018, 1, 1)} onDateChange={(date) => this.setState({ date })}></Date> */}
+                <Date onDateChange={(date) => this.setState({ date })}></Date>
 
-                    <HourInput
-                        onPress={() => this.setoutputTime()}
-                        value={outputTime}
-                        labelText="Hora de saída" />
-                    <FormTextInput
-                        placeholder="..."
-                        onChangeText={() => this.setState({ description })}
-                        value={description}
-                        labelText="Descrição"
-                        multiline={true}
-                    />
+                <HourInput
+                    onPress={() => this.setinputTime()}
+                    value={inputTime}
+                    labelText="Hora de entrada" />
 
-                    <TextArea></TextArea>
+                <HourInput
+                    onPress={() => this.setoutputTime()}
+                    value={outputTime}
+                    labelText="Hora de saída" />
 
-                    {file && (
+                <TextArea
+                    onChangeText={() => this.setState({ description })}
+                    value={description}
+                ></TextArea>
+
+                {
+                    file && (
                         <View>
                             <Text>Foto Carregada:</Text>
                             <Image
@@ -188,29 +164,16 @@ export default class App extends Component {
                             // style={{ width: 300, height: 300 }}
                             />
                         </View>
-                    )}
-                    <FormButton onPress={this.handleChooseFile}>
-                        Carregar Foto
-                    </FormButton>
-                    <FormButton onPress={this.handleSubmit}>
-                        Registrar Atividade
-                </FormButton>
-                </ScrollView>
-            </KeyboardAvoidingView>
+                    )
+                }
+                <BlueButton onPress={this.handleChooseFile}>
+                    Carregar Foto
+                    </BlueButton>
+                <BlueButton onPress={this.handleSubmit}>
+                    Registrar Atividade
+                </BlueButton>
+                {/* </KeyboardAvoidingView> */}
+            </Container >
         )
     }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        paddingHorizontal: 10,
-        backgroundColor: '#ebebeb',
-    },
-    screenTitle: {
-        fontSize: 35,
-        textAlign: 'center',
-        margin: 10,
-        color: '#FFF',
-    },
-});

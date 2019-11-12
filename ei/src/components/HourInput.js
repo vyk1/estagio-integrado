@@ -4,6 +4,7 @@ import {
     View, Text, StyleSheet, TouchableOpacity
 } from 'react-native';
 import FormTextInput from './FormTextInput';
+import { Container } from 'native-base';
 
 
 class HourInput extends React.Component {
@@ -11,7 +12,7 @@ class HourInput extends React.Component {
         const { labelText, dataDaAtividade, onPress, value, ...inputProps } = this.props;
 
         return (
-            <View style={styles.inputWrapper}>
+            <Container style={styles.inputWrapper}>
                 <TouchableOpacity onPress={onPress}>
                     <Text style={styles.label}>
                         {labelText}
@@ -24,7 +25,7 @@ class HourInput extends React.Component {
                         value={value}
                     />
                 </TouchableOpacity>
-            </View>
+            </Container>
         );
     }
 }

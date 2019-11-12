@@ -7,7 +7,7 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
  *
  * @param {obj} props
  */
-const FormButton = (props) => {
+const BlueButton = (props) => {
     const { children, onPress } = props;
 
     return (
@@ -17,18 +17,18 @@ const FormButton = (props) => {
     );
 };
 
-FormButton.propTypes = {
+BlueButton.propTypes = {
     onPress: PropTypes.func,
     children: PropTypes.string.isRequired,
 };
 
-FormButton.defaultProps = {
+BlueButton.defaultProps = {
     onPress: f => f,
 };
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: '#5846b0',
+        backgroundColor: '#4766ff',
         borderRadius: 3,
         height: 40,
         marginBottom: 15,
@@ -42,4 +42,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default FormButton;
+export default BlueButton;

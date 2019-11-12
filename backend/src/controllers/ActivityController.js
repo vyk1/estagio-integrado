@@ -21,7 +21,7 @@ module.exports = {
         // store é obrigatório o estágio
         // validar req.body
         // formato do date tem que converter para isostring
-        console.log(req.file);
+        console.log(req.body);
         let { date, description, inputTime, outputTime, id_internship } = req.body
         date = moment(date, 'DD-MM-YYYY').toISOString()
 
