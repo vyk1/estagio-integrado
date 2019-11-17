@@ -1,6 +1,7 @@
 1. colocar docs!
 
-3. Splashscreen! e icon
+2. certificar da cor (primary - colors.xml)
+
 ------------------------------------------------------
 4. imagens!-> usar sharp para reduzir tamanho!
 

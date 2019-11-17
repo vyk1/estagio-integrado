@@ -11,6 +11,8 @@ import Contacts from "./src/pages/Contacts";
 import GenReport from "./src/pages/GenReport";
 import ViewReports from "./src/pages/ViewReports";
 import Inicial from "./src/pages/Inicial";
+import InfoStage from "./src/pages/InfoStage";
+import MoreInfo from "./src/pages/MoreInfo";
 
 const AppNavigator = createStackNavigator({
     Main,
@@ -21,23 +23,20 @@ const AppNavigator = createStackNavigator({
     Contacts,
     GenReport,
     ViewReports,
-    Inicial
+    Inicial,
+    InfoStage,
+    MoreInfo
 }, {
     initialRouteName: 'Inicial'
 }
 ); 
 
 const AppContainer = createAppContainer(AppNavigator);
-//title do lugar onde stá
-// bttm nav-> profile ('voce está logado como ...', read e update de cadastro - form, )
-// https://medium.com/better-programming/react-native-add-app-icons-and-launch-screens-onto-ios-and-android-apps-3bfbc20b7d4c
+
 export default class App extends React.Component {
     render() {
         return (
             <AppContainer />
-            // <AppContainer2 />
         )
     }
 }
-
-// export default createStackNavigator({TabNavigator}, {headerMode: 'none'});
