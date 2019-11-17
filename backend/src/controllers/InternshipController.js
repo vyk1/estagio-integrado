@@ -57,19 +57,18 @@ module.exports = {
      },
      // relatorio geral
      async getInternshipsByUserId(req, res) {
-          console.log(req);
+          console.log(req.params);
 
           const { id_user } = req.params;
           await Internship.find({ $or: [{ id_student: id_user }, { id_advisor: id_user }, { id_supervisor: id_user }] }, (err, internships) => {
 
-               // Internship.find({ id_advisor: id_user }, (err, internships) => {
                if (internships.length > 0) {
                     return res.status(200).send({ status: 200, internships });
                } else {
                     console.log(err);
                     return res.status(404).send({ status: 404, message: "Não foram encontrados Estágios para este usuário." });
                }
-          }).populate('id_activities').populate('id_advisor').populate('id_supervisor').populate('id_student')
+          }).populate('id_advisor').populate('id_supervisor').populate('id_student').populate({ path: 'id_activities', options: { sort: { createdAt: -1 } } })
 
      },
      async getContacts(req, res) {

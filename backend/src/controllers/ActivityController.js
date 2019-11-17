@@ -4,10 +4,24 @@ const Internship = require('../models/Internship');
 
 module.exports = {
 
-    async getActivityByUID(req, res) {
+    async checkActivityDate(actvDate) {
+
+        // já vem isado!
+        await Activity.find({ date: actvDate }, (err, doc) => {
+            if (!err) {
+                if (!doc) {
+                    //não existe então retorna true
+                    return true
+                } else {
+                    return false
+                }
+            } else {
+                console.log(err);
+                return res.status(400).send({ status: 400, message: "Erro ao consultar o banco de dados!" });
+            }
+        })
 
     },
-
     async index(req, res) {
         const activity = await Activity.find().sort('-createdAt');
         if (activity.length) {
@@ -19,11 +33,11 @@ module.exports = {
 
     async store(req, res) {
         // store é obrigatório o estágio
-        // validar req.body
-        // formato do date tem que converter para isostring
-        console.log(req.body);
+        // console.log(req.body);
+        // console.log(req.file);
+
         let { date, description, inputTime, outputTime, id_internship } = req.body
-        date = moment(date, 'DD-MM-YYYY').toISOString()
+        // date = moment(date, 'DD-MM-YYYY').toISOString()
 
         const obj = {
             date,
@@ -33,26 +47,97 @@ module.exports = {
             id_internship,
             image: req.file.filename
         }
+        await Activity.find({ date }, (err, doc) => {
+            if (!err) {
+                console.log('====================================');
+                console.log(doc);
+                console.log('====================================');
+                if (!doc.length > 0) {
+                    //não existe então retorna true
+                    // return true
+                    const activity = new Activity(obj);
 
-        const activity = new Activity(obj);
-        // return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
+                    activity.save((err, activity) => {
+                        if (err) {
+                            console.log(err);
+                            return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
 
-
-        await activity.save((err, activity) => {
-            if (err) {
-                console.log(err);
-                return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
-
+                        } else {
+                            // $ pull para fazer um pop ou remove https://boostlog.io/@vithalreddy/push-and-pop-items-into-mongodb-array-via-mongoose-in-nodejs-5a8c3a95a7e5b7008ae1d809
+                            Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
+                                if (err || internship == null) {
+                                    console.log(err);
+                                    return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+                                } else {
+                                    return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
+                                }
+                            });
+                        }
+                    })
+                } else {
+                    return res.status(400).send({ status: 400, message: "Já existe uma atividade cadastrada para este dia." });
+                }
             } else {
-                // $ pull para fazer um pop ou remove https://boostlog.io/@vithalreddy/push-and-pop-items-into-mongodb-array-via-mongoose-in-nodejs-5a8c3a95a7e5b7008ae1d809
-                Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
-                    if (err || internship == null) {
-                        console.log(err);
-                        return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
-                    } else {
-                        return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
-                    }
-                });
+                console.log(err);
+                return res.status(400).send({ status: 400, message: "Erro ao consultar o banco de dados!" });
+            }
+        })
+    },
+    async storeWithNoImage(req, res) {
+        // store é obrigatório o estágio
+        // formato do date tem que converter para isostring
+        // console.log(req.headers);
+        // console.log(JSON.stringify(req.body));
+        // console.log(JSON.stringify(req.headers));
+        console.log('acionou');
+        let { date, description, inputTime, outputTime, id_internship } = req.body
+
+        const obj = {
+            date,
+            description,
+            inputTime,
+            outputTime,
+            id_internship,
+            image: null
+        }
+
+        console.log('====================================');
+        console.log(date);
+        console.log('====================================');
+
+        await Activity.find({ date }, (err, doc) => {
+            if (!err) {
+                console.log('====================================');
+                console.log(doc);
+                console.log('====================================');
+                if (!doc.length > 0) {
+                    //não existe então retorna true
+                    // return true
+                    const activity = new Activity(obj);
+
+                    activity.save((err, activity) => {
+                        if (err) {
+                            console.log(err);
+                            return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+
+                        } else {
+                            // $ pull para fazer um pop ou remove https://boostlog.io/@vithalreddy/push-and-pop-items-into-mongodb-array-via-mongoose-in-nodejs-5a8c3a95a7e5b7008ae1d809
+                            Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
+                                if (err || internship == null) {
+                                    console.log(err);
+                                    return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+                                } else {
+                                    return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
+                                }
+                            });
+                        }
+                    })
+                } else {
+                    return res.status(400).send({ status: 400, message: "Já existe uma atividade cadastrada para este dia." });
+                }
+            } else {
+                console.log(err);
+                return res.status(400).send({ status: 400, message: "Erro ao consultar o banco de dados!" });
             }
         })
     },

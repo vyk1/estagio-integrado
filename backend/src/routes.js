@@ -63,7 +63,9 @@ routes.get('/internship/user/:id_student/:id_dvisor', jsonParser, InternshipCont
 
 routes.get('/activity', jsonParser, ActivityController.index);
 routes.post('/activity', upload.single('image'), ActivityController.store);
+routes.post('/activity/noimg', jsonParser, ActivityController.storeWithNoImage);
 routes.put('/activity/:id', jsonParser, ActivityController.update);
+// routes.get('/activity/teste', jsonParser, ActivityController.checkActivityDate);
 // mongodb+srv://developer:<password>@cluster0-dqw7t.mongodb.net/test?retryWrites=true&w=majority
 
 
