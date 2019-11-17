@@ -54,7 +54,8 @@ export default class StudentMain extends Component {
         const { logado } = this.state;
         this.props.navigation.navigate(page, {
             title: key,
-            logado
+            logado,
+            title: 'Carregando',
 
         });
     }

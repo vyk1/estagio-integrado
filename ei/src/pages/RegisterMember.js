@@ -7,7 +7,7 @@ export default class PickerInputExample extends Component {
       selected2: undefined
     };
   }
-  onValueChange2(value: string) {
+  onValueChange2(value) {
     this.setState({
       selected2: value
     });

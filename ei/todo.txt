@@ -1,6 +1,16 @@
-1. Perfil
-2. Melhorar layout de forumlários
-3. Splashscreen!
+1. colocar docs!
 
+3. Splashscreen! e icon
+------------------------------------------------------
+4. imagens!-> usar sharp para reduzir tamanho!
+
+colocar alerts em vez de texto puro
+
+----------------------
+ao fazer a página de login e cadastro, certificar que o id tem que estar
+no header!
+
+1. Perfil de cadastro
 
 2. Página em React para permitir/associar users em internships
+    

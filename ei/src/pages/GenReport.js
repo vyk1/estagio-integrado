@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { Container, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
+import { Container, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, View } from 'native-base';
 import { StyleSheet, Image, Linking, ScrollView } from 'react-native';
 import server from "../config/server";
-import moment from "moment";
 import Esperador from '../components/Esperador';
+import moment from 'moment';
+import 'moment/locale/pt-br'
 
 export default class GenReport extends Component {
     static navigationOptions = ({ navigation }) => {
+        console.log(navigation.state.params)
         return {
             title: `${navigation.getParam('title')}`,
             headerStyle: {
@@ -29,24 +31,37 @@ export default class GenReport extends Component {
         }
     }
     componentDidMount() {
-        this.getContacts()
+        this.getInternshipByUID()
     }
 
-    async getContacts() {
-        const { student_id } = this.props.navigation.state.params;
-        console.log(student_id);
+    async getInternshipByUID() {
 
-        return fetch(`${server}/internship/user/${student_id}`)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.setState({ internship: responseJson })
-                console.log(responseJson);
-                console.log('chegou aqui');
-                this.CALC()
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        // se estudante logado...
+        if (this.props.navigation.state.params.logado.user.type == 1) {
+            const student_id = this.props.navigation.state.params.logado.user._id;
+            return fetch(`${server}/internship/user/${student_id}`)
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    this.setState({ internship: responseJson })
+                    console.log(responseJson);
+                    this.CALC()
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        } else {
+            const { student_id } = this.props.navigation.state.params;
+            return fetch(`${server}/internship/user/${student_id}`)
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    this.setState({ internship: responseJson })
+                    console.log(responseJson);
+                    this.CALC()
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
     }
 
     CALC() {
@@ -68,8 +83,6 @@ export default class GenReport extends Component {
             arrayHoras.push(newTime)
             arrayDatas.push(el.date)
         });
-        console.log(arrayDatas);
-
 
         let uniqueDates = []
         o = {}
@@ -77,7 +90,7 @@ export default class GenReport extends Component {
             o[e] = true
         })
         uniqueDates = Object.keys(o)
-        console.log(uniqueDates);
+        // console.log(uniqueDates);
 
         let nroDias = uniqueDates.length
 
@@ -148,20 +161,32 @@ export default class GenReport extends Component {
                                     </Body>
                                 </CardItem>
                             </Card>
-                            <Card style={{ flex: 0 }} key={1}>
-                                {internship.internships[0].id_activities.map((rowData, i) => (
+                            {/* atividades */}
+                            {internship.internships[0].id_activities.map((rowData, i) => (
 
-                                    <CardItem key={i}>
+                                <Card style={{ flex: 0}} key={i}>
+                                    <CardItem>
                                         <Body>
-                                            <Text note>Foto da Atividade</Text>
-                                            <Image source={{ uri: server + '/files/' + rowData.image }} style={styles.image}>
-                                            </Image>
+                                            <Text note>Data da Atividade:</Text>
+                                            {/* <Text>{Date(rowData.createdAt).toString()}</Text> */}
+                                            <Text>{moment(rowData.createdAt).locale('pt-br').format("DD/MM/YYYY HH:mm - dddd")
+                                            }</Text>
+                                            {
+                                                rowData.image && (
+                                                    <>
+                                                        <Text note>Foto da Atividade</Text>
+                                                        <Image source={{ uri: server + '/files/' + rowData.image }} style={styles.image}>
+                                                        </Image>
+                                                    </>
+                                                )
+                                            }
+
                                             <Text note>Descrição</Text>
                                             <Text>{rowData.description}</Text>
                                         </Body>
                                     </CardItem>
-                                ))}
-                            </Card>
+                                </Card>
+                            ))}
 
                         </Content>
                     </ScrollView>
@@ -173,8 +198,8 @@ export default class GenReport extends Component {
 const styles = StyleSheet.create({
     image: {
         alignSelf: 'center',
-        width: 200,
-        height: 200,
+        width: 300,
+        height: 300,
         resizeMode: 'contain',
         flex: 1
     },

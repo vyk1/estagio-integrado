@@ -9,7 +9,6 @@ import {
 import BlueButton from '../components/BlueButton';
 
 import logo from '../assets/logo_transp2.png';
-import { ScrollView } from 'react-native-gesture-handler';
 import { Container, Header, Button, Content } from 'native-base';
 
 export default class About extends Component {
