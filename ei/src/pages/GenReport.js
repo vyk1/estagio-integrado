@@ -8,7 +8,6 @@ import 'moment/locale/pt-br'
 
 export default class GenReport extends Component {
     static navigationOptions = ({ navigation }) => {
-        console.log(navigation.state.params)
         return {
             title: `${navigation.getParam('title')}`,
             headerStyle: {

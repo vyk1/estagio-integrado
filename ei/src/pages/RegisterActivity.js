@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React, { Component } from 'react';
-import { Image, StyleSheet, Text, TimePickerAndroid, View, Alert, Modal } from 'react-native';
+import { Image, StyleSheet, Text, TimePickerAndroid, View, Alert } from 'react-native';
 import { Body, Container, Header, Title } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import ImagePicker from 'react-native-image-picker';
@@ -13,18 +13,30 @@ import Esperador from '../components/Esperador';
 
 export default class App extends Component {
 
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: `${navigation.getParam('title')}`,
+            headerStyle: {
+                backgroundColor: '#5f98e3',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontFamily: 'RobotoMono-Bold',
+                fontSize: 15
+            },
+        }
+    };
+
     constructor(props) {
         super(props);
-        this.initialState = { formSent: true, companyName: '', nameError: '', date: '', file: null, id_internship: '5d7260bdcc169444900b2403', studentId: '5d72603dcc169444900b2402', description: 'teste', inputTime: '', outputTime: '' };
+        this.initialState = { formSent: true, companyName: '', nameError: 'Por favor, preencha todos os campos', date: '', file: null, id_internship: '5d7260bdcc169444900b2403', studentId: '5d72603dcc169444900b2402', description: 'teste', inputTime: '', outputTime: '' };
 
         this.state = this.initialState;
     }
 
-    static navigationOptions = ({ navigation }) => {
-        return {
-            title: 'Registro de Atividades'
-        }
-    };
+    componentDidMount = () => {
+        this.getInternshipName()
+    }
 
     getInternshipName = async () => {
 
@@ -36,7 +48,7 @@ export default class App extends Component {
                 console.log(responseJson.internship.company);
 
                 this.setState({ companyName: responseJson.internship.company })
-                // this.props.navigation.setParams({ title: `Olá ${this.state.logado.user.name}` })
+                this.props.navigation.setParams({ title: `Registro de Atividade` })
 
             })
             .catch((error) => {
@@ -44,17 +56,25 @@ export default class App extends Component {
                 return false
             });
     }
-    componentDidMount() {
-        this.getInternshipName()
-    }
 
+
+    showAlert = () => {
+        const { nameError } = this.state
+        Alert.alert(
+            'Erro de Validação',
+            nameError,
+            [{ text: 'OK' }])
+
+    }
     checkInputs = () => {
         if (this.state.inputTime.trim() === "" || this.state.inputTime === "") {
             this.setState({ nameError: "Hora de Entrada Necessária." });
+            this.showAlert();
             return false
         } else {
             if (this.state.outputTime.trim() === "" || this.state.outputTime === "") {
                 this.setState({ nameError: "Hora de Saída Necessária." });
+                this.showAlert();
                 return false
             } else {
                 var startTime = moment(this.state.inputTime, "HH:mm");
@@ -63,19 +83,15 @@ export default class App extends Component {
                 var hours = parseInt(duration.asHours());
                 var minutes = parseInt(duration.asMinutes()) - hours * 60;
 
-                console.log(hours);
-                console.log(minutes);
-                console.log(duration);
-
-                // se a h for maior que 0 E min maior que 0
-                // se h for zero E min maior que 0
                 if ((hours === 0 && minutes > 0) || (hours > 0 && minutes >= 0)) {
                     if (this.state.date === "" || null) {
                         this.setState({ nameError: "Data da Atividade Necessária." });
+                        this.showAlert();
                         return false
                     } else {
                         if (this.state.description.trim() === "") {
                             this.setState({ nameError: "Descrição Necessária." });
+                            this.showAlert();
                             return false
                         } else {
                             this.setState({ nameError: "" });
@@ -84,6 +100,7 @@ export default class App extends Component {
                     }
                 } else {
                     this.setState({ nameError: "Hora de Saída Menor ou Igual a de Entrada." });
+                    this.showAlert();
                     return false
                 }
 
@@ -313,7 +330,6 @@ export default class App extends Component {
             )
         } else {
             return (
-
                 <Container>
                     <Header style={styles.header}>
                         <Body>
@@ -342,9 +358,7 @@ export default class App extends Component {
                                 placeholder="Descrição"
                                 multiline={true}
                             />
-                            {!!nameError && (
-                                <Text style={{ color: 'red' }}>{nameError}</Text>
-                            )}
+
                             {
                                 file && (
                                     <View>
@@ -365,7 +379,6 @@ export default class App extends Component {
                             <BlueButton onPress={this.handleSubmit}>
                                 Registrar Atividade
                             </BlueButton>
-                            {/* </KeyboardAvoidingView> */}
                         </ScrollView>
                     </View>
                 </Container>

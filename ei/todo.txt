@@ -1,11 +1,12 @@
-1. colocar docs!
+
+
+fazer cards para o CRA
 
 2. certificar da cor (primary - colors.xml)
 
 ------------------------------------------------------
 4. imagens!-> usar sharp para reduzir tamanho!
 
-colocar alerts em vez de texto puro
 
 ----------------------
 ao fazer a página de login e cadastro, certificar que o id tem que estar

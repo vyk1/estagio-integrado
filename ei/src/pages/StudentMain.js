@@ -7,7 +7,15 @@ import Esperador from '../components/Esperador';
 export default class StudentMain extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: `${navigation.getParam('title')}`
+            title: `${navigation.getParam('title')}`,
+            headerStyle: {
+                backgroundColor: '#5f98e3',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontFamily: 'RobotoMono-Bold',
+                fontSize: 15
+            },
         }
     };
 
@@ -61,6 +69,10 @@ export default class StudentMain extends Component {
     }
     renderiza() {
         const { logado } = this.state;
+        console.log('====================================');
+        console.log(logado);
+        console.log(!Object.keys(logado).length);
+        console.log('====================================');
 
         if (!Object.keys(logado).length) {
             return (
@@ -88,12 +100,15 @@ export default class StudentMain extends Component {
 }
 const styles = StyleSheet.create({
 
+    Container: {
+        backgroundColor: '#fafbfc'
+    },
+
     MainContainer: {
         justifyContent: 'center',
         flex: 1,
         margin: 10,
-        paddingTop: (Platform.OS) === 'ios' ? 20 : 0
-
+        paddingTop: 0,
     },
 
     GridViewBlockStyle: {
@@ -103,23 +118,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 100,
         margin: 5,
-        backgroundColor: '#00BCD4'
-
-    }
-    ,
+        backgroundColor: '#5fbbe3'
+    },
 
     GridViewInsideTextItemStyle: {
-
         color: '#fff',
         padding: 18,
         fontSize: 18,
         justifyContent: 'center',
         textAlign: 'center',
-
-    },
-    Grind2: {
-        textAlign: 'center',
-        fontSize: 20,
-    },
-
+    }
 });

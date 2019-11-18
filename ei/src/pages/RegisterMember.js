@@ -1,44 +1,154 @@
 import React, { Component } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { Container, Header, Content, Form, Item, Picker } from 'native-base';
+import InlineLabel from '../components/InlineLabel';
+import BlueButton from '../components/BlueButton';
+import Esperador from '../components/Esperador';
+import PhoneInput from '../components/PhoneInput';
+
 export default class PickerInputExample extends Component {
-    constructor(props) {
+
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: 'Cadastro de Usuário',
+      headerStyle: {
+        backgroundColor: '#5f98e3',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontFamily: 'RobotoMono-Bold',
+        fontSize: 15
+      },
+    }
+  };
+  constructor(props) {
     super(props);
-    this.state = {
-      selected2: undefined
-    };
+    this.initialState = { name: '', email: '', password: '', phone: '', type: null, nameError: 'Por favor, preencha todos os campos', formSent: true };
+    this.state = this.initialState;
   }
-  onValueChange2(value) {
+  showAlert = () => {
+    const { nameError } = this.state
+    Alert.alert(
+      'Erro de Validação',
+      nameError,
+      [{ text: 'OK' }])
+
+  }
+  checkInputs = () => {
+
+    if (this.state.name.length < 4) {
+      this.setState({ nameError: "O nome necessita de ao menos 3 caracteres." });
+      this.showAlert();
+      return false
+    } else {
+      if (!checkEmail() || this.state.email === "") {
+        this.setState({ nameError: "E-mail inválido" });
+        this.showAlert();
+        return false
+      } else {
+        if (this.state.password.length < 8) {
+          this.setState({ nameError: "A senha necessita de ao menos 8 caracteres." });
+          this.showAlert();
+          return false
+        } else {
+          if (this.state.phone === "") {
+            this.setState({ nameError: "O telefone necessita de ao menos 8 caracteres." });
+            this.showAlert();
+            return false
+          } else {
+            if (this.state.type === "" || null) {
+              this.setState({ nameError: "O tipo do usuário necessita ser preenchido." });
+              this.showAlert();
+              return false
+            } else {
+              return true
+            }
+          }
+        }
+      }
+    }
+  }
+
+  checkEmail() {
+    const { email } = this.state
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (reg.test(email) === false) {
+      console.log("Email is Not Correct");
+      // this.setState({ email: text })
+      return false;
+    }
+    else {
+      // this.setState({ email: text })
+      console.log("Email is Correct");
+      return true
+    }
+  }
+
+  onChangeType(value) {
     this.setState({
-      selected2: value
+      type: value
     });
   }
+
   render() {
-    return (
-      <Container>
-        <Header />
-        <Content>
-          <Form>
+    const { formSent, email, name, phone, password } = this.state;
+    if (formSent == false) {
+      return (
+        <Esperador />
+      )
+    } else {
+      return (
+        <View style={styles.MainContainer}>
+          <Container>
+            <InlineLabel label="Nome:"
+              onChangeText={(name) => this.setState({ name })}
+              value={name} />
+
+            <InlineLabel label="E-mail:"
+              onChangeText={(email) => this.setState({ email })}
+              value={email} />
+
+            <InlineLabel label="Senha:"
+              onChangeText={(password) => this.setState({ password })}
+              value={password} />
+
+            <PhoneInput label="Telefone:"
+              onChangeText={(phone) => this.setState({ phone })}
+              value={phone} />
+
             <Item picker>
               <Picker
                 mode="dropdown"
-                iosIcon={<Icon name="arrow-down" />}
                 style={{ width: undefined }}
-                placeholder="Select your SIM"
+                placeholder="Selecione o tipo de usuário"
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
-                selectedValue={this.state.selected2}
-                onValueChange={this.onValueChange2.bind(this)}
+                selectedValue={this.state.type}
+                onValueChange={this.onChangeType.bind(this)}
               >
-                <Picker.Item label="Wallet" value="key0" />
-                <Picker.Item label="ATM Card" value="key1" />
-                <Picker.Item label="Debit Card" value="key2" />
-                <Picker.Item label="Credit Card" value="key3" />
-                <Picker.Item label="Net Banking" value="key4" />
+                <Picker.Item label="Estudante" value="1" />
+                <Picker.Item label="Orientador" value="2" />
+                <Picker.Item label="Supervisor" value="3" />
               </Picker>
             </Item>
-          </Form>
-        </Content>
-      </Container>
-    );
+          </Container>
+          <BlueButton onPress={() => console.log(this.state)}>
+            Cadastrar-se
+            </BlueButton>
+        </View>
+
+      );
+    }
   }
 }
+const styles = StyleSheet.create({
+  header: {
+    fontSize: 6,
+  },
+  MainContainer: {
+    justifyContent: 'center',
+    flex: 2,
+    marginHorizontal: 10,
+    alignContent: "space-between"
+  }
+})

@@ -9,7 +9,7 @@ import server from "../config/server";
 import RNFetchBlob from 'rn-fetch-blob';
 import { ScrollView } from 'react-native-gesture-handler';
 
-export default class Law extends Component {
+export default class MoreInfo extends Component {
 
     static navigationOptions = ({ navigation }) => {
         return {
@@ -29,12 +29,12 @@ export default class Law extends Component {
             <View>
                 <ScrollView>
 
-                    <Text style={styles.text} onPress={() => this.handleDoc()}>aqui</Text>
+                    {/* <Text style={styles.text} onPress={() => this.handleDoc()}>aqui</Text>
                     <Text onPress={() => {
                         Linking.openURL(this.props.navigation.params.link);
 
                     }}
-                    >Mais informações: {this.state.link}</Text>
+                    >Mais informações: {this.state.link}</Text> */}
                 </ScrollView>
             </View>
         );

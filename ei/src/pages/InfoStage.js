@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, FlatList, Text, View, Platform } from 'react-native';
+import { StyleSheet, FlatList, Text, View, Platform, Linking } from 'react-native';
+import { CardItem } from 'native-base'
 import server from "../config/server";
 import RNFetchBlob from 'rn-fetch-blob';
 import Esperador from '../components/Esperador';
 
 export default class InfoStage extends Component {
-    static navigationOptions = {
-        title: 'Informações sobre o Estágio',
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: 'Informações sobre o Estágio',
+            headerStyle: {
+                backgroundColor: '#5f98e3',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontFamily: 'RobotoMono-Bold',
+                fontSize: 15
+            },
+        }
     };
 
     constructor(props) {
@@ -16,23 +27,25 @@ export default class InfoStage extends Component {
         this.state = {
             loaded: true,
             GridViewItems: [
-                { key: 'Lei de Estágio n° 11788/08', page: 'Law', fileName: 'leiEstagio' },
-                { key: 'Passo a Passo para Iniciar o Estágio', page: 'Tutorial', fileName: 'fluxograma' },
-                { key: 'Lista dos Locais Conveniados', page: 'List', fileName: 'listaConveniados' },
-                { key: 'Documentos', page: 'MoreInfo', link: 'https://docs.google.com/spreadsheets/d/1rqA00R7FE5x3sBmt758UTDH7NsnCNn27yMuuWu60sIw/edit#gid=1870369049' },
-                { key: 'Projeto Pedagógico dos Cursos', page: 'MoreInfo', link: 'https://www.iffarroupilha.edu.br/projeto-pedag%C3%B3gico-de-curso/sobre-os-projetos-pedag%C3%B3gicos-de-cursos' }
+                { key: 'Lei de Estágio n° 11788/08', fileName: 'leiEstagio' },
+                { key: 'Passo a Passo para Iniciar o Estágio', fileName: 'fluxograma' },
+                { key: 'Lista dos Locais Conveniados', fileName: 'listaConveniados' },
+                { key: 'Documentos', link: 'https://docs.google.com/spreadsheets/d/1rqA00R7FE5x3sBmt758UTDH7NsnCNn27yMuuWu60sIw' },
+                { key: 'Projeto Pedagógico dos Cursos', link: 'https://www.iffarroupilha.edu.br/projeto-pedag%C3%B3gico-de-curso/sobre-os-projetos-pedag%C3%B3gicos-de-cursos' }
+                // { key: 'Documentos', page: 'MoreInfo', link: 'https://docs.google.com/spreadsheets/d/1rqA00R7FE5x3sBmt758UTDH7NsnCNn27yMuuWu60sIw/edit#gid=1870369049' },
+                // { key: 'Projeto Pedagógico dos Cursos', page: 'MoreInfo', link: 'https://www.iffarroupilha.edu.br/projeto-pedag%C3%B3gico-de-curso/sobre-os-projetos-pedag%C3%B3gicos-de-cursos' }
             ]
         }
     }
 
-    handleDoc(item) {
+    async handleDoc(item) {
         const { fileName, key, page, link } = item
         if (link != null) {
-
-            this.GetGridViewItem(page, key, link)
+            // this.GetGridViewItem(page, key, link)
+            Linking.openURL(link);
         } else {
             this.setState({ loaded: false })
-            RNFetchBlob
+            await RNFetchBlob
                 .config({
                     addAndroidDownloads: {
                         useDownloadManager: true, // <-- this is the only thing required
@@ -50,7 +63,6 @@ export default class InfoStage extends Component {
                     // the path of downloaded file
                     console.log(resp);
                     resp.path();
-                    console.log('====================================');
                     this.setState({ loaded: true })
 
                 }).catch((e) => {
@@ -77,6 +89,9 @@ export default class InfoStage extends Component {
         } else {
             return (
                 <View style={styles.MainContainer}>
+                    <CardItem header bordered>
+                        <Text>Toque na opção desejada para fazer download ou acessar documentos</Text>
+                    </CardItem>
                     <FlatList
                         data={this.state.GridViewItems}
                         renderItem={({ item }) => <View style={styles.GridViewBlockStyle}>

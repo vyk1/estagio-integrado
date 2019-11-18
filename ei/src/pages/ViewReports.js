@@ -4,16 +4,18 @@ import server from "../config/server";
 import Esperador from '../components/Esperador';
 
 export default class ViewReports extends Component {
-    static navigationOptions = {
-        title: 'Visualização de estagiários',
-        headerStyle: {
-            backgroundColor: '#5f98e3',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-            fontFamily: 'RobotoMono-Bold',
-            fontSize: 15
-        },
+    static navigationOptions = ({ navigation }) => {
+        return {        // title: 'Visualização de estagiários',
+            title: `${navigation.getParam('title')}`,
+            headerStyle: {
+                backgroundColor: navigation.getParam('backgroundColor'),
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontFamily: 'RobotoMono-Bold',
+                fontSize: 15
+            },
+        }
     };
 
     constructor(props) {
@@ -71,7 +73,7 @@ export default class ViewReports extends Component {
                                         <Text>{rowData.name}</Text>
                                     </Left>
                                     <Right>
-                                        <Text>-></Text>
+                                        <Text>=></Text>
                                     </Right>
                                 </ListItem>
                             ))}

@@ -28,7 +28,7 @@ export default class About extends Component {
         this.state = {
             GridViewItems: [
                 { key: 'Login', page: 'Main' },
-                { key: 'Cadastre-se', page: '' }
+                { key: 'Cadastre-se', page: 'RegisterMember' }
             ]
         }
     }
@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
 
     },
     GridViewInsideTextItemStyle: {
-
         color: '#fff',
         padding: 18,
         fontSize: 18,

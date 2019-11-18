@@ -12,7 +12,7 @@ import GenReport from "./src/pages/GenReport";
 import ViewReports from "./src/pages/ViewReports";
 import Inicial from "./src/pages/Inicial";
 import InfoStage from "./src/pages/InfoStage";
-import MoreInfo from "./src/pages/MoreInfo";
+import RegisterMember from "./src/pages/RegisterMember";
 
 const AppNavigator = createStackNavigator({
     Main,
@@ -25,9 +25,9 @@ const AppNavigator = createStackNavigator({
     ViewReports,
     Inicial,
     InfoStage,
-    MoreInfo
+    RegisterMember
 }, {
-    initialRouteName: 'Inicial'
+    initialRouteName: 'RegisterMember'
 }
 ); 
 
