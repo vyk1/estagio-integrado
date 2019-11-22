@@ -29,8 +29,14 @@ const UserSchema = new mongoose.Schema({
           select: false
      },
      emailConfirmed: {
-          type: String,
-          select: false
+          type: Boolean,
+          select: false,
+          default: false
+     },
+     verified: {
+          type: Boolean,
+          select: false,
+          default: false
      },
      phone: {
           type: String,

@@ -29,7 +29,7 @@ export default class App extends Component {
 
     constructor(props) {
         super(props);
-        this.initialState = { formSent: true, companyName: '', nameError: 'Por favor, preencha todos os campos', date: '', file: null, id_internship: '5d7260bdcc169444900b2403', studentId: '5d72603dcc169444900b2402', description: 'teste', inputTime: '', outputTime: '' };
+        this.initialState = { formSent: true, companyName: '', nameError: '', date: '', date2: '', file: null, id_internship: '5d7260bdcc169444900b2403', studentId: '5d72603dcc169444900b2402', description: 'teste', inputTime: '', outputTime: '' };
 
         this.state = this.initialState;
     }
@@ -183,10 +183,9 @@ export default class App extends Component {
     };
 
     sendForm = async () => {
-        const { file, formSent } = this.state
+        const { file } = this.state
         console.log('submeteu');
 
-        // alert('Espere um pouco...')
         this.setState({ formSent: false })
 
         if (!file) {
@@ -199,9 +198,6 @@ export default class App extends Component {
                     'Content-Type': 'application/json',
                 }
             }
-            console.log('====================================');
-            console.log(config.body);
-            console.log('====================================');
 
             await fetch(`${server}/activity/noimg`, config)
                 .then(res => res.json())
@@ -228,30 +224,35 @@ export default class App extends Component {
                                     text: 'OK', onPress: () => { console.log('res negativa') }
                                 }
                             ])
+                        this.setState({ formSent: true })
+
                     }
 
                 }).catch(e => {
-                    console.log('deu ruim', e);
+                    // 
+                    console.log(e);
                     Alert.alert(
                         'Erro',
                         e.toString(),
                         [
                             { text: 'OK', onPress: () => { console.log('ok né :/') } }
                         ])
-
+                    this.setState({ formSent: true })
                 })
         } else {
+            await
+                this.setState({ date2: this.state.date.toISOString() })
+            console.log(this.state);
 
             const config = {
                 method: 'POST',
-                body: this.createFormData(this.state.file, this.state)
+                body: this.createFormData(this.state.file, this.state),
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
             }
 
-            console.log('====================================');
-            console.log(config.body);
-            console.log('====================================');
-
-            await fetch(`${server}/activity`, config)
+            fetch(`${server}/activity`, config)
                 .then(res => res.json())
                 .then(res => {
                     this.setState({ formSent: true })
@@ -276,6 +277,8 @@ export default class App extends Component {
                                     text: 'OK', onPress: () => { console.log('res negativa') }
                                 }
                             ])
+                        this.setState({ formSent: true })
+
                     }
                 }).catch(e => {
                     console.log('deu ruim', e);
@@ -285,7 +288,7 @@ export default class App extends Component {
                         [
                             { text: 'OK', onPress: () => { console.log('ok né :/') } }
                         ])
-
+                    this.setState({ formSent: true })
                 })
         }
 
@@ -295,11 +298,10 @@ export default class App extends Component {
     handleSubmit = async () => {
 
         let checagem = this.checkInputs();
-        console.log(checagem);
+        // console.log(checagem);
         if (!checagem) {
             return false
         } else {
-            console.log('parou aqui2');
             if (this.state.file == null) {
                 Alert.alert(
                     'Carregamento de Foto',
@@ -323,7 +325,7 @@ export default class App extends Component {
 
 
     render() {
-        const { formSent, companyName, inputTime, outputTime, date, file, description, nameError } = this.state;
+        const { formSent, companyName, inputTime, outputTime, file, description } = this.state;
         if (companyName === "" || formSent == false) {
             return (
                 <Esperador />

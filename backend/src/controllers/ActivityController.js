@@ -1,6 +1,7 @@
 const moment = require('moment')
 const Activity = require('../models/Activity');
 const Internship = require('../models/Internship');
+const filehelper = require('../config/file-helper')
 
 module.exports = {
 
@@ -33,56 +34,86 @@ module.exports = {
 
     async store(req, res) {
         // store é obrigatório o estágio
-        // console.log(req.body);
-        // console.log(req.file);
+        console.log(req.body.date2);
+        console.log(req.file);
 
-        let { date, description, inputTime, outputTime, id_internship } = req.body
-        // date = moment(date, 'DD-MM-YYYY').toISOString()
+        if (req.file) {
+            console.log('tem arquivo');
 
-        const obj = {
-            date,
-            description,
-            inputTime,
-            outputTime,
-            id_internship,
-            image: req.file.filename
-        }
-        await Activity.find({ date }, (err, doc) => {
-            if (!err) {
-                console.log('====================================');
-                console.log(doc);
-                console.log('====================================');
-                if (!doc.length > 0) {
-                    //não existe então retorna true
-                    // return true
-                    const activity = new Activity(obj);
+            const { date, date2, description, inputTime, outputTime, id_internship } = req.body
+            // valida data
+            Activity.find({ date: date2 }, (err, doc) => {
+                // console.log('====================================');
+                // console.log(doc);
+                // console.log('====================================');
+                if (!err) {
+                    // se não existir
+                    if (!doc.length > 0) {
+                        console.log('tá vago');
 
-                    activity.save((err, activity) => {
-                        if (err) {
-                            console.log(err);
-                            return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+                        filehelper.compressImage(req.file, 100)
+                            .then(newPath => {
 
-                        } else {
-                            // $ pull para fazer um pop ou remove https://boostlog.io/@vithalreddy/push-and-pop-items-into-mongodb-array-via-mongoose-in-nodejs-5a8c3a95a7e5b7008ae1d809
-                            Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
-                                if (err || internship == null) {
-                                    console.log(err);
-                                    return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
-                                } else {
-                                    return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
+                                const full = newPath.split('\\');
+                                const caminho = full[full.length - 1]
+
+                                const obj = {
+                                    date: date2,
+                                    description,
+                                    inputTime,
+                                    outputTime,
+                                    id_internship,
+                                    // image: req.file.filename
+                                    image: caminho
                                 }
+
+                                const activity = new Activity(obj);
+
+                                activity.save((err, activity) => {
+                                    if (err) {
+                                        console.log(err);
+                                        return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+
+                                    } else {
+                                        console.log('obj');
+                                        Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
+                                            if (err || internship == null) {
+                                                console.log(err);
+                                                return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+                                            } else {
+                                                return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
+                                            }
+                                        });
+                                    }
+                                })
+
+                            }).catch(err => {
+                                console.log(err);
+                                return err
                             });
-                        }
-                    })
-                } else {
-                    return res.status(400).send({ status: 400, message: "Já existe uma atividade cadastrada para este dia." });
+
+                    } else {
+                        console.log('====================================');
+                        console.log('já tem esse cy');
+                        console.log('====================================');
+                        return res.status(400).send({ status: 400, message: "Já existe uma atividade cadastrada para este dia." });
+                    }
                 }
-            } else {
-                console.log(err);
-                return res.status(400).send({ status: 400, message: "Erro ao consultar o banco de dados!" });
-            }
-        })
+
+            })
+        } else {
+            console.log('====================================');
+            console.log(err);
+            console.log('====================================');
+            return res.status(400).send({ status: 400, message: "Imagem não recebida." });
+        }
+
+        // else {
+        //     console.log(err);
+        //     return res.status(400).send({ status: 400, message: "Erro ao consultar o banco de dados." });
+        // }
     },
+
     async storeWithNoImage(req, res) {
         // store é obrigatório o estágio
         // formato do date tem que converter para isostring

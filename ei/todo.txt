@@ -1,7 +1,3 @@
-
-
-fazer cards para o CRA
-
 2. certificar da cor (primary - colors.xml)
 
 ------------------------------------------------------
@@ -12,7 +8,7 @@ fazer cards para o CRA
 ao fazer a página de login e cadastro, certificar que o id tem que estar
 no header!
 
-1. Perfil de cadastro
+1. página de cadastro
 
 2. Página em React para permitir/associar users em internships
     

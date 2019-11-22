@@ -27,7 +27,7 @@ const AppNavigator = createStackNavigator({
     InfoStage,
     RegisterMember
 }, {
-    initialRouteName: 'RegisterMember'
+    initialRouteName: 'Main'
 }
 ); 
 

@@ -18,7 +18,6 @@ class NHDatePicker extends Component {
         // const { minimumDate, maximumDate } = this.props
         return (
             <DatePicker style={styles.inputWrapper}
-                defaultDate={new Date()}
                 date={this.state.date}
                 // minimumDate={minimumDate}
                 // maximumDate={maximumDate}

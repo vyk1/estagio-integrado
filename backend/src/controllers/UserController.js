@@ -15,6 +15,15 @@ function generateToken(params = {}) {
 
 module.exports = {
 
+     async notVerified(req, res) {
+          const users = await User.find({ verified: false });
+          return res.json(users);
+     },
+     async notAssociated(req, res) {
+          // const users = await User.find({ id_: false });
+          // return res.json(users);
+          
+     },
      async index(req, res) {
           const users = await User.find();
           return res.json(users);

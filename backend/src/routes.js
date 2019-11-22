@@ -69,10 +69,10 @@ routes.put('/activity/:id', jsonParser, ActivityController.update);
 // mongodb+srv://developer:<password>@cluster0-dqw7t.mongodb.net/test?retryWrites=true&w=majority
 
 
-//get para where tipo = students 
-// ou
-// get para trazer tipo de um user
-routes.get('/user', jsonParser, UserController.index);
+// USERS PARA O ADMIN!
+routes.get('/users', jsonParser, UserController.index);
+routes.get('/users/notVerified', jsonParser, UserController.notVerified);
+routes.get('/users/notAssoc', jsonParser, UserController.notAssociated);
 routes.get('/user/:id', jsonParser, UserController.getById);
 routes.post('/user/register', jsonParser, UserController.store);
 routes.post('/user/auth', jsonParser, UserController.auth);
