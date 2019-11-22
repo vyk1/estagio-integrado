@@ -72,7 +72,8 @@ routes.put('/activity/:id', jsonParser, ActivityController.update);
 // USERS PARA O ADMIN!
 routes.get('/users', jsonParser, UserController.index);
 routes.get('/users/notVerified', jsonParser, UserController.notVerified);
-routes.get('/users/notAssoc', jsonParser, UserController.notAssociated);
+routes.get('/users/:type', jsonParser, UserController.getByType)
+
 routes.get('/user/:id', jsonParser, UserController.getById);
 routes.post('/user/register', jsonParser, UserController.store);
 routes.post('/user/auth', jsonParser, UserController.auth);

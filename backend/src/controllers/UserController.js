@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Internship = require('../models/Internship');
 const jwt = require('jsonwebtoken');
 
 const bcrypt = require('bcrypt');
@@ -19,10 +20,37 @@ module.exports = {
           const users = await User.find({ verified: false });
           return res.json(users);
      },
-     async notAssociated(req, res) {
-          // const users = await User.find({ id_: false });
-          // return res.json(users);
-          
+     async getByType(req, res) {
+          const { type } = req.params
+          if (type == 1) {
+               let arrayEstudantesSemEstagio = []
+               let arrayCompleto= []
+
+               // pego todos ids dos estudantes,
+               const estudantes = await User.find({ type: type })
+
+               for (let index = 0; index < estudantes.length; index++) {
+                    const element = estudantes[index];
+                    estagio = await Internship.find({ id_student: element._id })
+
+                    // se voltar vazio, arrayDeIds push
+                    if (estagio.length == 0)
+                         arrayEstudantesSemEstagio.push(element)
+               }
+               for (let i = 0; i < arrayEstudantesSemEstagio.length; i++) {
+                    const element = arrayEstudantesSemEstagio[i];
+                    estudante = await User.findById(element._id)
+                    arrayCompleto.push(estudante)
+               }
+
+               // console.log(arrayCompleto);
+               return res.json(arrayCompleto);
+
+          } else {
+               const users = await User.find({ type: type });
+               return res.json(users);
+          }
+
      },
      async index(req, res) {
           const users = await User.find();
