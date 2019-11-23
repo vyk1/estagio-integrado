@@ -30,12 +30,10 @@ const UserSchema = new mongoose.Schema({
      },
      emailConfirmed: {
           type: Boolean,
-          select: false,
           default: false
      },
      verified: {
           type: Boolean,
-          select: false,
           default: false
      },
      phone: {

@@ -14,8 +14,44 @@ function generateToken(params = {}) {
      return jwt.sign(params, authConfig.secret, { expiresIn: 86400 })
 }
 
+// convenção:
+// header apenas para auth do user bem como seu id
+// body faço as reqs de mudança
 module.exports = {
+     async accept(req, res) {
+          const { id } = req.body;
+          console.log(id);
+          
+          await User.findOneAndUpdate({ '_id': id }, { verified: true }, { new: true, useFindAndModify: false }, (err, doc) => {
+               console.log('====================================');
+               console.log('====================================');
+               if (err) {
+                    console.log(err);
+                    return res.status(500).send(err);
+               } else {
+                    if (doc) {
+                         // se new é true traz doc updateado
+                         // dá pra por na url e direcionar!
+                         return res.status(200).send({ status: 200, message: 'Usuário aceito com sucesso!' })
+                    } else {
+                         console.log(err);
+                         return res.status(400).send({ status: 400, message: "Erro na operação." });
+                    }
+               }
+          })
+     },
+     async remove(req, res) {
+          const { id } = req.body;
+          await User.findByIdAndDelete(id, (err, doc) => {
+               if (err) {
+                    console.log(err);
+                    return res.status(500).send(err);
+               } else {
+                    return res.status(200).send({ status: 200, message: "Usuário apagado com sucesso!" })
+               }
 
+          });
+     },
      async notVerified(req, res) {
           const users = await User.find({ verified: false });
           return res.json(users);
@@ -53,7 +89,7 @@ module.exports = {
 
      },
      async index(req, res) {
-          const users = await User.find();
+          const users = await User.find().sort('type');
           return res.json(users);
      },
 

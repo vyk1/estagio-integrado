@@ -6,12 +6,14 @@ import {
   Col,
   FormGroup,
   ControlLabel,
-  FormControl
+  FormControl,
+  Spinner
 } from "react-bootstrap";
 
 import { Card } from "components/Card/Card.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
 import api from "variables/Server.js";
+import SpinnerBS from "components/SpinnerBS";
 
 class NewInternship extends Component {
 
@@ -36,20 +38,26 @@ class NewInternship extends Component {
     let response = await api.get('/users/1')
     var arrTen = [];
     if (response.data.length === 0) {
-      arrTen.push(<option disabled>Não há Estudantes a Serem Associados à Estágios</option>)
+      arrTen.push(<option disabled key={null}>Não há Estudantes a Serem Associados à Estágios</option>)
+      this.setState({
+        warning: "Não há Estudantes a Serem Associados à Estágios",
+        disabled: true,
+        color: "danger"
+      });
+
     } else {
-      this.setState({ student_id: response.data[0]._id })
+      this.setState({ id_student: response.data[0]._id })
       for (let k = 0; k < response.data.length; k++) {
         arrTen.push(<option key={response.data[k]._id} value={response.data[k]._id}> {response.data[k].name} </option>);
       }
     }
     this.setState({
-      students: arrTen
+      students: arrTen,
     });
 
     response = await api.get('/users/2')
     arrTen = [];
-    this.setState({ advisor_id: response.data[0]._id })
+    this.setState({ id_advisor: response.data[0]._id })
     for (let k = 0; k < response.data.length; k++) {
       arrTen.push(<option key={response.data[k]._id} value={response.data[k]._id}> {response.data[k].name} </option>);
     }
@@ -58,7 +66,7 @@ class NewInternship extends Component {
     });
     response = await api.get('/users/3')
     arrTen = [];
-    this.setState({ supervisor_id: response.data[0]._id })
+    this.setState({ id_supervisor: response.data[0]._id })
     for (let k = 0; k < response.data.length; k++) {
       arrTen.push(<option key={response.data[k]._id} value={response.data[k]._id}> {response.data[k].name} </option>);
     }
@@ -95,20 +103,20 @@ class NewInternship extends Component {
     e.preventDefault();
     console.log('====================================');
     await console.log(this.state);
-    const { company, student_id, supervisor_id, advisor_id, description } = this.state
-    const res = await api.post('/internship', { company, student_id, supervisor_id, advisor_id, description })
+    const { company, id_student, id_supervisor, id_advisor, description } = this.state
+    const res = await api.post('/internship', { company, id_student, id_supervisor, id_advisor, description })
     if (res.status === 201) {
       console.log('====================================');
       console.log(res);
-      console.log('====================================');
+      // console.log('====================================');
+
       this.setState({
-        warning: res.data.message, 
+        warning: res.data.message,
         company: "",
-        student_id: "",
-        advisor_id: "",
-        supervisor_id: "",
         description: ""
       })
+      this.getData();
+
     } else {
       this.setState({ warning: res.data.message })
     }
@@ -123,7 +131,7 @@ class NewInternship extends Component {
           <Grid fluid>
             <Row>
               <Col md={12}>
-                <Card content="Carregando..."></Card>
+                <SpinnerBS />
               </Col>
             </Row>
           </Grid>
@@ -135,7 +143,7 @@ class NewInternship extends Component {
         <div className="content">
           {
             this.state.warning && (
-              <Alert bsStyle="info">
+              <Alert bsStyle={this.state.color}>
                 <button type="button" aria-hidden="true" className="close">
                   &#x2715;
                     </button>
@@ -164,6 +172,7 @@ class NewInternship extends Component {
                               bsClass="form-control"
                               placeholder="Insira aqui o nome da Empresa"
                               onChange={async (e) => await this.setState({ company: e.target.value })}
+                              value={this.state.company}
                             />
                           </FormGroup>
                         </Col>
@@ -171,21 +180,21 @@ class NewInternship extends Component {
 
                       <FormGroup controlId="formControlsSelect">
                         <ControlLabel>Estudante</ControlLabel>
-                        <FormControl componentClass="select" placeholder="Estudante" classID="student_id" onChange={this.handleChange.bind(this)}>
+                        <FormControl componentClass="select" placeholder="Estudante" classID="id_student" value={this.state.id_student} onChange={this.handleChange.bind(this)}>
                           {this.state.students}
                         </FormControl>
                       </FormGroup>
 
                       <FormGroup controlId="formControlsSelect">
                         <ControlLabel>Orientador</ControlLabel>
-                        <FormControl componentClass="select" placeholder="Orientador" classID="advisor_id" onChange={this.handleChange.bind(this)}>
+                        <FormControl componentClass="select" placeholder="Orientador" classID="id_advisor" value={this.state.id_advisor} onChange={this.handleChange.bind(this)}>
                           {this.state.advisors}
                         </FormControl>
 
                       </FormGroup>
                       <FormGroup controlId="formControlsSelect">
                         <ControlLabel>Supervisor</ControlLabel>
-                        <FormControl componentClass="select" placeholder="Supervisor" classID="supervisor_id" onChange={this.handleChange.bind(this)}>
+                        <FormControl componentClass="select" placeholder="Supervisor" classID="id_supervisor" value={this.state.id_supervisor} onChange={this.handleChange.bind(this)}>
                           {this.state.supervisors}
                         </FormControl>
                       </FormGroup>
@@ -206,7 +215,7 @@ class NewInternship extends Component {
                           </FormGroup>
                         </Col>
                       </Row>
-                      <Button bsStyle="info" pullRight fill type="submit">
+                      <Button bsStyle="info" pullRight fill type="submit" disabled={this.state.disabled}>
                         Enviar
                     </Button>
                       <div className="clearfix" />

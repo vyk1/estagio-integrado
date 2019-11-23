@@ -20,6 +20,11 @@ mongoose.connect('mongodb+srv://developer:developer@cluster0-dqw7t.mongodb.net/e
 //habilita o cors
 app.use(cors());
 
+// const corsOptions = {
+//      origin: 'http://localhost:4444'
+// }
+// app.use(cors(corsOptions))
+
 //alias para o caminho relativo dos arquivos
 
 app.use('/files', express.static(path.resolve(__dirname, '..', 'uploads')))

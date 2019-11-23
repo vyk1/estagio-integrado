@@ -5,7 +5,7 @@ import Card from "components/Card/Card.jsx";
 import { thArray } from "variables/Variables.jsx";
 import api from "variables/Server.js";
 
-class TableList extends Component {
+class AllActivatedMembers extends Component {
 
   state = {
     users: [],
@@ -71,7 +71,7 @@ class TableList extends Component {
                 <Col md={12}>
                   <Card
                     title="Membros"
-                    category="Aqui estão listados todos os membros :)"
+                    category="Aqui estão listados todos os membros aceitos pela administração :)"
                     ctTableFullWidth
                     ctTableResponsive
                     content={
@@ -91,6 +91,7 @@ class TableList extends Component {
                                 <td>{prop.email}</td>
                                 <td>{prop.phone}</td>
                                 <td>{this.getType(prop.type)}</td>
+                                <td>{prop.emailConfirmed? "Sim":"Não"}</td>
                               </tr>
                             );
                           })}
@@ -122,4 +123,4 @@ class TableList extends Component {
   }
 }
 
-export default TableList;
+export default AllActivatedMembers;

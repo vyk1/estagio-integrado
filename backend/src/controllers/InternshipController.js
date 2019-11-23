@@ -193,6 +193,12 @@ module.exports = {
                     return res.status(400).send({ status: 400, message: "Não foi possível salvar." });
                }
                else {
+                    // console.log('====================================');
+                    // console.log(doc);
+                    // console.log('====================================');
+                    // if(doc){
+
+                    // }
                     return res.status(201).send({ status: 201, message: "Estágio Cadastrado!" });
                }
           })

@@ -73,8 +73,11 @@ routes.put('/activity/:id', jsonParser, ActivityController.update);
 routes.get('/users', jsonParser, UserController.index);
 routes.get('/users/notVerified', jsonParser, UserController.notVerified);
 routes.get('/users/:type', jsonParser, UserController.getByType)
-
 routes.get('/user/:id', jsonParser, UserController.getById);
+
+routes.delete('/user', jsonParser, UserController.remove);
+routes.post('/user/accept', jsonParser, UserController.accept);
+
 routes.post('/user/register', jsonParser, UserController.store);
 routes.post('/user/auth', jsonParser, UserController.auth);
 routes.post('/user/forgot', jsonParser, UserController.recovery);
