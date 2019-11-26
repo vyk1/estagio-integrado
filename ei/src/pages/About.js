@@ -3,12 +3,12 @@ import {
   Image,
   StyleSheet,
   Text,
-  View
+  Linking
 } from 'react-native';
 
 import logo from '../assets/logo_transp2.png';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Container, Content } from 'native-base';
+import { Container, Content, Button } from 'native-base';
 
 export default class About extends Component {
   static navigationOptions = {
@@ -34,6 +34,18 @@ export default class About extends Component {
             O objetivo deste aplicativo é incentivar a reflexão acerca do estágio e promover a comunicação entre os sujeitos envolvidos, por meio do suporte de um software educacional, contribuindo assim com os processos de ensino e de aprendizagem proporcionados pelo estágio curricular supervisionado.
             Esperamos que este aplicativo seja útil para você. Use e aproveite todas as ferramentas disponíveis.
         </Text>
+          <Text style={styles.text}>
+            Esperamos que este aplicativo seja útil para você. Use e aproveite todas as ferramentas disponíveis.
+        </Text>
+          <Text style={styles.text}>
+            Além disso, gostaríamos de conhecer a sua opinião sobre este aplicativo. Por favor, responda ao formulário do link abaixo. Você levará menos de 1 minuto.
+        </Text>
+          <Button block primary onPress={() => {
+            Linking.openURL(`https://docs.google.com/forms/d/1r9CITN_8QIGXI5uacS8ZMsT3KCC1gkm-Q6vsHfcN3ng/viewform?edit_requested=true`)
+          }}>
+            <Text style={[styles.text, { color: 'white' }]}>Deixe sua Opinião</Text>
+          </Button>
+            <Text style={[styles.text, { textAlign: "right" }]}>Josiana</Text>
         </Content>
       </Container>
     );
@@ -44,7 +56,8 @@ const styles = StyleSheet.create({
   MainContainer: {
     justifyContent: 'center',
     flex: 1,
-    paddingHorizontal: 8
+    paddingHorizontal: 8,
+    paddingRight: 2
   },
   image: {
     alignSelf: 'center',

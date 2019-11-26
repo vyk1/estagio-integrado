@@ -64,7 +64,7 @@ export default class StudentMain extends Component {
             title: key,
             logado,
             title: 'Carregando',
-
+            backgroundColor: '#5f98e3',
         });
     }
     renderiza() {

@@ -15,7 +15,8 @@ export default class Main extends Component {
             GridViewItems: [
                 { key: 'Aluno', page: 'StudentMain' },
                 { key: 'Orientador', page: 'VisorMain' },
-                { key: 'Supervisor', page: 'VisorMain' }
+                { key: 'Supervisor', page: 'VisorMain' },
+                { key: 'TESTAR PARA SUPERVISOR', page: '' }
             ]
         }
     }

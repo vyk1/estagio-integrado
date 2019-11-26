@@ -59,13 +59,10 @@ export default class VisorMain extends Component {
             // this.props.navigation.setParams({ title: , headerStyle: { backgroundColor: '#d60f16' } })
             this.props.navigation.setParams({ title: `Olá ${this.state.logado.user.name}`, backgroundColor: '#5bd4d4' });
             this.setState({ backgroundColor: this.props.navigation.getParam('backgroundColor') })
-            console.log('====================================');
-            console.log(this.state.backgroundColor);
-            console.log('====================================');
 
         } else {
-            // this.props.navigation.setParams({ title: `Olá ${this.state.logado.user.name}`, headerStyle: { backgroundColor: '#555' } })
-            this.props.navigation.setParams({ title: 'RENDERIZAR PARA SUPERVISOR!', backgroundColor: '#1B5E20' });
+            this.props.navigation.setParams({ title: `Olá ${this.state.logado.user.name}`, backgroundColor: '#1B5E20' });
+            this.setState({ backgroundColor: this.props.navigation.getParam('backgroundColor') })
 
         }
         return

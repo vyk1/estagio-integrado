@@ -1,5 +1,4 @@
-2. certificar da cor (primary - colors.xml)
-
+https://blog.rocketseat.com.br/criando-efeito-de-lazy-load-em-imagens-no-react-native/
 ------------------------------------------------------
 4. imagens!-> usar sharp para reduzir tamanho!
 
@@ -7,8 +6,3 @@
 ----------------------
 ao fazer a página de login e cadastro, certificar que o id tem que estar
 no header!
-
-1. página de cadastro
-
-2. Página em React para permitir/associar users em internships
-    
