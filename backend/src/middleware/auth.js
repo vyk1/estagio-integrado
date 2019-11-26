@@ -1,33 +1,26 @@
 const jwt = require('jsonwebtoken');
-const authConfig = require('../config/auth');
+const authConfig = require('../config/auth.json');
 
+// console.log(authConfig);
 
-
-module.exports = (req, res, next) => {
-     const authHeader = req.headers.authorization;
-     // console.log(authHeader);
-     
-     if (!authHeader)
-          return res.status(401).send({ error: 'Token isn\'t provided' });
-
-     const parts = authHeader.split(' ');
-
-     if (!parts.length == 2)
-          return res.status(401).send({ error: 'Token error' });
-
-     const [scheme, token] = parts;
-
-     if(!/^Bearer$/i.test(scheme))
-          return res.status(401).send({ error: 'Token malformatted' });
-     
-     
-     jwt.verify(token, authConfig.secret, (err, decoded)=>{
-          if(err)
-               return res.status(401).send({ error: 'Inválid token' });
-
-          req.userId = decoded.id;
-          return next();
-     })
-
-
+// nota-se que:
+// 401 e 403 tem diferença:
+// 401 é que falta informação -> unauthorized
+// 403 é que não há informações adequadas para ter acesso (mal formação)
+// ->forbidden
+const withAuth = function (req, res, next) {
+     const token = req.cookies.token; 
+     if (!token) {
+          res.status(401).send('Não autorizado: Hash não fornecido.');
+     } else {
+          jwt.verify(token, authConfig.secret, function (err, decoded) {
+               if (err) {
+                    res.status(403).send('Não autorizado: Hash inválido.');
+               } else {
+                    req.email = decoded.email;
+                    next();
+               }
+          });
+     }
 }
+module.exports = withAuth;

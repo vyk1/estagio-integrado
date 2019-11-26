@@ -16,14 +16,10 @@
 
 */
 import Dashboard from "views/Dashboard.jsx";
-import UserProfile from "views/UserProfile.jsx";
 import AllActivatedMembers from "views/AllActivatedMembers.jsx";
 import AllNotActivatedMembers from "views/AllNotActivatedMembers.jsx";
-import Typography from "views/Typography.jsx";
 import Icons from "views/Icons.jsx";
 import NewInternship from "views/NewInternship.jsx";
-import Notifications from "views/Notifications.jsx";
-// import Upgrade from "views/Upgrade.jsx";
 
 const dashboardRoutes = [
   {

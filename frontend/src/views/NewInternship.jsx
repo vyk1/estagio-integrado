@@ -7,7 +7,6 @@ import {
   FormGroup,
   ControlLabel,
   FormControl,
-  Spinner
 } from "react-bootstrap";
 
 import { Card } from "components/Card/Card.jsx";

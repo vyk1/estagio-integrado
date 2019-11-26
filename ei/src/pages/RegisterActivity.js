@@ -29,7 +29,7 @@ export default class App extends Component {
 
     constructor(props) {
         super(props);
-        this.initialState = { formSent: true, companyName: '', nameError: '', date: '', date2: '', file: null, id_internship: '5d7260bdcc169444900b2403', studentId: '5d72603dcc169444900b2402', description: 'teste', inputTime: '', outputTime: '' };
+        this.initialState = { acceptedMIMETypes: ["image/png", "image/jpeg", "image/webp"], formSent: true, companyName: '', nameError: '', date: '', date2: '', file: null, id_internship: '5d7260bdcc169444900b2403', studentId: '5d72603dcc169444900b2402', description: 'teste', inputTime: '', outputTime: '' };
 
         this.state = this.initialState;
     }
@@ -229,7 +229,6 @@ export default class App extends Component {
                     }
 
                 }).catch(e => {
-                    // 
                     console.log(e);
                     Alert.alert(
                         'Erro',
@@ -244,19 +243,21 @@ export default class App extends Component {
                 this.setState({ date2: this.state.date.toISOString() })
             console.log(this.state);
 
-            const config = {
+            const config = await {
                 method: 'POST',
                 body: this.createFormData(this.state.file, this.state),
+                // body: this.state.file,
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }
             }
 
-            fetch(`${server}/activity`, config)
+            await fetch(`${server}/activity`, config)
                 .then(res => res.json())
                 .then(res => {
                     this.setState({ formSent: true })
                     console.log(res);
+                    console.log('cu');
                     if (res.status == 201) {
                         Alert.alert(
                             'Sucesso',
@@ -291,14 +292,12 @@ export default class App extends Component {
                     this.setState({ formSent: true })
                 })
         }
-
-        // return false
-
     }
     handleSubmit = async () => {
 
         let checagem = this.checkInputs();
         // console.log(checagem);
+
         if (!checagem) {
             return false
         } else {
@@ -317,7 +316,26 @@ export default class App extends Component {
                     { cancelable: true },
                 );
             } else {
-                this.sendForm()
+                if (!this.state.acceptedMIMETypes.includes(this.state.file.type)) {
+                    console.log('====================================');
+                    console.log("não aceit");
+                    console.log('====================================');
+                    Alert.alert(
+                        'Extensão de arquivo não permitida',
+                        'Certifique-se que a extensão do arquivo seja: .jpeg, .jpg ou .png.',
+                        [
+                            { text: 'OK', onPress: () => this.sendForm() },
+                            {
+                                text: 'Não',
+                                onPress: () => { return false },
+                                style: 'cancel',
+                            },
+                        ],
+                        { cancelable: true },
+                    );
+                } else {
+                    this.sendForm()
+                }
             }
         }
 

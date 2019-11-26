@@ -49,10 +49,37 @@ const UserSchema = new mongoose.Schema({
      }
 );
 
-UserSchema.pre('save', async function (next) {
-     const hash = await bcrypt.hash(this.password, saltRounds);
-     this.password = hash;
-     next();
-});
+UserSchema.pre('save', function(next) {
+     // Check if document is new or a new password has been set
+     if (this.isNew || this.isModified('password')) {
+       // Saving reference to this because of changing scopes
+       const document = this;
+       bcrypt.hash(document.password, saltRounds,
+         function(err, hashedPassword) {
+         if (err) {
+           next(err);
+         }
+         else {
+           document.password = hashedPassword;
+           next();
+         }
+       });
+     } else {
+       next();
+     }
+   });
 
+   UserSchema.methods.isCorrectPassword = function(password, callback){
+        console.log(password);
+        console.log(this.password);
+        
+     bcrypt.compare(password, this.password, function(err, same) {
+       if (err) {
+         callback(err);
+       } else {
+         callback(err, same);
+       }
+     });
+   }
+   
 module.exports = mongoose.model('User', UserSchema);

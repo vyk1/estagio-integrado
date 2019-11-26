@@ -34,9 +34,8 @@ module.exports = {
 
     async store(req, res) {
         // store é obrigatório o estágio
-        console.log(req.body.date2);
-        console.log(req.file);
 
+        // return res.send({message: "caraio"}).status(200)
         if (req.file) {
             console.log('tem arquivo');
 
@@ -51,7 +50,7 @@ module.exports = {
                     if (!doc.length > 0) {
                         console.log('tá vago');
 
-                        filehelper.compressImage(req.file, 100)
+                        filehelper.compressImage(req.file, 200)
                             .then(newPath => {
 
                                 const full = newPath.split('\\');
@@ -75,7 +74,6 @@ module.exports = {
                                         return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
 
                                     } else {
-                                        console.log('obj');
                                         Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
                                             if (err || internship == null) {
                                                 console.log(err);
@@ -89,7 +87,8 @@ module.exports = {
 
                             }).catch(err => {
                                 console.log(err);
-                                return err
+                                console.log("erro na compressão");
+                                return res.status(400).send({ status: 400, message: "Ocorreu um erro, por favor tente novamente." });
                             });
 
                     } else {
@@ -102,9 +101,6 @@ module.exports = {
 
             })
         } else {
-            console.log('====================================');
-            console.log(err);
-            console.log('====================================');
             return res.status(400).send({ status: 400, message: "Imagem não recebida." });
         }
 
@@ -112,6 +108,59 @@ module.exports = {
         //     console.log(err);
         //     return res.status(400).send({ status: 400, message: "Erro ao consultar o banco de dados." });
         // }
+    },
+    async store2(req, res) {
+        return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+
+
+        // DESCOBRIR PQ NO IMSOMINIA FUNCIONA E NO APP NÃO MAIS 
+        // console.log('====================================');
+        // // console.log(req.body);
+        // console.log('====================================');
+        // const { date, date2, description, inputTime, outputTime, id_internship } = req.body
+
+        // const obj = {
+        //     date: date2,
+        //     description,
+        //     inputTime,
+        //     outputTime,
+        //     id_internship,
+        //     image: req.file.filename
+        // }
+
+        // await Activity.find({ date: date2 }, (err, doc) => {
+
+        //     if (!err) {
+        //         // se não existir
+        //         if (!doc.length > 0) {
+        //             console.log('tá vago');
+
+        //             const activity = new Activity(obj);
+        //             activity.save((err, activity) => {
+        //                 if (err) {
+        //                     console.log(err);
+        //                     return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+
+        //                 } else {
+        //                     Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
+        //                         if (err || internship == null) {
+        //                             console.log(err);
+        //                             return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+        //                         } else {
+        //                             return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
+        //                         }
+        //                     });
+        //                 }
+        //             }).catch(err => {
+        //                 console.log(err);
+        //                 return res.status(400).send({ status: 400, message: "Ocorreu um erro, por favor tente novamente." });
+        //             });
+
+        //         } else {
+        //             return res.status(400).send({ status: 400, message: "Já existe uma atividade cadastrada para este dia." });
+        //         }
+        //     }
+        // })
     },
 
     async storeWithNoImage(req, res) {

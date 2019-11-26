@@ -1,14 +1,12 @@
+const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const Internship = require('../models/Internship');
 const jwt = require('jsonwebtoken');
 
-const bcrypt = require('bcrypt');
-
 const authConfig = require('../config/auth');
 
-const mailer = require('../modules/mailer');
+// const mailer = require('../modules/mailer');
 
-const crypto = require('crypto');
 
 function generateToken(params = {}) {
      return jwt.sign(params, authConfig.secret, { expiresIn: 86400 })
@@ -21,7 +19,7 @@ module.exports = {
      async accept(req, res) {
           const { id } = req.body;
           console.log(id);
-          
+
           await User.findOneAndUpdate({ '_id': id }, { verified: true }, { new: true, useFindAndModify: false }, (err, doc) => {
                console.log('====================================');
                console.log('====================================');
@@ -60,7 +58,7 @@ module.exports = {
           const { type } = req.params
           if (type == 1) {
                let arrayEstudantesSemEstagio = []
-               let arrayCompleto= []
+               let arrayCompleto = []
 
                // pego todos ids dos estudantes,
                const estudantes = await User.find({ type: type })
@@ -129,65 +127,80 @@ module.exports = {
           const { email, password } = req.body;
           const user = await User.findOne({ email }).select('+password');
           if (!user) {
-               return res.status(401).json({ status: 401, message: "User doesn't exist." });
+               return res.status(401).json({ status: 401, message: "Usuário Incorreto" });
           }
 
           if (!await bcrypt.compare(password, user.password)) {
-               return res.status(401).json({ status: 401, message: "Wrong password!" });
+               return res.status(401).json({ status: 401, message: "Senha Incorreta." });
           }
 
           user.password = undefined;
 
-          // const token = jwt.sign({id:user.id}, authConfig.secret, {expiresIn:86400});
+          res.send({ user, token: generateToken({ id: user.id }) });
+
+     },
+     async authAdmin(req, res) {
+          const { email, password } = req.body;
+          const user = await User.findOne({ email, type:0 }).select('+password');
+          if (!user) {
+               return res.status(401).json({ status: 401, message: "Usuário Incorreto" });
+          }
+
+          if (!await bcrypt.compare(password, user.password)) {
+               return res.status(401).json({ status: 401, message: "Senha Incorreta." });
+          }
+
+          user.password = undefined;
+
           res.send({ user, token: generateToken({ id: user.id }) });
 
      },
 
-     async recovery(req, res) {
-          const email = req.body.email;
+     // async recovery(req, res) {
+     //      const email = req.body.email;
 
-          try {
-               const user = await User.findOne({ email });
-               if (!user)
-                    return res.status(400).json({ status: 400, message: "User not found" });
+     //      try {
+     //           const user = await User.findOne({ email });
+     //           if (!user)
+     //                return res.status(400).json({ status: 400, message: "User not found" });
 
-               //geração de token de identidade
-               const token = crypto.randomBytes(15).toString('hex');
-               const expires = new Date();
-               expires.setDate(expires.getHours() + 1);
+     //           //geração de token de identidade
+     //           const token = crypto.randomBytes(15).toString('hex');
+     //           const expires = new Date();
+     //           expires.setDate(expires.getHours() + 1);
 
-               //atualização do token no mongo
-               await User.findOneAndUpdate(user.id, {
-                    '$set': {
-                         passwordResetToken: token,
-                         passwordResetExpires: expires
-                    }
-               })
+     //           //atualização do token no mongo
+     //           await User.findOneAndUpdate(user.id, {
+     //                '$set': {
+     //                     passwordResetToken: token,
+     //                     passwordResetExpires: expires
+     //                }
+     //           })
 
-               mensagem = `Hey there! Here's your token:  ${token}. It'll expires in 1 hour.`;
+     //           mensagem = `Hey there! Here's your token:  ${token}. It'll expires in 1 hour.`;
 
-               //envio do email
-               mailer.sendMail({
-                    to: email,
-                    from: 'checagem.sistemas@gmail.com',
-                    subject: 'Password Recovery',
-                    text: mensagem,
-                    html: mensagem
-               }, (err) => {
+     //           //envio do email
+     //           mailer.sendMail({
+     //                to: email,
+     //                from: 'checagem.sistemas@gmail.com',
+     //                subject: 'Password Recovery',
+     //                text: mensagem,
+     //                html: mensagem
+     //           }, (err) => {
 
-                    if (err)
-                         return res.status(400).json({ status: 400, message: "Cannot send forgot email" });
+     //                if (err)
+     //                     return res.status(400).json({ status: 400, message: "Cannot send forgot email" });
 
-                    return res.status(201).json({ status: 201, message: "Recovery's mail sent." });
-               })
+     //                return res.status(201).json({ status: 201, message: "Recovery's mail sent." });
+     //           })
 
-          }
-          catch (err) {
-               console.log(err);
+     //      }
+     //      catch (err) {
+     //           console.log(err);
 
-               return res.status(400).json({ status: 400, message: "Error on recovery password" });
-          }
-     },
+     //           return res.status(400).json({ status: 400, message: "Error on recovery password" });
+     //      }
+     // },
 
 
      async reset(req, res) {

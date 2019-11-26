@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
-
+const cookieParser = require('cookie-parser')
 //cria inst do  servidor
 const app = express();
 
@@ -19,6 +19,7 @@ mongoose.connect('mongodb+srv://developer:developer@cluster0-dqw7t.mongodb.net/e
 
 //habilita o cors
 app.use(cors());
+app.use(cookieParser());
 
 // const corsOptions = {
 //      origin: 'http://localhost:4444'

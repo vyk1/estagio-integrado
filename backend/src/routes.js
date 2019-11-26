@@ -1,10 +1,11 @@
 const express = require('express')
 const multer = require('multer');
 const uploadsConfig = require('./config/upload');
-
-const routes = new express.Router();
 const upload = multer(uploadsConfig);
 
+const routes = new express.Router();
+
+const withAuth = require('./middleware/auth')
 // Implementar tokens! no final!
 // const authMiddleware = require('./middleware/auth');
 
@@ -28,31 +29,6 @@ routes.post('/internship', jsonParser, InternshipController.store);
 routes.put('/internship/:id', jsonParser, InternshipController.update);
 routes.delete('/internship/:id', jsonParser, InternshipController.remove);
 
-// tela estudante
-// registrar atv - post activity
-// relatorio geral - get internship by user (1 estagio por aluno ou mais?)
-// chat - get users where users.int = user.int
-
-// tela orientador
-// ver relatorio dos estagiarios - get internship where int.id_advisor = id_advisor
-// ->show by name
-// chat - get users where users.int = user.int
-
-// tela supervisor
-// ver relatorio dos estagiarios - get internship where int.id_supervisor = id_supervisor
-// ->show by name
-// chat - get users where users.int = user.int
-
-// ADENDO:
-// 0 ADMIN
-// 1 ESTUDANTE
-// 2 ORIENTADOR
-// 3 SUPERVISOR
-
-// estudante1
-// supervisor1
-// ...
-
 // retorna todos os estágios associados aquele user
 routes.get('/internship/user/:id_user', jsonParser, InternshipController.getInternshipsByUserId);
 // retorna todos os alunos associados ao user
@@ -62,25 +38,32 @@ routes.get('/internship/user/:id_student/:id_dvisor', jsonParser, InternshipCont
 
 
 routes.get('/activity', jsonParser, ActivityController.index);
-routes.post('/activity', upload.single('image'), ActivityController.store);
+routes.post('/activity', upload.single('image'), ActivityController.store2);
+
 routes.post('/activity/noimg', jsonParser, ActivityController.storeWithNoImage);
 routes.put('/activity/:id', jsonParser, ActivityController.update);
 // routes.get('/activity/teste', jsonParser, ActivityController.checkActivityDate);
 // mongodb+srv://developer:<password>@cluster0-dqw7t.mongodb.net/test?retryWrites=true&w=majority
 
 
-// USERS PARA O ADMIN!
-routes.get('/users', jsonParser, UserController.index);
-routes.get('/users/notVerified', jsonParser, UserController.notVerified);
-routes.get('/users/:type', jsonParser, UserController.getByType)
-routes.get('/user/:id', jsonParser, UserController.getById);
 
-routes.delete('/user', jsonParser, UserController.remove);
-routes.post('/user/accept', jsonParser, UserController.accept);
 
 routes.post('/user/register', jsonParser, UserController.store);
 routes.post('/user/auth', jsonParser, UserController.auth);
-routes.post('/user/forgot', jsonParser, UserController.recovery);
+routes.post('/user/admin/auth', jsonParser, UserController.authAdmin);
+// routes.post('/user/forgot', jsonParser, UserController.recovery);
 routes.post('/user/resetpassword', jsonParser, UserController.reset);
+
+routes.get('/user/checkToken', withAuth, (req, res) => {
+     res.status(200)
+})
+
+// USERS PARA O ADMIN!
+routes.get('/users', jsonParser, UserController.index);
+routes.get('/users/notVerified', jsonParser, UserController.notVerified);
+routes.get('/user/:id', jsonParser, UserController.getById);
+routes.get('/users/:type', withAuth, jsonParser, UserController.getByType)
+routes.delete('/user', jsonParser, UserController.remove);
+routes.post('/user/accept', jsonParser, UserController.accept);
 
 module.exports = routes;

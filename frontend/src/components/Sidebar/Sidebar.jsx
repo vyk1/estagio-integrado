@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 
 
-import logo from "assets/img/logo2.png";
+import logo from "assets/img/logo1.png";
 
 class Sidebar extends Component {
   constructor(props) {
