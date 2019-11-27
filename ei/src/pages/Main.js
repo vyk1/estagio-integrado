@@ -16,7 +16,6 @@ export default class Main extends Component {
                 { key: 'Aluno', page: 'StudentMain' },
                 { key: 'Orientador', page: 'VisorMain' },
                 { key: 'Supervisor', page: 'VisorMain' },
-                { key: 'TESTAR PARA SUPERVISOR', page: '' }
             ]
         }
     }

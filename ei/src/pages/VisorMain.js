@@ -23,7 +23,8 @@ export default class VisorMain extends Component {
         super(props);
 
         this.state = {
-            user: { id: '5d71649f227ac93c30958221' },
+            // user: { id: '5d71649f227ac93c30958221' },
+            user: { id: '5d7164f9227ac93c30958223' },
             logado: {},
             GridViewItems: [
                 { key: 'Informações Sobre o Estágio', page: 'InfoStage' },
@@ -57,13 +58,15 @@ export default class VisorMain extends Component {
     changeHeaderColor() {
         if (this.state.logado.user.type == 2) {
             // this.props.navigation.setParams({ title: , headerStyle: { backgroundColor: '#d60f16' } })
-            this.props.navigation.setParams({ title: `Olá ${this.state.logado.user.name}`, backgroundColor: '#5bd4d4' });
-            this.setState({ backgroundColor: this.props.navigation.getParam('backgroundColor') })
+            this.props.navigation.setParams({ title: `Olá ${this.state.logado.user.name}`, backgroundColor: '#5fb2d4' });
+            this.setState({ backgroundColor: '#5fb2d4' })
 
         } else {
-            this.props.navigation.setParams({ title: `Olá ${this.state.logado.user.name}`, backgroundColor: '#1B5E20' });
-            this.setState({ backgroundColor: this.props.navigation.getParam('backgroundColor') })
-
+            this.props.navigation.setParams({ title: `Olá ${this.state.logado.user.name}`, backgroundColor: '#5bd4d4' });
+            this.setState({ backgroundColor: '#5bd4d4' })
+            console.log('====================================');
+            console.log(this.state);
+            console.log('====================================');
         }
         return
     }
@@ -74,6 +77,9 @@ export default class VisorMain extends Component {
     GetGridViewItem(page, key) {
         const { logado, backgroundColor } = this.state;
 
+        console.log('====================================');
+        console.log(backgroundColor);
+        console.log('====================================');
         this.props.navigation.navigate(page, {
             title: key,
             logado,
@@ -97,7 +103,7 @@ export default class VisorMain extends Component {
                         data={this.state.GridViewItems}
                         renderItem={({ item }) =>
                             <View style={styles.GridViewBlockStyle}>
-                                <Text style={styles.GridViewInsideTextItemStyle} onPress={this.GetGridViewItem.bind(this, item.page)} > {item.key} </Text>
+                                <Text style={[styles.GridViewInsideTextItemStyle, styles.text]} onPress={this.GetGridViewItem.bind(this, item.page)} > {item.key} </Text>
                             </View>}
                         numColumns={2} />
                 </View>
@@ -109,7 +115,13 @@ export default class VisorMain extends Component {
     }
 }
 const styles = StyleSheet.create({
-
+    text: {
+        color: 'white',
+        fontSize: 17,
+        fontFamily: 'RobotoMono-Light',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
     MainContainer: {
         justifyContent: 'center',
         flex: 1,

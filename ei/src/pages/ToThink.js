@@ -116,7 +116,7 @@ export default class ToThink extends Component {
                         <FlatList
                             data={this.state.GridViewItems2}
                             renderItem={({ item }) => <View style={styles.GridViewBlockStyle}>
-                                <Text style={styles.GridViewInsideTextItemStyle} onPress={this.GetGridViewItem2.bind(this, item.page)}> {item.key} </Text>
+                                <Text style={styles.GridViewInsideTextItemStyle} onPress={this.GetGridViewItem2.bind(this, item.page, item.key)}> {item.key} </Text>
                             </View>}
                             numColumns={1}
                         />
@@ -148,7 +148,7 @@ export default class ToThink extends Component {
                         <FlatList
                             data={this.state.GridViewItems3}
                             renderItem={({ item }) => <View style={styles.GridViewBlockStyle}>
-                                <Text style={styles.GridViewInsideTextItemStyle} onPress={this.GetGridViewItem3.bind(this, item.page)}> {item.key} </Text>
+                                <Text style={styles.GridViewInsideTextItemStyle} onPress={this.GetGridViewItem3.bind(this, item.page, item.key)}> {item.key} </Text>
                             </View>}
                             numColumns={1}
                         />

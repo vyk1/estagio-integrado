@@ -32,8 +32,6 @@ export default class InfoStage extends Component {
                 { key: 'Lista dos Locais Conveniados', fileName: 'listaConveniados' },
                 { key: 'Documentos', link: 'https://docs.google.com/spreadsheets/d/1rqA00R7FE5x3sBmt758UTDH7NsnCNn27yMuuWu60sIw' },
                 { key: 'Projeto Pedagógico dos Cursos', link: 'https://www.iffarroupilha.edu.br/projeto-pedag%C3%B3gico-de-curso/sobre-os-projetos-pedag%C3%B3gicos-de-cursos' }
-                // { key: 'Documentos', page: 'MoreInfo', link: 'https://docs.google.com/spreadsheets/d/1rqA00R7FE5x3sBmt758UTDH7NsnCNn27yMuuWu60sIw/edit#gid=1870369049' },
-                // { key: 'Projeto Pedagógico dos Cursos', page: 'MoreInfo', link: 'https://www.iffarroupilha.edu.br/projeto-pedag%C3%B3gico-de-curso/sobre-os-projetos-pedag%C3%B3gicos-de-cursos' }
             ]
         }
     }

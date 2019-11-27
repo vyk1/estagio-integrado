@@ -85,7 +85,7 @@ export default class StudentMain extends Component {
                         data={this.state.GridViewItems}
                         renderItem={({ item }) =>
                             <View style={styles.GridViewBlockStyle}>
-                                <Text style={styles.GridViewInsideTextItemStyle} onPress={this.GetGridViewItem.bind(this, item.page)} > {item.key} </Text>
+                                <Text style={[styles.GridViewInsideTextItemStyle, styles.text]} onPress={this.GetGridViewItem.bind(this, item.page)} > {item.key} </Text>
                             </View>}
                         numColumns={2}
                     />
@@ -99,18 +99,19 @@ export default class StudentMain extends Component {
     }
 }
 const styles = StyleSheet.create({
-
-    Container: {
-        backgroundColor: '#fafbfc'
+    text: {
+        color: 'white',
+        fontSize: 17,
+        fontFamily: 'RobotoMono-Light',
+        textAlign: 'center',
+        fontWeight: 'bold'
     },
-
     MainContainer: {
         justifyContent: 'center',
         flex: 1,
         margin: 10,
         paddingTop: 0,
     },
-
     GridViewBlockStyle: {
 
         justifyContent: 'center',

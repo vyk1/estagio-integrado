@@ -13,8 +13,11 @@ import ViewReports from "./src/pages/ViewReports";
 import Inicial from "./src/pages/Inicial";
 import InfoStage from "./src/pages/InfoStage";
 import RegisterMember from "./src/pages/RegisterMember";
+import MoreInfoSupervisor from "./src/pages/MoreInfoSupervisor";
+import MoreInfoAdvisor from "./src/pages/MoreInfoAdvisor";
 import ToThink from "./src/pages/ToThink";
 import MoreInfoStudent from "./src/pages/MoreInfoStudent";
+import StayOn from "./src/pages/StayOn";
 
 const AppNavigator = createStackNavigator({
     Main,
@@ -27,13 +30,16 @@ const AppNavigator = createStackNavigator({
     ViewReports,
     Inicial,
     InfoStage,
+    StayOn,
     MoreInfoStudent,
     ToThink,
+    MoreInfoAdvisor,
+    MoreInfoSupervisor,
     RegisterMember
 }, {
-    initialRouteName: 'StudentMain'
+    initialRouteName: 'Inicial'
 }
-); 
+);
 
 const AppContainer = createAppContainer(AppNavigator);
 

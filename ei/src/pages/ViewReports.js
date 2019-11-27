@@ -5,7 +5,7 @@ import Esperador from '../components/Esperador';
 
 export default class ViewReports extends Component {
     static navigationOptions = ({ navigation }) => {
-        return {        // title: 'Visualização de estagiários',
+        return {        // title: '',
             title: `${navigation.getParam('title')}`,
             headerStyle: {
                 backgroundColor: navigation.getParam('backgroundColor'),
@@ -39,6 +39,8 @@ export default class ViewReports extends Component {
                 console.log('rodou');
 
                 this.setState({ students: responseJson.students })
+                this.props.navigation.setParams({ title: `Visualização de estagiários` });
+
                 console.log(responseJson);
 
             })

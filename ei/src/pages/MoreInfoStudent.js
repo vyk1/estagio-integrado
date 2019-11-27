@@ -10,7 +10,7 @@ const dataArray = [
     { title: "Um Senhor Estagiário (2015)", content: "Jules Ostin é diretora de um site de moda famoso e passa a contar com a ajuda de Ben, um viúvo de 70 anos que assume a vaga de estagiário sênior na empresa. A diretora tem dificuldade de delegar tarefas e quer controlar tudo o que se passa em sua empresa, o que acaba prejudicando sua vida pessoal. Além de falar sobre o respeito às diferenças, o filme mostra a superação de obstáculos, a importância de estar aberto a novos aprendizados e desafios, entre outros temas." },
     { title: "O Sorriso de Monalisa (2003)", content: "O enredo fala sobre uma jovem professora, que foi contratada para lecionar História da Arte em um colégio feminino bastante tradicional. A obra traz reflexões acerca da flexibilidade, sobre fazer coisas além do óbvio e também mostra que é preciso colocar em prática tudo aquilo que se aprende na teoria." },
     { title: "Ritmo total (2002)", content: "Retrata a história de dois vendedores de relógios de grife, Billy e Nick, que tem uma vida de alto padrão, e que ficam desempregados após uma queda nas vendas. Sem rumo, os dois se candidatam ao programa de estágios do Google. Com 40 anos de idade e poucas habilidades técnicas, eles disputam a vaga com jovens, e precisam lidar com a diferença de idade e de conhecimentos entre eles. Além de retratar de maneira cômica a divergência entre as gerações, ele ainda ensina sobre adaptação a diferentes situações, persistência e a arriscar em busca de novas oportunidades." },
-    { title: "Os Eestagiários (2013)", content: "O adolescente Devon Miles se forma no ensino médio e parte para Atlanta para estudar numa universidade famosa pela qualidade de suas bandas. Ele acredita que seu talento individual poderá levar seu grupo de músicos à vitória numa competição entre escolas, mas logo percebe que isso não é suficiente. O longa mostra que o individualismo e o “estrelismo” podem ser extremamente nocivos para a carreira do jovem. Além de mais produtivo, o trabalho em equipe costuma gerar resultados melhores e mais sustentáveis a longo prazo." }
+    { title: "Os Estagiários (2013)", content: "O adolescente Devon Miles se forma no ensino médio e parte para Atlanta para estudar numa universidade famosa pela qualidade de suas bandas. Ele acredita que seu talento individual poderá levar seu grupo de músicos à vitória numa competição entre escolas, mas logo percebe que isso não é suficiente. O longa mostra que o individualismo e o “estrelismo” podem ser extremamente nocivos para a carreira do jovem. Além de mais produtivo, o trabalho em equipe costuma gerar resultados melhores e mais sustentáveis a longo prazo." }
 ];
 
 export default class MoreInfoStudent extends Component {
@@ -18,7 +18,6 @@ export default class MoreInfoStudent extends Component {
         return {
             title: `${navigation.getParam('title')}`,
             headerStyle: {
-                // backgroundColor: `${navigation.getParam('backgroundColor')}`,
                 backgroundColor: '#5f98e3',
 
             },
