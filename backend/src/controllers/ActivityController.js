@@ -110,57 +110,60 @@ module.exports = {
         // }
     },
     async store2(req, res) {
-        return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
-
-
+        console.log('entrou');
+        
+        return res.status(201).send({ status: 201, message: "Erro ao salvar atividade!" });
         // DESCOBRIR PQ NO IMSOMINIA FUNCIONA E NO APP NÃO MAIS 
-        // console.log('====================================');
-        // // console.log(req.body);
-        // console.log('====================================');
-        // const { date, date2, description, inputTime, outputTime, id_internship } = req.body
+        console.log(req.body.date2);
 
-        // const obj = {
-        //     date: date2,
-        //     description,
-        //     inputTime,
-        //     outputTime,
-        //     id_internship,
-        //     image: req.file.filename
-        // }
+        // return res.status(400).send({ status: 400, message: req.body.date});
 
-        // await Activity.find({ date: date2 }, (err, doc) => {
 
-        //     if (!err) {
-        //         // se não existir
-        //         if (!doc.length > 0) {
-        //             console.log('tá vago');
+        const { date, date2, description, inputTime, outputTime, id_internship } = req.body
 
-        //             const activity = new Activity(obj);
-        //             activity.save((err, activity) => {
-        //                 if (err) {
-        //                     console.log(err);
-        //                     return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+        const obj = {
+            date: date2,
+            description,
+            inputTime,
+            outputTime,
+            id_internship,
+            image: req.file.filename
+        }
 
-        //                 } else {
-        //                     Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
-        //                         if (err || internship == null) {
-        //                             console.log(err);
-        //                             return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
-        //                         } else {
-        //                             return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
-        //                         }
-        //                     });
-        //                 }
-        //             }).catch(err => {
-        //                 console.log(err);
-        //                 return res.status(400).send({ status: 400, message: "Ocorreu um erro, por favor tente novamente." });
-        //             });
+        await Activity.find({ date2 }, (err, doc) => {
 
-        //         } else {
-        //             return res.status(400).send({ status: 400, message: "Já existe uma atividade cadastrada para este dia." });
-        //         }
-        //     }
-        // })
+            console.log('====================================');
+            if (!err) {
+                // se não existir
+                if (!doc.length > 0) {
+                    console.log('tá vago');
+
+                    const activity = new Activity(obj);
+                    activity.save((err, activity) => {
+                        if (err) {
+                            console.log(err);
+                            return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+
+                        } else {
+                            Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
+                                if (err || internship == null) {
+                                    console.log(err);
+                                    console.log(internship);
+                                    return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+                                } else {
+                                    console.log('pode pá');
+                                    
+                                    return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
+                                }
+                            });
+                        }
+                    });
+
+                } else {
+                    return res.status(400).send({ status: 400, message: "Já existe uma atividade cadastrada para este dia." });
+                }
+            }
+        })
     },
 
     async storeWithNoImage(req, res) {

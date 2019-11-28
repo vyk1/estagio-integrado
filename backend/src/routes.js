@@ -2,6 +2,9 @@ const express = require('express')
 const multer = require('multer');
 const uploadsConfig = require('./config/upload');
 const upload = multer(uploadsConfig);
+const sharp = require('sharp')
+const path = require('path')
+const fs = require('fs')
 
 const routes = new express.Router();
 
@@ -46,7 +49,13 @@ routes.put('/activity/:id', jsonParser, ActivityController.update);
 // mongodb+srv://developer:<password>@cluster0-dqw7t.mongodb.net/test?retryWrites=true&w=majority
 
 
-
+routes.post('/upload', upload.single('image'), (req, res, next) => {
+     console.log('file', req.file)
+     console.log('body', req.body)
+     res.status(200).json({
+          message: 'success!',
+     })
+})
 
 routes.post('/user/register', jsonParser, UserController.store);
 routes.post('/user/auth', jsonParser, UserController.auth);
@@ -55,7 +64,7 @@ routes.post('/user/admin/auth', jsonParser, UserController.authAdmin);
 routes.post('/user/resetpassword', jsonParser, UserController.reset);
 
 routes.get('/user/checkToken', withAuth, (req, res) => {
-     res.status(200)
+     return res.status(200).send("Olá")
 })
 
 // USERS PARA O ADMIN!

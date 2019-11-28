@@ -29,7 +29,7 @@ export default class App extends Component {
 
     constructor(props) {
         super(props);
-        this.initialState = { acceptedMIMETypes: ["image/png", "image/jpeg", "image/webp"], formSent: true, companyName: '', nameError: '', date: '', date2: '', file: null, id_internship: '5d7260bdcc169444900b2403', studentId: '5d72603dcc169444900b2402', description: 'teste', inputTime: '', outputTime: '' };
+        this.initialState = { acceptedMIMETypes: ["image/png", "image/jpeg", "image/webp"], formSent: true, companyName: '', nameError: '', date: '', date2: '', file: null, id_internship: '5dd9a11814be6d0dd8df570c', studentId: '5d72603dcc169444900b2402', description: 'teste', inputTime: '', outputTime: '' };
 
         this.state = this.initialState;
     }
@@ -252,12 +252,12 @@ export default class App extends Component {
                 }
             }
 
-            await fetch(`${server}/activity`, config)
+            await fetch(`http://192.168.1.101:4444/activity`, config)
                 .then(res => res.json())
                 .then(res => {
                     this.setState({ formSent: true })
                     console.log(res);
-                    console.log('cu');
+                    console.log('1');
                     if (res.status == 201) {
                         Alert.alert(
                             'Sucesso',

@@ -18,6 +18,7 @@ import MoreInfoAdvisor from "./src/pages/MoreInfoAdvisor";
 import ToThink from "./src/pages/ToThink";
 import MoreInfoStudent from "./src/pages/MoreInfoStudent";
 import StayOn from "./src/pages/StayOn";
+import ImageTest from "./src/pages/ImageTest";
 
 const AppNavigator = createStackNavigator({
     Main,
@@ -30,6 +31,7 @@ const AppNavigator = createStackNavigator({
     ViewReports,
     Inicial,
     InfoStage,
+    ImageTest,
     StayOn,
     MoreInfoStudent,
     ToThink,
@@ -37,7 +39,7 @@ const AppNavigator = createStackNavigator({
     MoreInfoSupervisor,
     RegisterMember
 }, {
-    initialRouteName: 'Inicial'
+    initialRouteName: 'StudentMain'
 }
 );
 
