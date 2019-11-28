@@ -1,4 +1,4 @@
-const moment = require('moment')
+const fs = require('fs')
 const Activity = require('../models/Activity');
 const Internship = require('../models/Internship');
 const filehelper = require('../config/file-helper')
@@ -31,20 +31,18 @@ module.exports = {
             return res.status(404).send({ status: 404, message: "Não há registros." });
         }
     },
-
-    async store(req, res) {
+    async store2(req, res) {
         // store é obrigatório o estágio
 
-        // return res.send({message: "caraio"}).status(200)
+        console.log(req.body);
+        
+        // return res.send({message: req}).status(200)
         if (req.file) {
             console.log('tem arquivo');
 
             const { date, date2, description, inputTime, outputTime, id_internship } = req.body
             // valida data
             Activity.find({ date: date2 }, (err, doc) => {
-                // console.log('====================================');
-                // console.log(doc);
-                // console.log('====================================');
                 if (!err) {
                     // se não existir
                     if (!doc.length > 0) {
@@ -62,9 +60,9 @@ module.exports = {
                                     inputTime,
                                     outputTime,
                                     id_internship,
-                                    // image: req.file.filename
                                     image: caminho
                                 }
+                                // console.log(id_internship);
 
                                 const activity = new Activity(obj);
 
@@ -92,9 +90,11 @@ module.exports = {
                             });
 
                     } else {
-                        console.log('====================================');
-                        console.log('já tem esse cy');
-                        console.log('====================================');
+                        fs.unlink(`./uploads/${req.file.filename}`, err => {
+
+                            // Não quero que erros aqui parem todo o sistema, então só vou imprimir o erro, sem throw.
+                            if (err) console.log(err)
+                        });
                         return res.status(400).send({ status: 400, message: "Já existe uma atividade cadastrada para este dia." });
                     }
                 }
@@ -109,69 +109,74 @@ module.exports = {
         //     return res.status(400).send({ status: 400, message: "Erro ao consultar o banco de dados." });
         // }
     },
-    async store2(req, res) {
-        console.log('entrou');
-        
-        return res.status(201).send({ status: 201, message: "Erro ao salvar atividade!" });
-        // DESCOBRIR PQ NO IMSOMINIA FUNCIONA E NO APP NÃO MAIS 
-        console.log(req.body.date2);
 
-        // return res.status(400).send({ status: 400, message: req.body.date});
+    // async store2(req, res) {
+    //     console.log('entrou');
+
+    //     if (req.file) {
+    //         const { date2, description, inputTime, outputTime, id_internship } = req.body
+
+    //         try {
+    //             const vago = await Activity.find({ date: date2 })
+    //             console.log(vago);
+
+    //             if (vago.length) {
+    //                 return res.status(400).send({ status: 400, message: "Já existe uma atividade cadastrada para este dia." });
+    //             } else {
+    //                 const arquivo = await filehelper.compressImage(req.file, 100);
+    //                 const obj = {
+    //                     date: date2,
+    //                     description,
+    //                     inputTime,
+    //                     outputTime,
+    //                     id_internship,
+    //                     image: arquivo
+    //                 }
+    //                 const activity = new Activity(obj);
+
+    //                 activity.save((err, activity) => {
+    //                     if (err) {
+    //                         console.log(err);
+    //                         return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+
+    //                     } else {
+    //                         Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
+    //                             if (err || internship == null) {
+    //                                 console.log(err);
+    //                                 console.log(internship);
+    //                                 return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+    //                             } else {
+    //                                 console.log('pode pá');
+
+    //                                 return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
+    //                             }
+    //                         });
+    //                     }
+    //                 });
+
+    //             }
+
+    //         } catch (e) {
+    //             console.log('====================================');
+    //             console.log(e);
+    //             console.log('====================================');
+    //         }
+    //     }
+    // },
+    // async store2(req, res) {
+    //     console.log('entrou');
+
+    //     return res.status(201).send({ status: 201, message: "Erro ao salvar atividade!" });
+    //     // DESCOBRIR PQ NO IMSOMINIA FUNCIONA E NO APP NÃO MAIS 
+    //     console.log(req.body.date2);
+
+    //     // return res.status(400).send({ status: 400, message: req.body.date});
 
 
-        const { date, date2, description, inputTime, outputTime, id_internship } = req.body
-
-        const obj = {
-            date: date2,
-            description,
-            inputTime,
-            outputTime,
-            id_internship,
-            image: req.file.filename
-        }
-
-        await Activity.find({ date2 }, (err, doc) => {
-
-            console.log('====================================');
-            if (!err) {
-                // se não existir
-                if (!doc.length > 0) {
-                    console.log('tá vago');
-
-                    const activity = new Activity(obj);
-                    activity.save((err, activity) => {
-                        if (err) {
-                            console.log(err);
-                            return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
-
-                        } else {
-                            Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
-                                if (err || internship == null) {
-                                    console.log(err);
-                                    console.log(internship);
-                                    return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
-                                } else {
-                                    console.log('pode pá');
-                                    
-                                    return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
-                                }
-                            });
-                        }
-                    });
-
-                } else {
-                    return res.status(400).send({ status: 400, message: "Já existe uma atividade cadastrada para este dia." });
-                }
-            }
-        })
-    },
 
     async storeWithNoImage(req, res) {
         // store é obrigatório o estágio
         // formato do date tem que converter para isostring
-        // console.log(req.headers);
-        // console.log(JSON.stringify(req.body));
-        // console.log(JSON.stringify(req.headers));
         console.log('acionou');
         let { date, description, inputTime, outputTime, id_internship } = req.body
 

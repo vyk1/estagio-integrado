@@ -46,7 +46,14 @@ export default class App extends React.Component {
         // })
         await fetch('http://192.168.1.101:4444/activity', {
             method: "POST",
-            body: this.createFormData(this.state.photo, { userId: "123" })
+            body: this.createFormData(this.state.photo, {
+                "userId": "123", 
+                "date2": "2017-11-28T00:00:00.007Z",
+                "description": "teste123",
+                "inputTime": "08:00",
+                "outputTime": "12:00",
+                "id_internship": "5d7260bdcc169444900b2403"
+            })
         })
             .then(response => response.json())
             .then(response => {

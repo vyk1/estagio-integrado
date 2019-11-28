@@ -2,9 +2,6 @@ const express = require('express')
 const multer = require('multer');
 const uploadsConfig = require('./config/upload');
 const upload = multer(uploadsConfig);
-const sharp = require('sharp')
-const path = require('path')
-const fs = require('fs')
 
 const routes = new express.Router();
 
