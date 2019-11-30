@@ -34,15 +34,17 @@ module.exports = {
     async store2(req, res) {
         // store é obrigatório o estágio
 
-        console.log(req.body);
-        
-        // return res.send({message: req}).status(200)
+        console.log('entrou');
+        console.log(req.body.date2);
+        console.log(req.body.date);
+
+        // return res.send({message: 'req'}).status(200)
         if (req.file) {
             console.log('tem arquivo');
 
-            const { date, date2, description, inputTime, outputTime, id_internship } = req.body
+            const { date2, description, inputTime, outputTime, id_internship } = req.body
             // valida data
-            Activity.find({ date: date2 }, (err, doc) => {
+            await Activity.find({ date: date2 }, (err, doc) => {
                 if (!err) {
                     // se não existir
                     if (!doc.length > 0) {
@@ -62,22 +64,22 @@ module.exports = {
                                     id_internship,
                                     image: caminho
                                 }
-                                // console.log(id_internship);
 
                                 const activity = new Activity(obj);
 
                                 activity.save((err, activity) => {
                                     if (err) {
                                         console.log(err);
-                                        return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
+                                        console.log('deu algo de errado ao salvar');
+                                        // console.log(activity.id);
+                                        return res.status(400).json({ status: 400, message: "Erro ao salvar atividade!" });
 
                                     } else {
                                         Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
-                                            if (err || internship == null) {
-                                                console.log(err);
-                                                return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
-                                            } else {
-                                                return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });
+                                            console.log('entrou para update');
+                                            if (err == null) {
+                                                console.log('atividade succes');
+                                                return res.status(201).json({ status: 201, message: "Atividade Cadastrada!" });
                                             }
                                         });
                                     }
@@ -86,7 +88,7 @@ module.exports = {
                             }).catch(err => {
                                 console.log(err);
                                 console.log("erro na compressão");
-                                return res.status(400).send({ status: 400, message: "Ocorreu um erro, por favor tente novamente." });
+                                return res.status(400).json({ status: 400, message: "Ocorreu um erro, por favor tente novamente." });
                             });
 
                     } else {
@@ -95,12 +97,16 @@ module.exports = {
                             // Não quero que erros aqui parem todo o sistema, então só vou imprimir o erro, sem throw.
                             if (err) console.log(err)
                         });
-                        return res.status(400).send({ status: 400, message: "Já existe uma atividade cadastrada para este dia." });
+                        console.log('não tá vago, retornando...');
+
+                        return res.status(400).json({ status: 400, message: "Já existe uma atividade cadastrada para este dia." });
                     }
                 }
 
             })
         } else {
+
+            console.log('img not recebida');
             return res.status(400).send({ status: 400, message: "Imagem não recebida." });
         }
 

@@ -27,8 +27,8 @@ export default class StudentMain extends Component {
             logado: {},
             GridViewItems: [
                 { key: 'Informações Sobre o Estágio', page: 'InfoStage' },
-                // { key: 'Registrar Atividade', page: 'RegisterActivity' },
-                { key: 'Registrar Atividade', page: 'ImageTest' },
+                { key: 'Registrar Atividade', page: 'RegisterActivity' },
+                // { key: 'Registrar Atividade', page: 'ImageTest' },
                 { key: 'Relatório Geral', page: 'GenReport' },
                 { key: 'Contatos', page: 'Contacts' },
                 { key: 'Ei! Fique Ligado', page: 'StayOn' },

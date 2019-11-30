@@ -47,11 +47,31 @@ routes.put('/activity/:id', jsonParser, ActivityController.update);
 
 
 routes.post('/upload', upload.single('image'), (req, res, next) => {
-     console.log('file', req.file)
-     console.log('body', req.body)
-     res.status(200).json({
-          message: 'success!',
-     })
+     console.log(req.headers);
+     
+     try {
+          const file = req.file;
+          if (!file) {
+               res.status(400).json({
+                    "status": "failed",
+                    "code": "400",
+                    "message": "Please upload file"
+               });
+          }
+
+          res.status(200).json({
+               "status": "success",
+               "code": "200",
+               "message": "file uploaded successfully"
+          });
+     } catch (err) {
+          console.log(error.message);
+          res.status(200).json({
+               "status": "failed",
+               "code": "500",
+               "message": error.message
+          });
+     }
 })
 
 routes.post('/user/register', jsonParser, UserController.store);

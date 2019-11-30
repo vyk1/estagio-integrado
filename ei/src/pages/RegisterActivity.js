@@ -11,8 +11,8 @@ import HourInput from '../components/HourInput';
 import server from "../config/server";
 import Esperador from '../components/Esperador';
 
-export default class App extends Component {
 
+export default class App extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
             title: `${navigation.getParam('title')}`,
@@ -29,6 +29,7 @@ export default class App extends Component {
 
     constructor(props) {
         super(props);
+        // this.initialState = { nameError: '', date: '', file: null, id_internship: '5dd9a11814be6d0dd8df570c', studentId: '5d72603dcc169444900b2402', description: 'tst123', inputTime: '', outputTime: '' };
         this.initialState = { acceptedMIMETypes: ["image/png", "image/jpeg", "image/webp"], formSent: true, companyName: '', nameError: '', date: '', date2: '', file: null, id_internship: '5dd9a11814be6d0dd8df570c', studentId: '5d72603dcc169444900b2402', description: 'teste', inputTime: '', outputTime: '' };
 
         this.state = this.initialState;
@@ -57,24 +58,13 @@ export default class App extends Component {
             });
     }
 
-
-    showAlert = () => {
-        const { nameError } = this.state
-        Alert.alert(
-            'Erro de Validação',
-            nameError,
-            [{ text: 'OK' }])
-
-    }
-    checkInputs = () => {
+    checkInputs = async () => {
         if (this.state.inputTime.trim() === "" || this.state.inputTime === "") {
             this.setState({ nameError: "Hora de Entrada Necessária." });
-            this.showAlert();
             return false
         } else {
-            if (this.state.outputTime.trim() === "" || this.state.outputTime === "") {
+            if (this.state.outputTime.trim() === "") {
                 this.setState({ nameError: "Hora de Saída Necessária." });
-                this.showAlert();
                 return false
             } else {
                 var startTime = moment(this.state.inputTime, "HH:mm");
@@ -83,15 +73,13 @@ export default class App extends Component {
                 var hours = parseInt(duration.asHours());
                 var minutes = parseInt(duration.asMinutes()) - hours * 60;
 
-                if ((hours === 0 && minutes > 0) || (hours > 0 && minutes >= 0)) {
+                if (hours > 0 && minutes > 0) {
                     if (this.state.date === "" || null) {
                         this.setState({ nameError: "Data da Atividade Necessária." });
-                        this.showAlert();
                         return false
                     } else {
                         if (this.state.description.trim() === "") {
                             this.setState({ nameError: "Descrição Necessária." });
-                            this.showAlert();
                             return false
                         } else {
                             this.setState({ nameError: "" });
@@ -100,7 +88,6 @@ export default class App extends Component {
                     }
                 } else {
                     this.setState({ nameError: "Hora de Saída Menor ou Igual a de Entrada." });
-                    this.showAlert();
                     return false
                 }
 
@@ -108,7 +95,7 @@ export default class App extends Component {
         }
     }
 
-    handleChooseFile = () => {
+    handleChoosenFile = () => {
         const options = {
             noData: true,
         }
@@ -118,7 +105,6 @@ export default class App extends Component {
             }
         })
     }
-
 
     setinputTime = async () => {
         try {
@@ -165,9 +151,9 @@ export default class App extends Component {
             Object.keys(body).forEach(key => {
                 data.append(key, body[key]);
             });
-            console.log(data)
             return data;
         } else {
+
             data.append("image", {
                 name: photo.fileName,
                 type: photo.type,
@@ -182,236 +168,134 @@ export default class App extends Component {
 
     };
 
-    sendForm = async () => {
-        const { file } = this.state
-        console.log('submeteu');
-
-        this.setState({ formSent: false })
-
-        if (!file) {
-            console.log('no file');
-
-            const config = {
-                method: 'POST',
-                body: JSON.stringify(this.state),
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }
-
-            await fetch(`${server}/activity/noimg`, config)
-                .then(res => res.json())
-                .then(res => {
-                    this.setState({ formSent: true })
-                    console.log(res);
-                    if (res.status == 201) {
-                        Alert.alert(
-                            'Sucesso',
-                            res.message,
-                            [
-                                {
-                                    text: 'OK', onPress: () => {
-                                        this.props.navigation.navigate('StudentMain');
-                                    }
-                                }
-                            ])
-                    } else {
-                        Alert.alert(
-                            'Resposta',
-                            res.message,
-                            [
-                                {
-                                    text: 'OK', onPress: () => { console.log('res negativa') }
-                                }
-                            ])
-                        this.setState({ formSent: true })
-
-                    }
-
-                }).catch(e => {
-                    console.log(e);
-                    Alert.alert(
-                        'Erro',
-                        e.toString(),
-                        [
-                            { text: 'OK', onPress: () => { console.log('ok né :/') } }
-                        ])
-                    this.setState({ formSent: true })
-                })
-        } else {
-            await
-                this.setState({ date2: this.state.date.toISOString() })
-            console.log(this.state);
-
-            const config = await {
-                method: 'POST',
-                body: this.createFormData(this.state.file, this.state),
-                // body: this.state.file,
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                }
-            }
-
-            await fetch(`http://192.168.1.101:4444/activity`, config)
-                .then(res => res.json())
-                .then(res => {
-                    this.setState({ formSent: true })
-                    console.log(res);
-                    console.log('1');
-                    if (res.status == 201) {
-                        Alert.alert(
-                            'Sucesso',
-                            res.message,
-                            [
-                                {
-                                    text: 'OK', onPress: () => {
-                                        this.props.navigation.navigate('StudentMain');
-                                    }
-                                }
-                            ])
-                    } else {
-                        Alert.alert(
-                            'Resposta',
-                            res.message,
-                            [
-                                {
-                                    text: 'OK', onPress: () => { console.log('res negativa') }
-                                }
-                            ])
-                        this.setState({ formSent: true })
-
-                    }
-                }).catch(e => {
-                    console.log('deu ruim', e);
-                    Alert.alert(
-                        'Erro',
-                        e.toString(),
-                        [
-                            { text: 'OK', onPress: () => { console.log('ok né :/') } }
-                        ])
-                    this.setState({ formSent: true })
-                })
-        }
-    }
     handleSubmit = async () => {
+        await this.setState({ date2: this.state.date.toISOString() })
+        const { id_internship, inputTime, outputTime, date2, file, description } = this.state;
 
-        let checagem = this.checkInputs();
-        // console.log(checagem);
-
-        if (!checagem) {
-            return false
-        } else {
-            if (this.state.file == null) {
-                Alert.alert(
-                    'Carregamento de Foto',
-                    'Você ainda não carregou uma foto. Deseja prosseguir mesmo assim?',
-                    [
-                        { text: 'OK', onPress: () => this.sendForm() },
-                        {
-                            text: 'Não',
-                            onPress: () => { return false },
-                            style: 'cancel',
-                        },
-                    ],
-                    { cancelable: true },
-                );
-            } else {
-                if (!this.state.acceptedMIMETypes.includes(this.state.file.type)) {
-                    console.log('====================================');
-                    console.log("não aceit");
-                    console.log('====================================');
-                    Alert.alert(
-                        'Extensão de arquivo não permitida',
-                        'Certifique-se que a extensão do arquivo seja: .jpeg, .jpg ou .png.',
-                        [
-                            { text: 'OK', onPress: () => this.sendForm() },
-                            {
-                                text: 'Não',
-                                onPress: () => { return false },
-                                style: 'cancel',
-                            },
-                        ],
-                        { cancelable: true },
-                    );
-                } else {
-                    this.sendForm()
-                }
+        const config = await {
+            method: 'POST',
+            body: this.createFormData(file, {
+                date2,
+                description,
+                inputTime,
+                outputTime,
+                id_internship
+            }),
+            headers: {
+                'Content-Type': 'multipart/form-data',
             }
         }
 
-    }
+        try {
+            await fetch(`${server}/activity`, config)
+                .then(res => res.json())
+                .then(res => {
 
+                    if (res.status == 201) {
+                        Alert.alert(
+                            'Sucesso',
+                            res.message,
+                            [
+                                {
+                                    text: 'OK', onPress: () => {
+                                        this.props.navigation.navigate('StudentMain');
+                                    }
+                                }
+                            ])
+                    } else {
+                        Alert.alert(
+                            'Ops...',
+                            res.message,
+                            [
+                                {
+                                    text: 'OK', onPress: () => { console.log('res negativa') }
+                                }
+                            ])
+                    }
+                })
+        }
+        catch (error) {
+            console.log(error)
+            Alert.alert(
+                'Erro',
+                'Ocorreu um erro...')
+        } finally {
+            this.setState({ formSent: true })
+
+        }
+
+    }
 
     render() {
-        const { formSent, companyName, inputTime, outputTime, file, description } = this.state;
+        const { formSent, companyName, inputTime, outputTime, date, file, description, nameError } = this.state;
         if (companyName === "" || formSent == false) {
             return (
                 <Esperador />
             )
         } else {
             return (
-                <Container>
+                <Container style={styles.MainContainer}>
                     <Header style={styles.header}>
                         <Body>
                             <Title>Empresa: {companyName} </Title>
                         </Body>
                     </Header>
-                    <View style={styles.MainContainer}>
+                    <ScrollView>
 
-                        <ScrollView>
-                            <Date onDateChange={(date) => this.setState({ date })}></Date>
+                        <Date onDateChange={(date) => this.setState({ date })}></Date>
+                        <HourInput
+                            onPress={() => this.setinputTime()}
+                            value={inputTime}
+                            labelText="Hora de entrada" />
 
-                            <HourInput
-                                onPress={() => this.setinputTime()}
-                                value={inputTime}
-                                labelText="Hora de entrada" />
+                        <HourInput
+                            onPress={() => this.setoutputTime()}
+                            value={outputTime}
+                            labelText="Hora de saída" />
 
-                            <HourInput
-                                onPress={() => this.setoutputTime()}
-                                value={outputTime}
-                                labelText="Hora de saída" />
-
-                            <FormTextInput
-                                numberOfLines={5}
-                                onChangeText={(description) => this.setState({ description })}
-                                value={description}
-                                placeholder="Descrição"
-                                multiline={true}
-                            />
-
-                            {
-                                file && (
-                                    <View>
-                                        <Text>Foto Carregada:</Text>
-                                        <Image
-                                            source={{ uri: file.uri }}
-                                            style={{ width: 300, height: 300, alignSelf: 'center', marginBottom: 15 }}
-                                        />
-                                        <BlueButton onPress={() => this.setState({ file: null })}>
-                                            Apagar foto
+                        <FormTextInput
+                            numberOfLines={5}
+                            onChangeText={(description) => this.setState({ description })}
+                            value={description}
+                            placeholder="Descrição"
+                            multiline={true}
+                        />
+                        {
+                            file && (
+                                <View>
+                                    <Text>Foto Carregada:</Text>
+                                    <Image
+                                        source={{ uri: file.uri }}
+                                        style={{ width: 300, height: 300, alignSelf: 'center', marginBottom: 15 }}
+                                    />
+                                    <BlueButton onPress={() => this.setState({ file: null })}>
+                                        Apagar foto
                                         </BlueButton>
-                                    </View>
-                                )
-                            }
-                            <BlueButton onPress={this.handleChooseFile}>
-                                Carregar Foto
-                            </BlueButton>
-                            <BlueButton onPress={this.handleSubmit}>
-                                Registrar Atividade
-                            </BlueButton>
-                        </ScrollView>
-                    </View>
-                </Container>
+                                </View>
+                            )
+                        }
 
+                        {!!nameError && (
+                            <Text style={{ color: 'red' }}>{nameError}</Text>
+                        )}
+
+                        <BlueButton onPress={this.handleChoosenFile}>
+                            Carregar Foto
+                    </BlueButton>
+                        <BlueButton onPress={this.handleSubmit}>
+                            Registrar Atividade
+                    </BlueButton>
+                        {/* </KeyboardAvoidingView> */}
+                    </ScrollView>
+                </Container>
             )
         }
     }
 }
 
-
 const styles = StyleSheet.create({
     header: {
-        fontSize: 6,
+        fontSize: 6
     },
     MainContainer: {
         justifyContent: 'center',
