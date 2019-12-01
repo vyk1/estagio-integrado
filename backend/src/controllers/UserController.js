@@ -115,17 +115,13 @@ module.exports = {
           const { name, email, password, phone, type } = req.body;
           const user = new User({ name, email, password, phone, type });
 
-          console.log('====================================');
-          console.log(req.body);
-          console.log('====================================');
-          return
           user.save((err) => {
                user.password = undefined;
                if (err) {
                     if (err.code == 11000)
-                         return res.status(500).json({ status: 500, message: "E-mail já cadastrado" });
+                         return res.status(500).json({ status: 500, message: "Este e-mail já foi cadastrado" });
 
-                    return res.status(500).json({ status: 500, message: "Erro ao criar usuário" });
+                    return res.status(500).json({ status: 500, message: "Erro ao submeter. Tente novamente." });
                }
                else {
                     const token = new Token({ _id_user: user._id, token: crypto.randomBytes(16).toString('hex') });
@@ -136,22 +132,21 @@ module.exports = {
                          // Send the email
                          const host = req.headers.host
                          mail.confirm(host, name, email, token.token)
-                         res.status(200).send('Um e-mail de confimação foi enviado para: ' + user.email + '.');
+                          res.status(201).send({ status: 201, message: 'Um e-mail de confimação foi enviado para: ' + email + '.' });
                     })
                }
           })
      },
      // verificando
      async emailConfirmation(req, res) {
-          console.log(req.params);
 
           Token.findOne({ token: req.params.token }, function (err, token) {
-               if (!token) return res.status(400).send({ type: 'Não verificado', msg: 'Não foi possível validar o token. Sua token pode ter expirado :(' });
+               if (!token) return res.status(400).send('Não foi possível validar o token. Sua token pode ter expirado :(');
 
                // If we found a token, find a matching user
                User.findOne({ _id: token._id_user, email: req.params.email }, function (err, user) {
-                    if (!token) return res.status(400).send({ type: 'Não verificado', msg: 'Não foi possível validar o usuário.' });
-                    if (user.emailConfirmed) return res.status(400).send({ type: 'Já verificado', msg: 'este usuário já foi verificado. Por favor, aguarde a confirmação da administração.' });
+                    if (!token) return res.status(400).send( 'Não foi possível validar o usuário.');
+                    if (user.emailConfirmed) return res.status(400).send('Este usuário já foi verificado. Por favor, aguarde a confirmação da administração.');
 
                     // Verify and save the user
                     user.emailConfirmed = true;
@@ -182,7 +177,7 @@ module.exports = {
 
           user.password = undefined;
 
-          res.send({ user, token: generateToken({ id: user.id }) });
+          res.send({ user, token: generateToken({ id: user.id }), status: 200 }).status(200);
 
      },
      async authAdmin(req, res) {

@@ -27,7 +27,7 @@ export default class About extends Component {
         super(props);
         this.state = {
             GridViewItems: [
-                { key: 'Login', page: 'Main' },
+                { key: 'Login', page: 'Login' },
                 { key: 'Cadastre-se', page: 'RegisterMember' }
             ]
         }

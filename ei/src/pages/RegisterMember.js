@@ -1,5 +1,7 @@
+import server from "../config/server";
+import { TextInputMask } from 'react-native-masked-text';
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { Container, Header, Content, Form, Item, Picker } from 'native-base';
 import InlineLabel from '../components/InlineLabel';
 import BlueButton from '../components/BlueButton';
@@ -33,30 +35,30 @@ export default class PickerInputExample extends Component {
       [{ text: 'OK' }])
 
   }
-  checkInputs = () => {
+  checkInputs = async () => {
 
     if (this.state.name.length < 4) {
-      this.setState({ nameError: "O nome necessita de ao menos 3 caracteres." });
+      await this.setState({ nameError: "O nome necessita de ao menos 3 caracteres." });
       this.showAlert();
       return false
     } else {
-      if (!this.checkEmail() || this.state.email === "") {
-        this.setState({ nameError: "E-mail inválido" });
+      if (!await this.checkEmail() || this.state.email === "") {
+        await this.setState({ nameError: "E-mail inválido" });
         this.showAlert();
         return false
       } else {
         if (this.state.password.length < 8) {
-          this.setState({ nameError: "A senha necessita de ao menos 8 caracteres." });
+          await this.setState({ nameError: "A senha necessita de ao menos 8 caracteres." });
           this.showAlert();
           return false
         } else {
           if (this.state.phone === "") {
-            this.setState({ nameError: "O telefone necessita de ao menos 8 caracteres." });
+            await this.setState({ nameError: "O telefone necessita de ao menos 8 caracteres." });
             this.showAlert();
             return false
           } else {
             if (this.state.type === "" || null) {
-              this.setState({ nameError: "O tipo do usuário necessita ser preenchido." });
+              await this.setState({ nameError: "O tipo do usuário necessita ser preenchido." });
               this.showAlert();
               return false
             } else {
@@ -68,7 +70,7 @@ export default class PickerInputExample extends Component {
     }
   }
 
-  checkEmail() {
+  checkEmail = () => {
     const { email } = this.state
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (reg.test(email) === false) {
@@ -88,15 +90,55 @@ export default class PickerInputExample extends Component {
   }
   handleSubmit = async () => {
 
-    let checagem = this.checkInputs();
+    let checagem = await this.checkInputs();
 
     if (!checagem) {
-      console.log(false);
       return false
     } else {
-      console.log(true);
-      console.log(this.state);
 
+      await this.setState({ formSent: false })
+      const config = await {
+        method: 'POST',
+        body: JSON.stringify(this.state),
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+
+      try {
+        await fetch(`${server}/user/register`, config)
+          .then(res => res.json())
+          .then(res => {
+            console.log(res);
+
+            if (res.status == 201) {
+              Alert.alert(
+                'Sucesso',
+                res.message,
+                [
+                  {
+                    text: 'OK', onPress: () => {
+                      this.setState(this.initialState)
+                      this.props.navigation.navigate('Inicial');
+                    }
+                  }
+                ])
+            } else {
+              Alert.alert(
+                'Ops...',
+                res.message,
+              )
+            }
+          })
+      }
+      catch (error) {
+        console.log(error)
+        Alert.alert(
+          'Erro',
+          'Ocorreu um erro... Tente novamente.')
+      } finally {
+        this.setState({ formSent: true })
+      }
     }
   }
 
@@ -123,7 +165,20 @@ export default class PickerInputExample extends Component {
               onChangeText={(password) => this.setState({ password })}
               value={password} />
 
-
+            <Text>Insira seu número de telefone (com DDD)</Text>
+            <TextInputMask
+              onChangeText={phone => {
+                this.setState({
+                  phone
+                })
+              }}
+              value={phone}
+              placeholder="(55) 99999-9999"
+              type={'cel-phone'}
+              options={{
+                maskType: 'BRL',
+              }}
+            />
 
             <Text>Selecione o tipo de usuário desejado</Text>
             <Item picker>
@@ -144,7 +199,12 @@ export default class PickerInputExample extends Component {
           </Container>
           <BlueButton onPress={this.handleSubmit}>
             Cadastrar-se
-</BlueButton>
+            </BlueButton>
+          {/* <BlueButton onPress={() => {
+            console.log(this.state);
+          }}>
+            Apagar Formulário
+            </BlueButton> */}
         </View>
 
       );
@@ -152,6 +212,7 @@ export default class PickerInputExample extends Component {
   }
 }
 const styles = StyleSheet.create({
+
   header: {
     fontSize: 6,
   },

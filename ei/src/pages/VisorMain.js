@@ -23,9 +23,8 @@ export default class VisorMain extends Component {
         super(props);
 
         this.state = {
-            // user: { id: '5d71649f227ac93c30958221' },
-            user: { id: '5d7164f9227ac93c30958223' },
-            logado: {},
+
+            logado: this.props.navigation.state.params.logado,
             GridViewItems: [
                 { key: 'Informações Sobre o Estágio', page: 'InfoStage' },
                 { key: 'Estagiários', page: 'ViewReports' },
@@ -38,31 +37,33 @@ export default class VisorMain extends Component {
     }
     async getUser() {
 
-        return fetch(`${server}/user/${this.state.user.id}`)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                console.log('rodou');
+        console.log(this.props.navigation.state.params.logado);
+        
+        // return fetch(`${server}/user/${this.state.id}`)
+        //     .then((response) => response.json())
+        //     .then((responseJson) => {
+        //         console.log('rodou');
 
-                this.setState({ logado: responseJson })
-                console.log(responseJson);
-                if (this.state.logado != null) {
-                    this.changeHeaderColor();
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-                return false
-            });
+        //         this.setState({ logado: responseJson })
+        //         console.log(responseJson);
+        //         if (this.props.navigation.state.params.logado != null) {
+        this.changeHeaderColor();
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         console.error(error);
+        //         return false
+        //     });
 
     }
     changeHeaderColor() {
-        if (this.state.logado.user.type == 2) {
+        if (this.props.navigation.state.params.logado.type == 2) {
             // this.props.navigation.setParams({ title: , headerStyle: { backgroundColor: '#d60f16' } })
-            this.props.navigation.setParams({ title: `Olá ${this.state.logado.user.name}`, backgroundColor: '#5fb2d4' });
+            this.props.navigation.setParams({ title: `Olá ${this.props.navigation.state.params.logado.name}`, backgroundColor: '#5fb2d4' });
             this.setState({ backgroundColor: '#5fb2d4' })
 
         } else {
-            this.props.navigation.setParams({ title: `Olá ${this.state.logado.user.name}`, backgroundColor: '#5bd4d4' });
+            this.props.navigation.setParams({ title: `Olá ${this.props.navigation.state.params.logado.name}`, backgroundColor: '#5bd4d4' });
             this.setState({ backgroundColor: '#5bd4d4' })
             console.log('====================================');
             console.log(this.state);
