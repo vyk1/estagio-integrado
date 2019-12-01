@@ -117,7 +117,7 @@ export default class App extends Component {
                 this.setState({ file: response })
             }
         })
-    }
+    } 
 
 
     setinputTime = async () => {
