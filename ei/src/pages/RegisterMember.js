@@ -4,7 +4,6 @@ import { Container, Header, Content, Form, Item, Picker } from 'native-base';
 import InlineLabel from '../components/InlineLabel';
 import BlueButton from '../components/BlueButton';
 import Esperador from '../components/Esperador';
-import PhoneInput from '../components/PhoneInput';
 
 export default class PickerInputExample extends Component {
 
@@ -41,7 +40,7 @@ export default class PickerInputExample extends Component {
       this.showAlert();
       return false
     } else {
-      if (!checkEmail() || this.state.email === "") {
+      if (!this.checkEmail() || this.state.email === "") {
         this.setState({ nameError: "E-mail inválido" });
         this.showAlert();
         return false
@@ -74,11 +73,9 @@ export default class PickerInputExample extends Component {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (reg.test(email) === false) {
       console.log("Email is Not Correct");
-      // this.setState({ email: text })
       return false;
     }
     else {
-      // this.setState({ email: text })
       console.log("Email is Correct");
       return true
     }
@@ -88,6 +85,19 @@ export default class PickerInputExample extends Component {
     this.setState({
       type: value
     });
+  }
+  handleSubmit = async () => {
+
+    let checagem = this.checkInputs();
+
+    if (!checagem) {
+      console.log(false);
+      return false
+    } else {
+      console.log(true);
+      console.log(this.state);
+
+    }
   }
 
   render() {
@@ -109,13 +119,13 @@ export default class PickerInputExample extends Component {
               value={email} />
 
             <InlineLabel label="Senha:"
+              secureTextEntry={true}
               onChangeText={(password) => this.setState({ password })}
               value={password} />
 
-            <PhoneInput label="Telefone:"
-              onChangeText={(phone) => this.setState({ phone })}
-              value={phone} />
 
+
+            <Text>Selecione o tipo de usuário desejado</Text>
             <Item picker>
               <Picker
                 mode="dropdown"
@@ -132,9 +142,9 @@ export default class PickerInputExample extends Component {
               </Picker>
             </Item>
           </Container>
-          <BlueButton onPress={() => console.log(this.state)}>
+          <BlueButton onPress={this.handleSubmit}>
             Cadastrar-se
-            </BlueButton>
+</BlueButton>
         </View>
 
       );

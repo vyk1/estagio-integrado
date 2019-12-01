@@ -39,7 +39,7 @@ const AppNavigator = createStackNavigator({
     MoreInfoSupervisor,
     RegisterMember
 }, {
-    initialRouteName: 'StudentMain'
+    initialRouteName: 'RegisterMember'
 }
 );
 

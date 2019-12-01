@@ -312,9 +312,6 @@ export default class App extends Component {
                 );
             } else {
                 if (!this.state.acceptedMIMETypes.includes(this.state.file.type)) {
-                    console.log('====================================');
-                    console.log("não aceit");
-                    console.log('====================================');
                     Alert.alert(
                         'Extensão de arquivo não permitida',
                         'Certifique-se que a extensão do arquivo seja: .jpeg, .jpg ou .png.',

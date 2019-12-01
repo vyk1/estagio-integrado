@@ -4,13 +4,12 @@ import { Container, Header, Content, Form, Item, Input, Label } from 'native-bas
 
 export default class InlineLabel extends Component {
   render() {
-    const { label, onChangeText, value, ...inputProps } = this.props;
+    const { label, onChangeText, value, secureTextEntry, tel, ...inputProps } = this.props;
     return (
       <View>
-        {/* <Item floatingLabel onChangeText={onChangeText} error={error} success={}> */}
         <Item inlineLabel>
           <Label>{label}</Label>
-          <Input onChangeText={onChangeText} value={value} />
+          <Input onChangeText={onChangeText} value={value} secureTextEntry={secureTextEntry} />
         </Item>
       </View>
     );
