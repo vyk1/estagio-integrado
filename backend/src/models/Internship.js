@@ -26,11 +26,6 @@ const InternshipSchema = new mongoose.Schema({
           ref: 'User'
      },
 
-     // groupby and count
-     // passa id da internship
-     // e faz os role com populate e/ou
-     // aggregate
-     // https://stackoverflow.com/questions/41791015/mongoose-group-and-count
 },
      {
           timestamps: true

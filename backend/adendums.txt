@@ -7,3 +7,5 @@ https://docs.mongodb.com/manual/reference/operator/aggregation/sum/
 
 https://mongoosejs.com/docs/populate.html
 
+para fazer o reset token, se precisar. foi setado para 1 mês e meio
+https://codemoto.io/coding/nodejs/email-verification-node-express-mongodb

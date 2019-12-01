@@ -46,34 +46,34 @@ routes.put('/activity/:id', jsonParser, ActivityController.update);
 // mongodb+srv://developer:<password>@cluster0-dqw7t.mongodb.net/test?retryWrites=true&w=majority
 
 
-routes.post('/upload', upload.single('image'), (req, res, next) => {
-     console.log(req.headers);
+// routes.post('/upload', upload.single('image'), (req, res, next) => {
+//      console.log(req.headers);
      
-     try {
-          const file = req.file;
-          if (!file) {
-               res.status(400).json({
-                    "status": "failed",
-                    "code": "400",
-                    "message": "Please upload file"
-               });
-          }
+//      try {
+//           const file = req.file;
+//           if (!file) {
+//                res.status(400).json({
+//                     "status": "failed",
+//                     "code": "400",
+//                     "message": "Please upload file"
+//                });
+//           }
 
-          res.status(200).json({
-               "status": "success",
-               "code": "200",
-               "message": "file uploaded successfully"
-          });
-     } catch (err) {
-          console.log(error.message);
-          res.status(200).json({
-               "status": "failed",
-               "code": "500",
-               "message": error.message
-          });
-     }
-})
-
+//           res.status(200).json({
+//                "status": "success",
+//                "code": "200",
+//                "message": "file uploaded successfully"
+//           });
+//      } catch (err) {
+//           console.log(error.message);
+//           res.status(200).json({
+//                "status": "failed",
+//                "code": "500",
+//                "message": error.message
+//           });
+//      }
+// })
+routes.get('/user/confirmation/:token/:email', jsonParser, UserController.emailConfirmation);
 routes.post('/user/register', jsonParser, UserController.store);
 routes.post('/user/auth', jsonParser, UserController.auth);
 routes.post('/user/admin/auth', jsonParser, UserController.authAdmin);
