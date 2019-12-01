@@ -205,7 +205,7 @@ export default class App extends Component {
                     this.setState({ formSent: true })
                     console.log(res);
                     if (res.status == 201) {
-                        Alert.alert(
+                        await Alert.alert(
                             'Sucesso',
                             res.message,
                             [
@@ -216,7 +216,7 @@ export default class App extends Component {
                                 }
                             ])
                     } else {
-                        Alert.alert(
+                        await Alert.alert(
                             'Resposta',
                             res.message,
                             [
@@ -230,7 +230,7 @@ export default class App extends Component {
 
                 }).catch(e => {
                     console.log(e);
-                    Alert.alert(
+                    await Alert.alert(
                         'Erro',
                         e.toString(),
                         [
