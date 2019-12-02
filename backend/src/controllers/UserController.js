@@ -77,11 +77,13 @@ module.exports = {
                }
                for (let i = 0; i < arrayEstudantesSemEstagio.length; i++) {
                     const element = arrayEstudantesSemEstagio[i];
-                    estudante = await User.findById(element._id)
-                    arrayCompleto.push(estudante)
+                    // estudante = await User.findById(element._id, { verified: true })
+                    estudante = await User.find({ '_id': element._id, verified: true })
+                    // let obj = estudante[0]
+                    arrayCompleto = estudante
                }
 
-               // console.log(arrayCompleto);
+               console.log(arrayCompleto);
                return res.json(arrayCompleto);
 
           } else {

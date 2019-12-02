@@ -31,9 +31,6 @@ export default class Login extends Component {
             }
         }
 
-        // checar se quem loga é admin
-        // console.log(config);
-
         await api.post('/user/admin/auth', JSON.stringify(this.state), config)
             .then(res => {
                 console.log(res);

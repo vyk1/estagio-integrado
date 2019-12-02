@@ -72,7 +72,7 @@ module.exports = {
                     return res.status(200).send({ status: 200, internships });
                } else {
                     console.log(err);
-                    return res.status(404).send({ status: 404, message: "Ainda não existem atividades cadastradas." });
+                    return res.status(404).send({ status: 404, message: "Não foram encontrados Estágios Associados a este Usuário. Por favor, aguarde pela admissão da administração. " });
                }
           }).populate('id_advisor').populate('id_supervisor').populate('id_student').populate({ path: 'id_activities', options: { sort: { createdAt: -1 } } })
 

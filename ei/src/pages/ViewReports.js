@@ -5,7 +5,7 @@ import Esperador from '../components/Esperador';
 
 export default class ViewReports extends Component {
     static navigationOptions = ({ navigation }) => {
-        return {        // title: '',
+        return {        
             title: `${navigation.getParam('title')}`,
             headerStyle: {
                 backgroundColor: navigation.getParam('backgroundColor'),

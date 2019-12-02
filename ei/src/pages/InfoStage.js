@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, FlatList, Text, View, Platform, Linking } from 'react-native';
-import { CardItem } from 'native-base'
+import { StyleSheet, FlatList, View, Platform, Linking } from 'react-native';
+import { CardItem, Text} from 'native-base'
 import server from "../config/server";
 import RNFetchBlob from 'rn-fetch-blob';
 import Esperador from '../components/Esperador';

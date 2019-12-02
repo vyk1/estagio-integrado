@@ -9,22 +9,17 @@ const authConfig = require('../config/auth.json');
 // 403 é que não há informações adequadas para ter acesso (mal formação)
 // ->forbidden
 const withAuth = function (req, res, next) {
-     // const token = req.cookies.token;
-     var token = req.headers['x-access-token'];
-     console.log(authConfig.secret);
-     console.log(token);
 
+     let token = req.headers['x-access-token'];
      if (!token) {
           return res.status(401).send('Não autorizado: Hash não fornecido.');
      } else {
-          console.log('ok1');
-
+          
           jwt.verify(token, authConfig.secret, function (err, decoded) {
                if (err) {
                     return res.status(403).send('Não autorizado: Hash inválido.');
                } else {
                     req.id = decoded.id;
-                    // console.log(decoded);
                     next();
                }
           });

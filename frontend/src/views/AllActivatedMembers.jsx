@@ -4,6 +4,7 @@ import { Grid, Row, Col, Table, Alert } from "react-bootstrap";
 import Card from "components/Card/Card.jsx";
 import { thArray } from "variables/Variables.jsx";
 import api from "variables/Server.js";
+import { getToken } from "components/auth";
 
 class AllActivatedMembers extends Component {
 
@@ -16,7 +17,16 @@ class AllActivatedMembers extends Component {
   async componentDidMount() {
     console.log('montou');
 
-    const response = await api.get('/users')
+    let token = await getToken()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      }
+    }
+
+    const response = await api.get('/users', config)
     console.log(response);
 
     this.setState({

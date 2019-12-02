@@ -13,6 +13,7 @@ import { Card } from "components/Card/Card.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
 import api from "variables/Server.js";
 import SpinnerBS from "components/SpinnerBS";
+import { getToken } from "components/auth";
 
 class NewInternship extends Component {
 
@@ -31,17 +32,26 @@ class NewInternship extends Component {
   async componentDidMount() {
     console.log('montou');
     await this.getData()
-
   }
+
   async getData() {
-    let response = await api.get('/users/1')
+    let token = await getToken()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      }
+    }
+
+    let response = await api.get('/users/1', config)
     var arrTen = [];
     if (response.data.length === 0) {
       arrTen.push(<option disabled key={null}>Não há Estudantes a Serem Associados à Estágios</option>)
       this.setState({
-        warning: "Não há Estudantes a Serem Associados à Estágios",
+        studentWarning: "Não há Estudantes a Serem Associados à Estágios",
         disabled: true,
-        color: "danger"
+        studentWarningColor: "danger"
       });
 
     } else {
@@ -54,7 +64,7 @@ class NewInternship extends Component {
       students: arrTen,
     });
 
-    response = await api.get('/users/2')
+    response = await api.get('/users/2', config)
     arrTen = [];
     this.setState({ id_advisor: response.data[0]._id })
     for (let k = 0; k < response.data.length; k++) {
@@ -63,7 +73,7 @@ class NewInternship extends Component {
     this.setState({
       advisors: arrTen
     });
-    response = await api.get('/users/3')
+    response = await api.get('/users/3', config)
     arrTen = [];
     this.setState({ id_supervisor: response.data[0]._id })
     for (let k = 0; k < response.data.length; k++) {
@@ -103,21 +113,31 @@ class NewInternship extends Component {
     console.log('====================================');
     await console.log(this.state);
     const { company, id_student, id_supervisor, id_advisor, description } = this.state
-    const res = await api.post('/internship', { company, id_student, id_supervisor, id_advisor, description })
+
+    let token = await getToken()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      }
+    }
+    const res = await api.post('/internship', { company, id_student, id_supervisor, id_advisor, description }, config)
     if (res.status === 201) {
-      console.log('====================================');
-      console.log(res);
-      // console.log('====================================');
 
       this.setState({
         warning: res.data.message,
         company: "",
-        description: ""
+        description: "",
+        color: 'info'
       })
       this.getData();
 
     } else {
-      this.setState({ warning: res.data.message })
+      this.setState({ 
+        warning: res.data.message,
+        color: 'danger'
+       })
     }
   }
 
@@ -148,6 +168,18 @@ class NewInternship extends Component {
                     </button>
                 <span>
                   <b> {this.state.warning} </b>
+                </span>
+              </Alert>
+            )
+          }
+          {
+            this.state.studentWarning && (
+              <Alert bsStyle={this.state.studentWarningColor}>
+                <button type="button" aria-hidden="true" className="close">
+                  &#x2715;
+                    </button>
+                <span>
+                  <b> {this.state.studentWarning} </b>
                 </span>
               </Alert>
             )

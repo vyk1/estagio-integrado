@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { Component } from 'react';
-import { Image, StyleSheet, Text, TimePickerAndroid, View, Alert } from 'react-native';
-import { Body, Container, Header, Title } from 'native-base';
+import { Image, StyleSheet, TimePickerAndroid, View, Alert } from 'react-native';
+import { Container, CardItem, Text, Body, Header, Title } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import ImagePicker from 'react-native-image-picker';
 import BlueButton from '../components/BlueButton';
@@ -29,27 +29,26 @@ export default class App extends Component {
 
     constructor(props) {
         super(props);
-        this.initialState = { acceptedMIMETypes: ["image/png", "image/jpeg", "image/webp"], formSent: true, companyName: '', nameError: '', date: '', date2: '', file: null, id_internship: '5dd9a11814be6d0dd8df570c', studentId: '5d72603dcc169444900b2402', description: '', inputTime: '', outputTime: '' };
+        this.initialState = { internship: [], acceptedMIMETypes: ["image/png", "image/jpeg", "image/webp"], formSent: false, companyName: '', nameError: '', date: '', date2: '', file: null, description: '', inputTime: '', outputTime: '' };
 
         this.state = this.initialState;
     }
 
-    componentDidMount = () => {
-        this.getInternshipName()
+    componentDidMount = async () => {
+        await this.getInternshipName()
     }
 
     getInternshipName = async () => {
 
-        return fetch(`${server}/internship/${this.state.id_internship}`)
+        const user = this.props.navigation.state.params.logado;
+
+        await fetch(`${server}/internship/user/${user._id}`)
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log('rodou');
                 console.log(responseJson);
-                console.log(responseJson.internship.company);
 
-                this.setState({ companyName: responseJson.internship.company })
+                this.setState({ internship: responseJson, formSent: true })
                 this.props.navigation.setParams({ title: `Registro de Atividade` })
-
             })
             .catch((error) => {
                 console.error(error);
@@ -117,7 +116,7 @@ export default class App extends Component {
                 this.setState({ file: response })
             }
         })
-    } 
+    }
 
 
     setinputTime = async () => {
@@ -196,7 +195,7 @@ export default class App extends Component {
                 description,
                 inputTime,
                 outputTime,
-                id_internship
+                id_internship: internship.internship._id
             }),
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -334,67 +333,75 @@ export default class App extends Component {
 
 
     render() {
-        const { formSent, companyName, inputTime, outputTime, file, description } = this.state;
-        if (companyName === "" || formSent == false) {
+        const { internship, formSent, inputTime, outputTime, file, description } = this.state;
+        if (!formSent) {
             return (
                 <Esperador />
             )
         } else {
-            return (
-                <Container>
-                    <Header style={styles.header}>
-                        <Body>
-                            <Title>Empresa: {companyName} </Title>
-                        </Body>
-                    </Header>
-                    <View style={styles.MainContainer}>
+            if (internship.status == 404) {
+                return (
+                    <CardItem header bordered>
+                        <Text>{internship.message} </Text>
+                    </CardItem>
+                )
+            } else {
+                return (
+                    <Container>
+                        <Header style={styles.header}>
+                            <Body>
+                                <Title>Empresa: {internship.internship[0].companyName} </Title>
+                            </Body>
+                        </Header>
+                        <View style={styles.MainContainer}>
 
-                        <ScrollView>
-                            <Date onDateChange={(date) => this.setState({ date })}></Date>
+                            <ScrollView>
+                                <Date onDateChange={(date) => this.setState({ date })}></Date>
 
-                            <HourInput
-                                onPress={() => this.setinputTime()}
-                                value={inputTime}
-                                labelText="Hora de entrada" />
+                                <HourInput
+                                    onPress={() => this.setinputTime()}
+                                    value={inputTime}
+                                    labelText="Hora de entrada" />
 
-                            <HourInput
-                                onPress={() => this.setoutputTime()}
-                                value={outputTime}
-                                labelText="Hora de saída" />
+                                <HourInput
+                                    onPress={() => this.setoutputTime()}
+                                    value={outputTime}
+                                    labelText="Hora de saída" />
 
-                            <FormTextInput
-                                numberOfLines={5}
-                                onChangeText={(description) => this.setState({ description })}
-                                value={description}
-                                placeholder="Descrição"
-                                multiline={true}
-                            />
+                                <FormTextInput
+                                    numberOfLines={5}
+                                    onChangeText={(description) => this.setState({ description })}
+                                    value={description}
+                                    placeholder="Descrição"
+                                    multiline={true}
+                                />
 
-                            {
-                                file && (
-                                    <View>
-                                        <Text>Foto Carregada:</Text>
-                                        <Image
-                                            source={{ uri: file.uri }}
-                                            style={{ width: 300, height: 300, alignSelf: 'center', marginBottom: 15 }}
-                                        />
-                                        <BlueButton onPress={() => this.setState({ file: null })}>
-                                            Apagar foto
+                                {
+                                    file && (
+                                        <View>
+                                            <Text>Foto Carregada:</Text>
+                                            <Image
+                                                source={{ uri: file.uri }}
+                                                style={{ width: 300, height: 300, alignSelf: 'center', marginBottom: 15 }}
+                                            />
+                                            <BlueButton onPress={() => this.setState({ file: null })}>
+                                                Apagar foto
                                         </BlueButton>
-                                    </View>
-                                )
-                            }
-                            <BlueButton onPress={this.handleChooseFile}>
-                                Carregar Foto
+                                        </View>
+                                    )
+                                }
+                                <BlueButton onPress={this.handleChooseFile}>
+                                    Carregar Foto
                             </BlueButton>
-                            <BlueButton onPress={this.handleSubmit}>
-                                Registrar Atividade
+                                <BlueButton onPress={this.handleSubmit}>
+                                    Registrar Atividade
                             </BlueButton>
-                        </ScrollView>
-                    </View>
-                </Container>
+                            </ScrollView>
+                        </View>
+                    </Container>
 
-            )
+                )
+            }
         }
     }
 }

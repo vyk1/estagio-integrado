@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { Grid, Row, Col, Table, Alert } from "react-bootstrap";
 
 import Card from "components/Card/Card.jsx";
-import { thArray } from "variables/Variables.jsx";
+import { thArray2 } from "variables/Variables.jsx";
 import api from "variables/Server.js";
 import SpinnerBS from "components/SpinnerBS";
+import { getToken } from "components/auth";
 
 class AllNotActivatedMembers extends Component {
 
@@ -17,11 +18,20 @@ class AllNotActivatedMembers extends Component {
   async componentDidMount() {
     console.log('montou');
 
-    this.getNotVerified()
+    await this.getNotVerified()
   }
 
   async getNotVerified() {
-    const response = await api.get('/users/notVerified')
+    let token = await getToken()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      }
+    }
+
+    const response = await api.get('/users/notVerified', config)
     console.log(response);
 
     this.setState({
@@ -30,6 +40,7 @@ class AllNotActivatedMembers extends Component {
       loaded: true
     })
   }
+
   getType(tipo) {
     switch (tipo) {
       case 1:
@@ -56,8 +67,17 @@ class AllNotActivatedMembers extends Component {
       this.setState({
         loaded: false
       })
+      let token = await getToken()
 
-      const res = await api.delete('/user', { data: { id: classid } })
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': token
+        }
+      }
+  
+
+      const res = await api.delete('/user', { data: { id: classid } }, config)
       if (res.status === 200) {
         console.log(res);
 
@@ -102,8 +122,17 @@ class AllNotActivatedMembers extends Component {
       const body = {
         id: classid
       }
+      let token = await getToken()
 
-      const res = await api.post('/user/accept', body)
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': token
+        }
+      }
+  
+
+      const res = await api.post('/user/accept', body, config)
       if (res.status === 200) {
         console.log(res);
 
@@ -175,7 +204,7 @@ class AllNotActivatedMembers extends Component {
                       <Table striped hover>
                         <thead>
                           <tr>
-                            {thArray.map((prop, key) => {
+                            {thArray2.map((prop, key) => {
                               return <th key={key}>{prop}</th>;
                             })}
                           </tr>
