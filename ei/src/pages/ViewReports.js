@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, List, ListItem, Text, Left, Right, Icon } from 'native-base';
+import { Container, CardItem, Content, List, ListItem, Text, Left, Right, Icon } from 'native-base';
 import server from "../config/server";
 import Esperador from '../components/Esperador';
 
@@ -21,28 +21,25 @@ export default class ViewReports extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: this.props.navigation.state.params.logado.user,
-            students: []
+            students: [],
+            formSent: false
+
         }
     }
 
-    componentDidMount() {
-        console.log(this.state.user);
-        this.getStudents()
+    async componentDidMount() {
+        await this.getStudents()
     }
 
     async getStudents() {
+        const user = this.props.navigation.state.params.logado;
 
-        return fetch(`${server}/internship/user/${this.state.user._id}/students`)
+        await fetch(`${server}/internship/user/${user._id}/students`)
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log('rodou');
 
-                this.setState({ students: responseJson.students })
+                this.setState({ students: responseJson, formSent: true })
                 this.props.navigation.setParams({ title: `Visualização de estagiários` });
-
-                console.log(responseJson);
-
             })
             .catch((error) => {
                 console.error(error);
@@ -58,31 +55,38 @@ export default class ViewReports extends Component {
 
     }
     render() {
-        const { students } = this.state;
-        if (!Object.keys(students).length) {
+        const { students, formSent } = this.state;
+        if (!formSent) {
             return (
                 <Esperador />
             )
         } else {
-
-            return (
-                <Container>
-                    <Content>
-                        <List>
-                            {students.map((rowData, i) => (
-                                <ListItem onPress={() => this.goToStudent(rowData._id)} key={i}>
-                                    <Left>
-                                        <Text>{rowData.name}</Text>
-                                    </Left>
-                                    <Right>
-                                        <Text>=></Text>
-                                    </Right>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </Content>
-                </Container>
-            );
+            if (students.status == 404) {
+                return (
+                    <CardItem header bordered>
+                        <Text>{students.message} </Text>
+                    </CardItem>
+                )
+            } else {
+                return (
+                    <Container>
+                        <Content>
+                            <List>
+                                {students.students.map((rowData, i) => (
+                                    <ListItem onPress={() => this.goToStudent(rowData._id)} key={i}>
+                                        <Left>
+                                            <Text>{rowData.name}</Text>
+                                        </Left>
+                                        <Right>
+                                            <Text>=></Text>
+                                        </Right>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Content>
+                    </Container>
+                );
+            }
         }
     }
 }

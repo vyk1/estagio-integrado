@@ -71,7 +71,7 @@ class AllActivatedMembers extends Component {
                 <Col md={12}>
                   <Card
                     title="Membros"
-                    category="Aqui estão listados todos os membros aceitos pela administração :)"
+                    category="Aqui estão listados todos os membros pendentes ou não"
                     ctTableFullWidth
                     ctTableResponsive
                     content={
@@ -91,7 +91,7 @@ class AllActivatedMembers extends Component {
                                 <td>{prop.email}</td>
                                 <td>{prop.phone}</td>
                                 <td>{this.getType(prop.type)}</td>
-                                <td>{prop.emailConfirmed? "Sim":"Não"}</td>
+                                <td>{prop.emailConfirmed ? "Sim" : "Não"}</td>
                               </tr>
                             );
                           })}

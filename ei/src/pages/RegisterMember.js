@@ -24,7 +24,7 @@ export default class PickerInputExample extends Component {
   };
   constructor(props) {
     super(props);
-    this.initialState = { name: '', email: '', password: '', phone: '', type: null, nameError: 'Por favor, preencha todos os campos', formSent: true };
+    this.initialState = { type: "0", name: 'Luísa Castro', email: 'v3-14@hotmail.com', password: '12345678', phone: '88285522522', nameError: 'Por favor, preencha todos os campos', formSent: true };
     this.state = this.initialState;
   }
   showAlert = () => {
@@ -57,7 +57,7 @@ export default class PickerInputExample extends Component {
             this.showAlert();
             return false
           } else {
-            if (this.state.type === "" || null) {
+            if (this.state.type === "0" || null) {
               await this.setState({ nameError: "O tipo do usuário necessita ser preenchido." });
               this.showAlert();
               return false
@@ -84,11 +84,15 @@ export default class PickerInputExample extends Component {
   }
 
   onChangeType(value) {
-    this.setState({
-      type: value
-    });
+    if (value !== 0) {
+      this.setState({
+        type: value
+      });
+    }
   }
   handleSubmit = async () => {
+
+    console.log(this.state);
 
     let checagem = await this.checkInputs();
 
@@ -191,6 +195,7 @@ export default class PickerInputExample extends Component {
                 selectedValue={this.state.type}
                 onValueChange={this.onChangeType.bind(this)}
               >
+                <Picker.Item label="Selecionar... " value="0" />
                 <Picker.Item label="Estudante" value="1" />
                 <Picker.Item label="Orientador" value="2" />
                 <Picker.Item label="Supervisor" value="3" />
@@ -200,11 +205,6 @@ export default class PickerInputExample extends Component {
           <BlueButton onPress={this.handleSubmit}>
             Cadastrar-se
             </BlueButton>
-          {/* <BlueButton onPress={() => {
-            console.log(this.state);
-          }}>
-            Apagar Formulário
-            </BlueButton> */}
         </View>
 
       );

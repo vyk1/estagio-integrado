@@ -24,7 +24,9 @@ export default class PickerInputExample extends Component {
     };
     constructor(props) {
         super(props);
-        this.initialState = { email: 'victoriabotelho14@gmail.com', password: '12345678', nameError: 'Por favor, preencha todos os campos', formSent: true };
+        // this.initialState = { email: 'victoriabotelho14@gmail.com', password: '12345678', nameError: 'Por favor, preencha todos os campos', formSent: true };
+        // this.initialState = { email: 'victoria.martins@aluno.iffar.edu.br', password: '12345678', nameError: 'Por favor, preencha todos os campos', formSent: true };
+        this.initialState = { email: 'v3-14@hotmail.com', password: '12345678', nameError: 'Por favor, preencha todos os campos', formSent: true };
         this.state = this.initialState;
     }
     showAlert = () => {
@@ -80,7 +82,7 @@ export default class PickerInputExample extends Component {
             return false
         } else {
 
-            await this.setState({ formSent: false })
+            this.setState({ formSent: false })
             const config = await {
                 method: 'POST',
                 body: JSON.stringify(this.state),
@@ -97,15 +99,15 @@ export default class PickerInputExample extends Component {
 
                         if (res.status == 200) {
                             onLogin(res.token, res.user);
-                            
+
                             if (res.user.type == 1) {
-                                this.props.navigation.navigate('StudentMain', {
+                                return this.props.navigation.navigate('StudentMain', {
                                     logado: res.user,
                                     title: 'Carregando'
                                 })
                             }
                             if (res.user.type == 2 || 3) {
-                                this.props.navigation.navigate('VisorMain', {
+                                return this.props.navigation.navigate('VisorMain', {
                                     logado: res.user,
                                     title: 'Carregando'
                                 });

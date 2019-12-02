@@ -15,8 +15,7 @@ export default class MoreInfoAdvisor extends Component {
         return {
             title: `${navigation.getParam('title')}`,
             headerStyle: {
-                backgroundColor: '#5bd4d4',
-
+                backgroundColor: `${navigation.getParam('backgroundColor')}`,
             },
             headerTintColor: '#fff',
             headerTitleStyle: {

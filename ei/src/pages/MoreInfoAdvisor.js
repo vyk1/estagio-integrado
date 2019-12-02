@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import { StyleSheet, FlatList, Text, View, Image, Linking } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import student from '../assets/student2.png'
 import advisor1 from '../assets/advisor1.jpg'
 import advisor2 from '../assets/advisor2.jpg'
 import { Container, Header, Content, Accordion } from "native-base";
@@ -25,7 +24,7 @@ export default class MoreInfoAdvisor extends Component {
         return {
             title: `${navigation.getParam('title')}`,
             headerStyle: {
-                backgroundColor: '#1B5E20',
+                backgroundColor: `${navigation.getParam('backgroundColor')}`,
 
             },
             headerTintColor: '#fff',

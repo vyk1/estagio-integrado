@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-
 import { StyleSheet, FlatList, Text, View, Platform } from 'react-native';
 import server from "../config/server";
 import Esperador from '../components/Esperador';
+import { readUser, onLogout } from "../config/auth";
+import { NavigationActions, StackActions } from 'react-navigation';
 
 export default class StudentMain extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -23,8 +24,8 @@ export default class StudentMain extends Component {
         super(props);
 
         this.state = {
-            user: { id: '5d72603dcc169444900b2402' },
             logado: {},
+            backgroundColor: null,
             GridViewItems: [
                 { key: 'Informações Sobre o Estágio', page: 'InfoStage' },
                 { key: 'Registrar Atividade', page: 'RegisterActivity' },
@@ -34,48 +35,57 @@ export default class StudentMain extends Component {
                 { key: 'Ei! Fique Ligado', page: 'StayOn' },
                 { key: 'Para Refletir', page: 'ToThink' },
                 { key: "Sobre o App", page: "About" },
+                { key: 'Logout', page: 'logout' }
             ],
         }
     }
 
     async getUser() {
 
-        return fetch(`${server}/user/${this.state.user.id}`)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                console.log('rodou');
+        const user = await readUser();
+        logado = JSON.parse(user);
 
-                this.setState({ logado: responseJson })
-                console.log(responseJson);
-                this.props.navigation.setParams({ title: `Olá ${this.state.logado.user.name}` })
+        console.log(logado);
 
-            })
-            .catch((error) => {
-                console.error(error);
-                return false
-            });
+        await this.setState({ logado })
+
+        await this.props.navigation.setParams({ title: `Olá ${this.state.logado.name}` })
+        await this.setState({ backgroundColor: '#5f98e3' })
+
     }
-    componentDidMount() {
+    async componentDidMount() {
         this.getUser()
     }
 
-    GetGridViewItem(page, key) {
-        const { logado } = this.state;
-        this.props.navigation.navigate(page, {
-            title: key,
-            logado,
-            title: 'Carregando',
-            backgroundColor: '#5f98e3',
-        });
+    async GetGridViewItem(page, key) {
+        const { logado, backgroundColor } = this.state;
+
+        if (page == 'logout') {
+            this.setState({ formSent: false })
+
+            loggedOut = await onLogout()
+
+            if (loggedOut) {
+                console.log('delogo');
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({ routeName: 'Inicial' })],
+                });
+                this.props.navigation.dispatch(resetAction);
+
+            }
+        } else {
+            this.props.navigation.navigate(page, {
+                logado,
+                title: 'Carregando',
+                backgroundColor
+            });
+        }
     }
     renderiza() {
-        const { logado } = this.state;
-        console.log('====================================');
-        console.log(logado);
-        console.log(!Object.keys(logado).length);
-        console.log('====================================');
+        const { logado, backgroundColor } = this.state;
 
-        if (!Object.keys(logado).length) {
+        if (!Object.keys(logado).length || backgroundColor == null) {
             return (
                 <Esperador />
             )
@@ -85,7 +95,7 @@ export default class StudentMain extends Component {
                     <FlatList
                         data={this.state.GridViewItems}
                         renderItem={({ item }) =>
-                            <View style={styles.GridViewBlockStyle}>
+                            <View style={[styles.GridViewBlockStyle, { backgroundColor: `${backgroundColor}` }]}>
                                 <Text style={[styles.GridViewInsideTextItemStyle, styles.text]} onPress={this.GetGridViewItem.bind(this, item.page)} > {item.key} </Text>
                             </View>}
                         numColumns={2}

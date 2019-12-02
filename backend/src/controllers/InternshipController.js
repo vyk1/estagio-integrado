@@ -27,6 +27,8 @@ module.exports = {
      // traz todos os estudantes
      async getStudentsRelated(req, res) {
           const { id_dvisor } = req.params;
+          console.log(req.params);
+          
           //busca todos estágios em que este user faça parte
           await Internship.find({ $or: [{ id_advisor: id_dvisor }, { id_supervisor: id_dvisor }] }, (err, internships) => {
 
@@ -38,6 +40,10 @@ module.exports = {
                          studentsIdArr.push(i.id_student)
                     });
 
+                    if (!studentsIdArr.length > 0) {
+                         return res.status(404).send({ status: 404, message: "Não foram encontrados Estudantes Associados a este Usuário. Por favor, aguarde pela admissão da administração. " });
+
+                    }
                     // procura cada estudante
                     User.find({ '_id': { $in: studentsIdArr } }, (err, students) => {
 
@@ -45,13 +51,13 @@ module.exports = {
                               return res.status(200).send({ status: 200, students })
                          } else {
                               console.log(err);
-                              return res.status(404).send({ status: 404, message: "Não foram encontrados Estágios para este Usuário." });
+                              return res.status(404).send({ status: 404, message: "Não foram encontrados Estágios Associados a este Usuário. Por favor, aguarde pela admissão da administração. " });
                          }
                     })
 
                } else {
                     console.log(err);
-                    return res.status(404).send({ status: 404, message: "Não foram encontrados Estudantes para este usuário." });
+                    return res.status(404).send({ status: 404, message: "Não foram encontrados Estudantes para este usuário. Por favor, aguarde pela admissão da administração." });
                }
           })
      },
@@ -66,7 +72,7 @@ module.exports = {
                     return res.status(200).send({ status: 200, internships });
                } else {
                     console.log(err);
-                    return res.status(404).send({ status: 404, message: "Não foram encontrados Estágios para este usuário." });
+                    return res.status(404).send({ status: 404, message: "Ainda não existem atividades cadastradas." });
                }
           }).populate('id_advisor').populate('id_supervisor').populate('id_student').populate({ path: 'id_activities', options: { sort: { createdAt: -1 } } })
 
@@ -75,6 +81,8 @@ module.exports = {
           // mesma lógica do getStudents
           const { id_user } = req.params;
           const { tipo } = req.params;
+          console.log(req.params);
+
           // passar tipo para facilitar query
           let internships
           // estudante
@@ -86,6 +94,10 @@ module.exports = {
 
           } else if (tipo == 3) {
                internships = await Internship.find({ id_supervisor: id_user })
+          }
+
+          if (!internships.length > 0) {
+               return res.status(404).send({ status: 404, message: "Não foram encontrados Estágios Associados a este Usuário. Por favor, aguarde pela admissão da administração. " });
           }
 
           //busca todos estágios em que este user faça parte
@@ -115,10 +127,11 @@ module.exports = {
                     }
                }, (err, contacts) => {
                     if (contacts) {
+                         console.log(contacts);
                          return res.status(200).send({ status: 200, contacts })
                     } else {
                          console.log(err);
-                         return res.status(404).send({ status: 404, message: "Não foram encontrados Estágios para este Usuário." });
+                         return res.status(404).send({ status: 404, message: "Não foram encontrados Estágios associados a este usuário, portanto não há contatos a serem exibidos. Por favor, aguarde pela admissão da administração. " });
                     }
                })
           }
@@ -193,12 +206,6 @@ module.exports = {
                     return res.status(400).send({ status: 400, message: "Não foi possível salvar." });
                }
                else {
-                    // console.log('====================================');
-                    // console.log(doc);
-                    // console.log('====================================');
-                    // if(doc){
-
-                    // }
                     return res.status(201).send({ status: 201, message: "Estágio Cadastrado!" });
                }
           })

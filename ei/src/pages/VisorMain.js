@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, FlatList, Text, View, Alert, Platform } from 'react-native';
 import { Container, Header, Content, Footer, FooterTab, Button, Icon, Item } from 'native-base';
 import Esperador from '../components/Esperador';
-import { readUser, USER, TOKEN_KEY } from '../config/auth';
+import { readUser, onLogout } from "../config/auth";
+import { NavigationActions, StackActions } from 'react-navigation';
 
 export default class VisorMain extends Component {
 
@@ -25,13 +26,15 @@ export default class VisorMain extends Component {
 
         this.state = {
             logado: {},
+            backgroundColor: null,
             GridViewItems: [
                 { key: 'Informações Sobre o Estágio', page: 'InfoStage' },
                 { key: 'Estagiários', page: 'ViewReports' },
                 { key: 'Para Refletir', page: 'ToThink' },
                 { key: 'Contatos', page: 'Contacts', icon: 'contacts' },
                 { key: 'Ei! Fique Ligado', page: 'StayOn' },
-                { key: 'Sobre o App', page: 'About' }
+                { key: 'Sobre o App', page: 'About' },
+                { key: 'Logout', page: 'logout' }
             ]
         }
     }
@@ -48,49 +51,66 @@ export default class VisorMain extends Component {
     }
     async changeHeaderColor() {
         if (this.state.logado.type == 2) {
-            await this.props.navigation.setParams({ title: `Olá ${this.state.logado.name}`, backgroundColor: '#5fb2d4' });
-            await this.setState({ backgroundColor: '#5fb2d4' })
+            await this.props.navigation.setParams({ title: `Olá ${this.state.logado.name}`, backgroundColor: '#007fc4' });
+            await this.setState({ backgroundColor: '#007fc4' })
 
         } else {
-            await this.props.navigation.setParams({ title: `Olá ${this.state.logado.name}`, backgroundColor: '#5bd4d4' });
-            await this.setState({ backgroundColor: '#5bd4d4' })
+            await this.props.navigation.setParams({ title: `Olá ${this.state.logado.name}`, backgroundColor: '#004cc4' });
+            await this.setState({ backgroundColor: '#004cc4' })
         }
     }
     async componentDidMount() {
         await this.getUser()
     }
 
-    GetGridViewItem(page, key) {
+    async GetGridViewItem(page, key) {
         const { logado, backgroundColor } = this.state;
 
-        this.props.navigation.navigate(page, {
-            // title: key,
-            logado,
-            title: 'Carregando',
-            backgroundColor
-        });
+        if (page == 'logout') {
+            this.setState({ formSent: false })
+
+            loggedOut = await onLogout()
+
+            if (loggedOut) {
+                console.log('delogo');
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({ routeName: 'Inicial' })],
+                });
+                this.props.navigation.dispatch(resetAction);
+
+            } 
+        } else {
+            this.props.navigation.navigate(page, {
+                logado,
+                title: 'Carregando',
+                backgroundColor
+            });
+        }
     }
 
     renderiza() {
-        const { logado } = this.state;
+        const { logado, backgroundColor } = this.state;
 
-        if (!Object.keys(logado).length) {
+        console.log(backgroundColor);
+
+        if (!Object.keys(logado).length || backgroundColor == null) {
             return (
                 <Esperador />
             )
         } else {
             return (
                 <View style={styles.MainContainer}>
-                    {/* <Text>SSSSSS</Text> */}
                     <FlatList
                         data={this.state.GridViewItems}
                         renderItem={({ item }) =>
-                            <View style={styles.GridViewBlockStyle}>
-                                {item.icon && (<Icon type={"MaterialIcons"} name={item.icon} />)}
+                            <View style={[styles.GridViewBlockStyle, { backgroundColor: `${backgroundColor}` }]}>
+                                {/* <View style={[styles.GridViewBlockStyle, { color: `#fff` }]}> */}
+                                {/* {item.icon && (<Icon type={"MaterialIcons"} name={item.icon} />)} */}
                                 <Text style={[styles.GridViewInsideTextItemStyle, styles.text]} onPress={this.GetGridViewItem.bind(this, item.page)} > {item.key} </Text>
                             </View>}
                         numColumns={2} />
-                    <Footer style={{ color: this.state.backgroundColor, margin: 0 }}>
+                    <Footer>
                         <FooterTab>
                             {/* <Button vertical>
                                 <Icon name="apps" />
@@ -124,7 +144,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontFamily: 'RobotoMono-Light',
         textAlign: 'center',
-        fontWeight: 'bold'
+        fontWeight: '700'
     },
     MainContainer: {
         justifyContent: 'center',

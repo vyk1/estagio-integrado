@@ -6,6 +6,7 @@ import {
     View,
     FlatList
 } from 'react-native';
+import { NavigationActions, StackActions } from 'react-navigation';
 import BlueButton from '../components/BlueButton';
 import Esperador from '../components/Esperador';
 import logo from '../assets/logo_transp2.png';
@@ -36,7 +37,7 @@ export default class About extends Component {
     }
     GetGridViewItem(page, key) {
         this.props.navigation.navigate(page, {
-            type: key,
+            key,
             title: 'Carregando'
         });
     }
@@ -44,7 +45,7 @@ export default class About extends Component {
         this.setState({ formSent: false })
         const on = await isLoggedIn();
 
-        if (on != null) {
+        if (on == true) {
             const user = await readUser();
             json = JSON.parse(user);
 
@@ -59,12 +60,10 @@ export default class About extends Component {
         } else {
             this.setState({ formSent: true })
         }
-
     }
 
     render() {
         if (!this.state.formSent) {
-            // if (!logado.length) {
             return (
                 <Esperador />
             )
@@ -88,15 +87,20 @@ export default class About extends Component {
                         </Text>
                         {
                             this.state.Continue ? (
-                                <BlueButton onPress={this.GetGridViewItem.bind(this, this.state.Continue.page, this.state.Continue.key)}>
-                                    {this.state.Continue.key}
-                                </BlueButton>) : (
+                                <View>
+                                    <BlueButton onPress={this.GetGridViewItem.bind(this, this.state.Continue.page, this.state.Continue.key)}>
+                                        {this.state.Continue.key}
+                                    </BlueButton>
+                                </View>
+
+                            ) : (
                                     <FlatList
                                         data={this.state.GridViewItems}
                                         renderItem={({ item }) =>
                                             <BlueButton onPress={this.GetGridViewItem.bind(this, item.page, item.key)}>
                                                 {item.key}
                                             </BlueButton>
+
                                         }
                                     />
 

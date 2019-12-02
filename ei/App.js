@@ -2,7 +2,6 @@ import React, { Button } from "react";
 
 import { createStackNavigator, createAppContainer, createBottomTabNavigator } from "react-navigation";
 
-import Main from "./src/pages/Main";
 import About from "./src/pages/About";
 import StudentMain from "./src/pages/StudentMain";
 import VisorMain from "./src/pages/VisorMain";
@@ -18,11 +17,9 @@ import MoreInfoAdvisor from "./src/pages/MoreInfoAdvisor";
 import ToThink from "./src/pages/ToThink";
 import MoreInfoStudent from "./src/pages/MoreInfoStudent";
 import StayOn from "./src/pages/StayOn";
-import ImageTest from "./src/pages/ImageTest";
 import Login from "./src/pages/Login";
 
 const AppNavigator = createStackNavigator({
-    Main,
     About,
     StudentMain,
     VisorMain,

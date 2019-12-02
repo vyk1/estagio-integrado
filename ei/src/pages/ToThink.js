@@ -10,7 +10,7 @@ export default class ToThink extends Component {
         return {
             title: 'Para Refletir',
             headerStyle: {
-                backgroundColor: '#5f98e3',
+                backgroundColor: `${navigation.getParam('backgroundColor')}`,
             },
             headerTintColor: '#fff',
             headerTitleStyle: {
@@ -48,26 +48,29 @@ export default class ToThink extends Component {
     GetGridViewItem1(page, key) {
         this.props.navigation.navigate("MoreInfoStudent", {
             title: key,
-            info: page
+            info: page,
+            backgroundColor: this.props.navigation.state.params.backgroundColor
         });
     }
     GetGridViewItem2(page, key) {
         this.props.navigation.navigate("MoreInfoAdvisor", {
             title: key,
-            info: page
+            info: page,
+            backgroundColor: this.props.navigation.state.params.backgroundColor
         });
     }
     GetGridViewItem3(page, key) {
         this.props.navigation.navigate("MoreInfoSupervisor", {
             title: key,
-            info: page
+            info: page,
+            backgroundColor: this.props.navigation.state.params.backgroundColor
         });
     }
 
     render() {
 
         // estudante
-        if (this.props.navigation.state.params.logado.user.type == 1) {
+        if (this.props.navigation.state.params.logado.type == 1) {
             return (
                 <ScrollView>
 
@@ -94,7 +97,7 @@ export default class ToThink extends Component {
             );
         }
         // orientador
-        if (this.props.navigation.state.params.logado.user.type == 2) {
+        if (this.props.navigation.state.params.logado.type == 2) {
             return (
                 <ScrollView>
                     <View style={styles.MainContainer}>
@@ -107,11 +110,11 @@ export default class ToThink extends Component {
                         </Header>
 
                         <CardItem header bordered>
-                        <Text style={styles.text}>O estagiário é um profissional em formação, e que precisa de orientação para desenvolver melhor as suas atividades, bem como articular, de maneira proativa, a teoria e a prática. Nesse sentido, o professor orientador tem papel fundamental no desenvolvimento pessoal e profissional do estudante durante a realização do estágio.</Text>
+                            <Text style={styles.text}>O estagiário é um profissional em formação, e que precisa de orientação para desenvolver melhor as suas atividades, bem como articular, de maneira proativa, a teoria e a prática. Nesse sentido, o professor orientador tem papel fundamental no desenvolvimento pessoal e profissional do estudante durante a realização do estágio.</Text>
                         </CardItem>
 
                         <CardItem>
-                             <Text style={styles.text}>Para refletir mais sobre estas questões acesse os links abaixo</Text>
+                            <Text style={styles.text}>Para refletir mais sobre estas questões acesse os links abaixo</Text>
                         </CardItem>
                         <FlatList
                             data={this.state.GridViewItems2}
@@ -126,7 +129,7 @@ export default class ToThink extends Component {
             )
         }
         // supervisor
-        if (this.props.navigation.state.params.logado.user.type == 3) {
+        if (this.props.navigation.state.params.logado.type == 3) {
             return (
                 <ScrollView>
                     <View style={styles.MainContainer}>
@@ -139,11 +142,11 @@ export default class ToThink extends Component {
                         </Header>
 
                         <CardItem header bordered>
-                             <Text style={styles.text}>O estagiário é um profissional em formação, e que precisa de orientação para desenvolver melhor as suas atividades, bem como articular, de maneira proativa, a teoria e a prática. Nesse sentido, o supervisor tem papel fundamental no desenvolvimento pessoal e profissional do estudante durante a realização do estágio.</Text>
+                            <Text style={styles.text}>O estagiário é um profissional em formação, e que precisa de orientação para desenvolver melhor as suas atividades, bem como articular, de maneira proativa, a teoria e a prática. Nesse sentido, o supervisor tem papel fundamental no desenvolvimento pessoal e profissional do estudante durante a realização do estágio.</Text>
                         </CardItem>
 
                         <CardItem>
-                             <Text style={styles.text}>Para refletir mais sobre estas questões acesse os links abaixo</Text>
+                            <Text style={styles.text}>Para refletir mais sobre estas questões acesse os links abaixo</Text>
                         </CardItem>
                         <FlatList
                             data={this.state.GridViewItems3}

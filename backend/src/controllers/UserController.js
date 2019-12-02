@@ -9,8 +9,6 @@ const jwt = require('jsonwebtoken');
 
 const authConfig = require('../config/auth');
 
-// const mailer = require('../modules/mailer');
-
 
 function generateToken(params = {}) {
      return jwt.sign(params, authConfig.secret, { expiresIn: 86400 })
@@ -132,7 +130,7 @@ module.exports = {
                          // Send the email
                          const host = req.headers.host
                          mail.confirm(host, name, email, token.token)
-                          res.status(201).send({ status: 201, message: 'Um e-mail de confimação foi enviado para: ' + email + '.' });
+                         res.status(201).send({ status: 201, message: 'Um e-mail de confimação foi enviado para: ' + email + '.' });
                     })
                }
           })
@@ -145,7 +143,7 @@ module.exports = {
 
                // If we found a token, find a matching user
                User.findOne({ _id: token._id_user, email: req.params.email }, function (err, user) {
-                    if (!token) return res.status(400).send( 'Não foi possível validar o usuário.');
+                    if (!token) return res.status(400).send('Não foi possível validar o usuário.');
                     if (user.emailConfirmed) return res.status(400).send('Este usuário já foi verificado. Por favor, aguarde a confirmação da administração.');
 
                     // Verify and save the user

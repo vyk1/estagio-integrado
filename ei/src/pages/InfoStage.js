@@ -77,7 +77,6 @@ export default class InfoStage extends Component {
             title: key,
             link
         });
-
     }
     render() {
         if (this.state.loaded == false) {

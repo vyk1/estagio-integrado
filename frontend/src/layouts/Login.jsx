@@ -10,8 +10,8 @@ export default class Login extends Component {
         //Set default message
         this.state = {
             message: 'Loading...',
-            email: '',
-            password: '',
+            email: 'checagem.sistemas@gmail.com',
+            password: '12345678',
             error: '',
         }
     };
@@ -42,7 +42,7 @@ export default class Login extends Component {
                     // return <Redirect to="/admin" />;
                     login(res.data.token)
 
-                    this.props.history.push('/admin/dashboard');
+                    this.props.history.push('/admin/membros');
 
                 } else {
                     console.log(res)
