@@ -7,9 +7,10 @@ import {
     FlatList
 } from 'react-native';
 import BlueButton from '../components/BlueButton';
-
+import Esperador from '../components/Esperador';
 import logo from '../assets/logo_transp2.png';
 import { Container, Header, Button, Content } from 'native-base';
+import { isLoggedIn, readUser, onLogout, readToken } from "../config/auth";
 
 export default class About extends Component {
     static navigationOptions = {
@@ -26,6 +27,7 @@ export default class About extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            formSent: false,
             GridViewItems: [
                 { key: 'Login', page: 'Login' },
                 { key: 'Cadastre-se', page: 'RegisterMember' }
@@ -35,40 +37,77 @@ export default class About extends Component {
     GetGridViewItem(page, key) {
         this.props.navigation.navigate(page, {
             type: key,
-            title: ''
+            title: 'Carregando'
         });
+    }
+    async componentDidMount() {
+        this.setState({ formSent: false })
+        const on = await isLoggedIn();
+
+        if (on != null) {
+            const user = await readUser();
+            json = JSON.parse(user);
+
+            if (json.type == 1) {
+                this.setState({ formSent: true })
+                return this.setState({ Continue: { page: 'StudentMain', key: "Continuar Seção" } })
+            }
+            if (json.type == 2 || 3) {
+                this.setState({ formSent: true })
+                return this.setState({ Continue: { page: 'VisorMain', key: "Continuar Seção" } })
+            }
+        } else {
+            this.setState({ formSent: true })
+        }
+
     }
 
     render() {
-        return (
-            <Container style={styles.MainContainer}>
-                <Content>
-                    <Image source={logo} style={styles.image}></Image>
+        if (!this.state.formSent) {
+            // if (!logado.length) {
+            return (
+                <Esperador />
+            )
+        } else {
+            return (
+                <Container style={styles.MainContainer}>
+                    <Content>
+                        <Image source={logo} style={styles.image}></Image>
+                        <Text style={styles.text}>
+                            Estágio é a prática profissional em situação real
+                            de trabalho. É um momento de formação orientada e
+                            supervisionada, que articula a formação escolar e o mundo do trabalho.
                     <Text style={styles.text}>
-                        Estágio é a prática profissional em situação real
-                        de trabalho. É um momento de formação orientada e
-                        supervisionada, que articula a formação escolar e o mundo do trabalho.</Text>
-                    <Text style={styles.text}>
-                        Este trabalho visa tornar a comunicação entre estagiário, supervisor e orientador
-                        mais acessível, fornecendo a ponte necessária para a melhor experiência de estágio
+                                Este trabalho visa tornar a comunicação entre estagiário, supervisor e orientador
+                                mais acessível, fornecendo a ponte necessária para a melhor experiência de estágio.
+                                Quer saber mais?
                         </Text>
-                    <Text style={styles.text} onPress={() => {
-                        this.props.navigation.navigate('About')
-                    }}>Quer saber mais? Clique 'aqui'</Text>
+                            <Text style={[styles.text, { color: 'blue' }]} onPress={() => {
+                                this.props.navigation.navigate('About')
+                            }}>Clique aqui</Text>
+                        </Text>
+                        {
+                            this.state.Continue ? (
+                                <BlueButton onPress={this.GetGridViewItem.bind(this, this.state.Continue.page, this.state.Continue.key)}>
+                                    {this.state.Continue.key}
+                                </BlueButton>) : (
+                                    <FlatList
+                                        data={this.state.GridViewItems}
+                                        renderItem={({ item }) =>
+                                            <BlueButton onPress={this.GetGridViewItem.bind(this, item.page, item.key)}>
+                                                {item.key}
+                                            </BlueButton>
+                                        }
+                                    />
 
-                    <FlatList
-                        data={this.state.GridViewItems}
-                        renderItem={({ item }) =>
-                            <BlueButton onPress={this.GetGridViewItem.bind(this, item.page, item.key)}>
-                                {item.key}
-                            </BlueButton>
+                                )
                         }
-                    />
 
-                </Content>
-            </Container>
+                    </Content>
+                </Container>
 
-        );
+            );
+        }
     }
 }
 

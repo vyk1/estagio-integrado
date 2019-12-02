@@ -5,7 +5,6 @@ const Esperador = (props) => {
 
     return (
         <View style={[styles.MainContainer,styles.waiterCont, styles.waiterHorizontal]}>
-            {/* <Text>Pera carai</Text> */}
             <ActivityIndicator size="large" color="#0000ff" />
         </View>
     )

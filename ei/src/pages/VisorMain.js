@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, FlatList, Text, View, Alert, Platform } from 'react-native';
-import server from "../config/server";
+import { Container, Header, Content, Footer, FooterTab, Button, Icon, Item } from 'native-base';
 import Esperador from '../components/Esperador';
+import { readUser, USER, TOKEN_KEY } from '../config/auth';
 
 export default class VisorMain extends Component {
 
@@ -23,13 +24,12 @@ export default class VisorMain extends Component {
         super(props);
 
         this.state = {
-
-            logado: this.props.navigation.state.params.logado,
+            logado: {},
             GridViewItems: [
                 { key: 'Informações Sobre o Estágio', page: 'InfoStage' },
                 { key: 'Estagiários', page: 'ViewReports' },
                 { key: 'Para Refletir', page: 'ToThink' },
-                { key: 'Contatos', page: 'Contacts' },
+                { key: 'Contatos', page: 'Contacts', icon: 'contacts' },
                 { key: 'Ei! Fique Ligado', page: 'StayOn' },
                 { key: 'Sobre o App', page: 'About' }
             ]
@@ -37,52 +37,34 @@ export default class VisorMain extends Component {
     }
     async getUser() {
 
-        console.log(this.props.navigation.state.params.logado);
-        
-        // return fetch(`${server}/user/${this.state.id}`)
-        //     .then((response) => response.json())
-        //     .then((responseJson) => {
-        //         console.log('rodou');
+        console.log('on');
+        const user = await readUser();
+        logado = JSON.parse(user);
 
-        //         this.setState({ logado: responseJson })
-        //         console.log(responseJson);
-        //         if (this.props.navigation.state.params.logado != null) {
-        this.changeHeaderColor();
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.error(error);
-        //         return false
-        //     });
+        console.log(logado);
 
+        await this.setState({ logado })
+        this.changeHeaderColor()
     }
-    changeHeaderColor() {
-        if (this.props.navigation.state.params.logado.type == 2) {
-            // this.props.navigation.setParams({ title: , headerStyle: { backgroundColor: '#d60f16' } })
-            this.props.navigation.setParams({ title: `Olá ${this.props.navigation.state.params.logado.name}`, backgroundColor: '#5fb2d4' });
-            this.setState({ backgroundColor: '#5fb2d4' })
+    async changeHeaderColor() {
+        if (this.state.logado.type == 2) {
+            await this.props.navigation.setParams({ title: `Olá ${this.state.logado.name}`, backgroundColor: '#5fb2d4' });
+            await this.setState({ backgroundColor: '#5fb2d4' })
 
         } else {
-            this.props.navigation.setParams({ title: `Olá ${this.props.navigation.state.params.logado.name}`, backgroundColor: '#5bd4d4' });
-            this.setState({ backgroundColor: '#5bd4d4' })
-            console.log('====================================');
-            console.log(this.state);
-            console.log('====================================');
+            await this.props.navigation.setParams({ title: `Olá ${this.state.logado.name}`, backgroundColor: '#5bd4d4' });
+            await this.setState({ backgroundColor: '#5bd4d4' })
         }
-        return
     }
-    componentDidMount() {
-        this.getUser()
+    async componentDidMount() {
+        await this.getUser()
     }
 
     GetGridViewItem(page, key) {
         const { logado, backgroundColor } = this.state;
 
-        console.log('====================================');
-        console.log(backgroundColor);
-        console.log('====================================');
         this.props.navigation.navigate(page, {
-            title: key,
+            // title: key,
             logado,
             title: 'Carregando',
             backgroundColor
@@ -104,9 +86,30 @@ export default class VisorMain extends Component {
                         data={this.state.GridViewItems}
                         renderItem={({ item }) =>
                             <View style={styles.GridViewBlockStyle}>
+                                {item.icon && (<Icon type={"MaterialIcons"} name={item.icon} />)}
                                 <Text style={[styles.GridViewInsideTextItemStyle, styles.text]} onPress={this.GetGridViewItem.bind(this, item.page)} > {item.key} </Text>
                             </View>}
                         numColumns={2} />
+                    <Footer style={{ color: this.state.backgroundColor, margin: 0 }}>
+                        <FooterTab>
+                            {/* <Button vertical>
+                                <Icon name="apps" />
+                                <Text>Apps</Text>
+                            </Button>
+                            <Button vertical>
+                                <Icon name="camera" />
+                                <Text>Camera</Text>
+                            </Button>
+                            <Button vertical active>
+                                <Icon name="navigate" />
+                                <Text>Navigate</Text>
+                            </Button> */}
+                            <Button vertical style={{ color: 'white' }}>
+                                <Icon name="account-circle" type={"MaterialIcons"} />
+                                <Text>Conta</Text>
+                            </Button>
+                        </FooterTab>
+                    </Footer>
                 </View>
             );
         }
@@ -131,7 +134,6 @@ const styles = StyleSheet.create({
     },
 
     GridViewBlockStyle: {
-
         justifyContent: 'center',
         flex: 1,
         alignItems: 'center',

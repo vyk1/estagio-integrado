@@ -20,13 +20,7 @@ import MoreInfoStudent from "./src/pages/MoreInfoStudent";
 import StayOn from "./src/pages/StayOn";
 import ImageTest from "./src/pages/ImageTest";
 import Login from "./src/pages/Login";
-import { isLoggedIn, assign } from "./src/config/auth";
 
-if (isLoggedIn()) {
-    let user = assign();
-    console.log(user);
-    
-}
 const AppNavigator = createStackNavigator({
     Main,
     About,
