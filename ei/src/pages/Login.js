@@ -24,9 +24,9 @@ export default class PickerInputExample extends Component {
     };
     constructor(props) {
         super(props);
-        // this.initialState = { email: 'victoriabotelho14@gmail.com', password: '12345678', nameError: 'Por favor, preencha todos os campos', formSent: true };
+        this.initialState = { email: 'victoriabotelho14@gmail.com', password: '12345678', nameError: 'Por favor, preencha todos os campos', formSent: true };
         // this.initialState = { email: 'victoria.martins@aluno.iffar.edu.br', password: '12345678', nameError: 'Por favor, preencha todos os campos', formSent: true };
-        this.initialState = { email: 'v3-14@hotmail.com', password: '12345678', nameError: 'Por favor, preencha todos os campos', formSent: true };
+        // this.initialState = { email: 'v3-14@hotmail.com', password: '12345678', nameError: 'Por favor, preencha todos os campos', formSent: true };
         this.state = this.initialState;
     }
     showAlert = () => {
@@ -60,11 +60,9 @@ export default class PickerInputExample extends Component {
         const { email } = this.state
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (reg.test(email) === false) {
-            console.log("Email is Not Correct");
             return false;
         }
         else {
-            console.log("Email is Correct");
             return true
         }
     }
@@ -102,13 +100,11 @@ export default class PickerInputExample extends Component {
 
                             if (res.user.type == 1) {
                                 return this.props.navigation.navigate('StudentMain', {
-                                    logado: res.user,
                                     title: 'Carregando'
                                 })
                             }
                             if (res.user.type == 2 || 3) {
                                 return this.props.navigation.navigate('VisorMain', {
-                                    logado: res.user,
                                     title: 'Carregando'
                                 });
                             }

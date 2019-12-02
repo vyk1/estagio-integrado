@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, FlatList, Text, View, Platform } from 'react-native';
 import server from "../config/server";
 import Esperador from '../components/Esperador';
-import { readUser, onLogout } from "../config/auth";
+import { readUser, onLogout, readToken, teste } from "../config/auth";
 import { NavigationActions, StackActions } from 'react-navigation';
 
 export default class StudentMain extends Component {
@@ -29,7 +29,6 @@ export default class StudentMain extends Component {
             GridViewItems: [
                 { key: 'Informações Sobre o Estágio', page: 'InfoStage' },
                 { key: 'Registrar Atividade', page: 'RegisterActivity' },
-                // { key: 'Registrar Atividade', page: 'ImageTest' },
                 { key: 'Relatório Geral', page: 'GenReport' },
                 { key: 'Contatos', page: 'Contacts' },
                 { key: 'Ei! Fique Ligado', page: 'StayOn' },
@@ -45,9 +44,9 @@ export default class StudentMain extends Component {
         const user = await readUser();
         logado = JSON.parse(user);
 
-        console.log(logado);
+        const token = await readToken()
 
-        await this.setState({ logado })
+        await this.setState({ logado, token })
 
         await this.props.navigation.setParams({ title: `Olá ${this.state.logado.name}` })
         await this.setState({ backgroundColor: '#5f98e3' })
@@ -58,7 +57,7 @@ export default class StudentMain extends Component {
     }
 
     async GetGridViewItem(page, key) {
-        const { logado, backgroundColor } = this.state;
+        const { logado, backgroundColor, token } = this.state;
 
         if (page == 'logout') {
             this.setState({ formSent: false })
@@ -66,7 +65,6 @@ export default class StudentMain extends Component {
             loggedOut = await onLogout()
 
             if (loggedOut) {
-                console.log('delogo');
                 const resetAction = StackActions.reset({
                     index: 0,
                     actions: [NavigationActions.navigate({ routeName: 'Inicial' })],
@@ -77,8 +75,9 @@ export default class StudentMain extends Component {
         } else {
             this.props.navigation.navigate(page, {
                 logado,
+                token,
                 title: 'Carregando',
-                backgroundColor
+                backgroundColor,
             });
         }
     }

@@ -20,18 +20,22 @@ export default class Contacts extends Component {
 
     }
     async componentDidMount() {
-        // console.log(this.props.navigation.state.params.logado);
         await this.getContacts()
     }
 
     async getContacts() {
         const user = this.props.navigation.state.params.logado;
+        const { token } = this.props.navigation.state.params;
 
-        await fetch(`${server}/internship/user/${user._id}/contacts/${user.type}`)
+        const config = {
+            headers: {
+                'x-access-token': token
+            }
+        }
+        await fetch(`${server}/internship/user/${user._id}/contacts/${user.type}`, config)
             .then((response) => response.json())
             .then((responseJson) => {
                 this.setState({ contacts: responseJson, formSent: true })
-                console.log('chegou aqui');
             })
             .catch((error) => {
                 console.error(error);

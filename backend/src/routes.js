@@ -2,54 +2,47 @@ const express = require('express')
 const multer = require('multer');
 const uploadsConfig = require('./config/upload');
 const upload = multer(uploadsConfig);
-
 const routes = new express.Router();
-
 const withAuth = require('./middleware/auth')
-// Implementar tokens! no final!
-// const authMiddleware = require('./middleware/auth');
 
 const InternshipController = require('./controllers/InternshipController')
 const ActivityController = require('./controllers/ActivityController')
 const UserController = require('./controllers/UserController')
 
-
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json();
 
-routes.get('/', (req, res) => {
-     // console.log(req);
-     return res.status(200).send({ status: 200, message: "Ei, DB" });
+// routes.get('/', (req, res) => {
+//      // console.log(req);
+//      return res.status(200).send({ status: 200, message: "Ei, DB" });
 
-})
+// })
 
 routes.get('/internship', InternshipController.index);
 routes.get('/internship/:id', InternshipController.getById);
-routes.post('/internship', jsonParser, InternshipController.store);
-routes.put('/internship/:id', jsonParser, InternshipController.update);
-routes.delete('/internship/:id', jsonParser, InternshipController.remove);
 
-// retorna todos os estágios associados aquele user
-routes.get('/internship/user/:id_user', jsonParser, InternshipController.getInternshipsByUserId);
-// retorna todos os alunos associados ao user
-routes.get('/internship/user/:id_dvisor/students', jsonParser, InternshipController.getStudentsRelated)
-routes.get('/internship/user/:id_user/contacts/:tipo', jsonParser, InternshipController.getContacts);
-routes.get('/internship/user/:id_student/:id_dvisor', jsonParser, InternshipController.internshipsByStudentAndDvisorId);
+routes.get('/internship/user/:id_user', withAuth, jsonParser, InternshipController.getInternshipsByUserId);
+routes.get('/internship/user/:id_dvisor/students', withAuth, jsonParser, InternshipController.getStudentsRelated)
+routes.get('/internship/user/:id_user/contacts/:tipo', withAuth, jsonParser, InternshipController.getContacts);
+routes.get('/internship/user/:id_student/:id_dvisor', withAuth, jsonParser, InternshipController.internshipsByStudentAndDvisorId);
+
+// post by user (student!)
+routes.post('/activity', withAuth, upload.single('image'), ActivityController.store2);
+routes.post('/activity/noimg', withAuth, jsonParser, ActivityController.storeWithNoImage);
+
+// made but not used
+// routes.get('/activity',jsonParser, ActivityController.index);
+// routes.put('/activity/:id', jsonParser, ActivityController.update);
+// routes.post('/user/forgot', jsonParser, UserController.recovery);
+// routes.put('/internship/:id', jsonParser, InternshipController.update);
+// routes.delete('/internship/:id', jsonParser, InternshipController.remove);
 
 
-routes.get('/activity', jsonParser, ActivityController.index);
-routes.post('/activity', upload.single('image'), ActivityController.store2);
-
-routes.post('/activity/noimg', jsonParser, ActivityController.storeWithNoImage);
-routes.put('/activity/:id', jsonParser, ActivityController.update);
-// routes.get('/activity/teste', jsonParser, ActivityController.checkActivityDate);
-// mongodb+srv://developer:<password>@cluster0-dqw7t.mongodb.net/test?retryWrites=true&w=majority
-
+// no need to tokenize
 routes.get('/user/confirmation/:token/:email', jsonParser, UserController.emailConfirmation);
 routes.post('/user/register', jsonParser, UserController.store);
 routes.post('/user/auth', jsonParser, UserController.auth);
 routes.post('/user/admin/auth', jsonParser, UserController.authAdmin);
-// routes.post('/user/forgot', jsonParser, UserController.recovery);
 routes.post('/user/resetpassword', jsonParser, UserController.reset);
 
 
@@ -60,5 +53,6 @@ routes.get('/user/:id', withAuth, jsonParser, UserController.getById);
 routes.get('/users/:type', withAuth, jsonParser, UserController.getByType)
 routes.delete('/user', withAuth, jsonParser, UserController.remove);
 routes.post('/user/accept', withAuth, jsonParser, UserController.accept);
+routes.post('/internship', withAuth, jsonParser, InternshipController.store);
 
 module.exports = routes;

@@ -5,7 +5,7 @@ import Esperador from '../components/Esperador';
 
 export default class ViewReports extends Component {
     static navigationOptions = ({ navigation }) => {
-        return {        
+        return {
             title: `${navigation.getParam('title')}`,
             headerStyle: {
                 backgroundColor: navigation.getParam('backgroundColor'),
@@ -33,8 +33,15 @@ export default class ViewReports extends Component {
 
     async getStudents() {
         const user = this.props.navigation.state.params.logado;
+        const { token } = this.props.navigation.state.params;
 
-        await fetch(`${server}/internship/user/${user._id}/students`)
+        const config = {
+            headers: {
+                'x-access-token': token
+            }
+        }
+
+        await fetch(`${server}/internship/user/${user._id}/students`, config)
             .then((response) => response.json())
             .then((responseJson) => {
 
@@ -46,13 +53,19 @@ export default class ViewReports extends Component {
                 return false
             });
     }
-    async goToStudent(key) {
-        this.props.navigation.navigate('GenReport', {
-            student_id: key,
-            title: 'Carregando'
-        });
-        console.log(key);
+    async goToStudent(id, name) {
+        const { logado } = this.props.navigation.state.params;
+        const { token } = this.props.navigation.state.params;
+        const { backgroundColor } = this.props.navigation.state.params;
 
+        this.props.navigation.navigate('GenReport', {
+            student_id: id,
+            name: name,
+            logado,
+            token,
+            title: 'Carregando',
+            backgroundColor
+        });
     }
     render() {
         const { students, formSent } = this.state;
@@ -73,7 +86,7 @@ export default class ViewReports extends Component {
                         <Content>
                             <List>
                                 {students.students.map((rowData, i) => (
-                                    <ListItem onPress={() => this.goToStudent(rowData._id)} key={i}>
+                                    <ListItem onPress={() => this.goToStudent(rowData._id, rowData.name)} key={i}>
                                         <Left>
                                             <Text>{rowData.name}</Text>
                                         </Left>

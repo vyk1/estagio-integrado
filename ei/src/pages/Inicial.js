@@ -11,7 +11,7 @@ import BlueButton from '../components/BlueButton';
 import Esperador from '../components/Esperador';
 import logo from '../assets/logo_transp2.png';
 import { Container, Header, Button, Content } from 'native-base';
-import { isLoggedIn, readUser, onLogout, readToken } from "../config/auth";
+import { isLoggedIn, readUser, onLogout, readToken, teste } from "../config/auth";
 
 export default class About extends Component {
     static navigationOptions = {
@@ -42,6 +42,7 @@ export default class About extends Component {
         });
     }
     async componentDidMount() {
+
         this.setState({ formSent: false })
         const on = await isLoggedIn();
 

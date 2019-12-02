@@ -34,9 +34,8 @@ module.exports = {
     async store2(req, res) {
         // store é obrigatório o estágio
 
-        console.log('entrou');
-        console.log(req.body.date2);
-        console.log(req.body.date);
+        // console.log('entrou');
+        // console.log(req.body);
 
         // return res.send({message: 'req'}).status(200)
         if (req.file) {
@@ -184,8 +183,10 @@ module.exports = {
         // store é obrigatório o estágio
         // formato do date tem que converter para isostring
         console.log('acionou');
+        // console.log(req.body);
         let { date, description, inputTime, outputTime, id_internship } = req.body
 
+        // return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
         const obj = {
             date,
             description,
@@ -195,19 +196,14 @@ module.exports = {
             image: null
         }
 
-        console.log('====================================');
-        console.log(date);
-        console.log('====================================');
-
         await Activity.find({ date }, (err, doc) => {
             if (!err) {
-                console.log('====================================');
-                console.log(doc);
-                console.log('====================================');
                 if (!doc.length > 0) {
                     //não existe então retorna true
                     // return true
                     const activity = new Activity(obj);
+
+                    // console.log(activity);
 
                     activity.save((err, activity) => {
                         if (err) {
@@ -215,10 +211,11 @@ module.exports = {
                             return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
 
                         } else {
-                            // $ pull para fazer um pop ou remove https://boostlog.io/@vithalreddy/push-and-pop-items-into-mongodb-array-via-mongoose-in-nodejs-5a8c3a95a7e5b7008ae1d809
+
                             Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
                                 if (err || internship == null) {
                                     console.log(err);
+                                    console.log(internship);
                                     return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
                                 } else {
                                     return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });

@@ -37,11 +37,20 @@ export default class GenReport extends Component {
 
     async getInternshipByUID() {
 
-        const user = this.props.navigation.state.params.logado;
+        const user = await this.props.navigation.state.params.logado;
+        console.log(user);
+        
+        const { token } = await this.props.navigation.state.params;
+
+        const config = {
+            headers: {
+              'x-access-token': token
+            }
+          }
 
         if (user.type == 1) {
             const student_id = user._id;
-            await fetch(`${server}/internship/user/${student_id}`)
+            await fetch(`${server}/internship/user/${student_id}`, config)
                 .then((response) => response.json())
                 .then((responseJson) => {
                     this.setState({ internship: responseJson, formSent: true })
@@ -56,13 +65,15 @@ export default class GenReport extends Component {
 
         } else {
             const { student_id, name } = this.props.navigation.state.params;
+            console.log(student_id, name);
+            
             this.props.navigation.setParams({ title: `Relatório de ${name}` })
 
-            await fetch(`${server}/internship/user/${student_id}`)
+            await fetch(`${server}/internship/user/${student_id}`, config)
                 .then((response) => response.json())
                 .then((responseJson) => {
                     this.setState({ internship: responseJson, formSent: true })
-                    if (internship.status != 404) {
+                    if (responseJson.status != 404) {
                         this.CALC()
                     }
                 })
@@ -84,28 +95,27 @@ export default class GenReport extends Component {
             inputTime = inputTime.split(':');
 
             //h f - h i
+            // subraindo horas das atvs
             var newTime = moment(outputTime, "HH:mm")
                 .subtract({ 'hours': inputTime[0], 'minutes': inputTime[1] })
                 .format('hh:mm');
+
+            console.log(newTime);
 
             arrayHoras.push(newTime)
             arrayDatas.push(el.date)
         });
 
-        let uniqueDates = []
-        o = {}
-        arrayDatas.forEach(e => {
-            o[e] = true
-        })
-        uniqueDates = Object.keys(o)
-        // console.log(uniqueDates);
-
-        let nroDias = uniqueDates.length
+        let nroDias = id_activities.length
 
         let sum = moment(arrayHoras[0], "HH:mm");
+
         let inicial = moment(arrayHoras[0], "HH:mm");
-        for (let i = 1; i < arrayHoras.length; i++) {
+        // console.log(inicial);
+        // console.log('inicial');
+        for (let i = 0; i < arrayHoras.length; i++) {
             let h = arrayHoras[i].split(":");
+            console.log(h);            
 
             if (h[1]) {
                 sum = sum.add(h[1], "minutes")
@@ -114,7 +124,9 @@ export default class GenReport extends Component {
                 sum = sum.add(h[0], "hours")
             }
         }
+
         this.setState({ nroDias, horasTotais: sum.diff(inicial, 'hours') })
+        console.log(this.state);
     }
 
     render() {
@@ -180,10 +192,14 @@ export default class GenReport extends Component {
                                     <Card style={{ flex: 0 }} key={i}>
                                         <CardItem>
                                             <Body>
-                                                <Text note>Data da Atividade:</Text>
-                                                {/* <Text>{Date(rowData.createdAt).toString()}</Text> */}
-                                                <Text>{moment(rowData.createdAt).locale('pt-br').format("DD/MM/YYYY HH:mm - dddd")
-                                                }</Text>
+                                                <Text note>Data da Atividade</Text>
+                                                <Text>{moment(rowData.date).locale('pt-br').format("DD/MM/YYYY - dddd")}</Text>
+
+                                                <Text note>Hora inicial - Hora final</Text>
+                                                <Text>{rowData.inputTime} - {rowData.outputTime}</Text>
+
+                                                <Text note>Data da Atividade de Cadastro da Atividade:</Text>
+                                                <Text>{moment(rowData.createdAt).locale('pt-br').format("DD/MM/YYYY HH:mm - dddd")}</Text>
                                                 {
                                                     rowData.image && (
                                                         <>

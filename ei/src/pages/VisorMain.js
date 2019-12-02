@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, FlatList, Text, View, Alert, Platform } from 'react-native';
 import { Container, Header, Content, Footer, FooterTab, Button, Icon, Item } from 'native-base';
 import Esperador from '../components/Esperador';
-import { readUser, onLogout } from "../config/auth";
+import { readUser, onLogout, readToken } from "../config/auth";
 import { NavigationActions, StackActions } from 'react-navigation';
 
 export default class VisorMain extends Component {
@@ -40,13 +40,13 @@ export default class VisorMain extends Component {
     }
     async getUser() {
 
-        console.log('on');
         const user = await readUser();
         logado = JSON.parse(user);
 
-        console.log(logado);
+        const token = await readToken()
 
-        await this.setState({ logado })
+        await this.setState({ logado, token })
+
         this.changeHeaderColor()
     }
     async changeHeaderColor() {
@@ -64,7 +64,7 @@ export default class VisorMain extends Component {
     }
 
     async GetGridViewItem(page, key) {
-        const { logado, backgroundColor } = this.state;
+        const { logado, backgroundColor, token } = this.state;
 
         if (page == 'logout') {
             this.setState({ formSent: false })
@@ -78,13 +78,13 @@ export default class VisorMain extends Component {
                     actions: [NavigationActions.navigate({ routeName: 'Inicial' })],
                 });
                 this.props.navigation.dispatch(resetAction);
-
-            } 
+            }
         } else {
             this.props.navigation.navigate(page, {
                 logado,
                 title: 'Carregando',
-                backgroundColor
+                backgroundColor,
+                token
             });
         }
     }
@@ -110,9 +110,9 @@ export default class VisorMain extends Component {
                                 <Text style={[styles.GridViewInsideTextItemStyle, styles.text]} onPress={this.GetGridViewItem.bind(this, item.page)} > {item.key} </Text>
                             </View>}
                         numColumns={2} />
-                    <Footer>
+                    {/* <Footer>
                         <FooterTab>
-                            {/* <Button vertical>
+                            <Button vertical>
                                 <Icon name="apps" />
                                 <Text>Apps</Text>
                             </Button>
@@ -123,13 +123,13 @@ export default class VisorMain extends Component {
                             <Button vertical active>
                                 <Icon name="navigate" />
                                 <Text>Navigate</Text>
-                            </Button> */}
+                            </Button>
                             <Button vertical style={{ color: 'white' }}>
                                 <Icon name="account-circle" type={"MaterialIcons"} />
                                 <Text>Conta</Text>
                             </Button>
                         </FooterTab>
-                    </Footer>
+                    </Footer> */}
                 </View>
             );
         }

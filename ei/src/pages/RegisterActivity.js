@@ -41,11 +41,17 @@ export default class App extends Component {
     getInternshipName = async () => {
 
         const user = this.props.navigation.state.params.logado;
+        const { token } = this.props.navigation.state.params;
 
-        await fetch(`${server}/internship/user/${user._id}`)
+        const config = {
+            headers: {
+                'x-access-token': token
+            }
+        }
+        await fetch(`${server}/internship/user/${user._id}`, config)
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson);
+                // console.log(responseJson);
 
                 this.setState({ internship: responseJson, formSent: true })
                 this.props.navigation.setParams({ title: `Registro de Atividade` })
@@ -183,10 +189,11 @@ export default class App extends Component {
 
     sendFormWithImage = async () => {
 
-        await this.setState({ formSent: false })
+        const { inputTime, outputTime, date2, file, description, internship } = this.state;
 
-        await this.setState({ date2: this.state.date.toISOString() })
-        const { id_internship, inputTime, outputTime, date2, file, description } = this.state;
+        await this.setState({ date2: this.state.date.toISOString(), formSent: false })
+
+        const { token } = this.props.navigation.state.params;
 
         const config = await {
             method: 'POST',
@@ -195,10 +202,11 @@ export default class App extends Component {
                 description,
                 inputTime,
                 outputTime,
-                id_internship: internship.internship._id
+                id_internship: internship.internships[0]._id
             }),
             headers: {
                 'Content-Type': 'multipart/form-data',
+                'x-access-token': token
             }
         }
 
@@ -224,14 +232,13 @@ export default class App extends Component {
                             res.message,
                             [
                                 {
-                                    text: 'OK', onPress: () => { console.log('res negativa') }
+                                    text: 'OK', onPress: () => { console.log(res.message) }
                                 }
                             ])
                     }
                 })
         }
         catch (error) {
-            console.log(error)
             Alert.alert(
                 'Erro',
                 'Ocorreu um erro... Tente novamente...')
@@ -241,10 +248,20 @@ export default class App extends Component {
     }
 
     sendFormWithNoImage = async () => {
+
+        const { inputTime, outputTime, date, date2, description, internship } = this.state;
+
         await this.setState({ date2: this.state.date.toISOString(), formSent: false })
         const config = await {
             method: 'POST',
-            body: JSON.stringify(this.state),
+            body: JSON.stringify({
+                date,
+                date2,
+                description,
+                inputTime,
+                outputTime,
+                id_internship: internship.internships[0]._id
+            }),
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -350,7 +367,7 @@ export default class App extends Component {
                     <Container>
                         <Header style={styles.header}>
                             <Body>
-                                <Title>Empresa: {internship.internship[0].companyName} </Title>
+                                <Title>Empresa: {internship.internships[0].company} </Title>
                             </Body>
                         </Header>
                         <View style={styles.MainContainer}>

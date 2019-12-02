@@ -12,12 +12,12 @@ const withAuth = function (req, res, next) {
 
      let token = req.headers['x-access-token'];
      if (!token) {
-          return res.status(401).send('Não autorizado: Hash não fornecido.');
+          return res.status(401).send({ message: 'Não autorizado: Hash não fornecido.', status: 401 });
      } else {
-          
+
           jwt.verify(token, authConfig.secret, function (err, decoded) {
                if (err) {
-                    return res.status(403).send('Não autorizado: Hash inválido.');
+                    return res.status(403).send({ message: 'Não autorizado: Hash inválido.', status: 403 });
                } else {
                     req.id = decoded.id;
                     next();

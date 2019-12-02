@@ -74,11 +74,9 @@ export default class PickerInputExample extends Component {
     const { email } = this.state
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (reg.test(email) === false) {
-      console.log("Email is Not Correct");
       return false;
     }
     else {
-      console.log("Email is Correct");
       return true
     }
   }
