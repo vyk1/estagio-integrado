@@ -31,9 +31,6 @@ module.exports = {
                     if (doc) {
                          const host = req.headers.host
                          mail.verified(host, doc.name, doc.email)
-                         console.log('====================================');
-                         console.log(doc);
-                         console.log('====================================');
                          res.status(200).send({ status: 200, message: 'Usuário aceito com sucesso!' })
                     } else {
                          console.log(err);
@@ -44,6 +41,9 @@ module.exports = {
      },
      async remove(req, res) {
           const { id } = req.body;
+          console.log(req.body);
+          
+          if (!id) return res.send(400).send({ status: 400, message: "ID não informado" })
           await User.findByIdAndDelete(id, (err, doc) => {
                if (err) {
                     console.log(err);

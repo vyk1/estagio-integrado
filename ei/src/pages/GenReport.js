@@ -198,7 +198,7 @@ export default class GenReport extends Component {
                                                 <Text note>Hora inicial - Hora final</Text>
                                                 <Text>{rowData.inputTime} - {rowData.outputTime}</Text>
 
-                                                <Text note>Data da Atividade de Cadastro da Atividade:</Text>
+                                                <Text note>Data de Cadastro da Atividade:</Text>
                                                 <Text>{moment(rowData.createdAt).locale('pt-br').format("DD/MM/YYYY HH:mm - dddd")}</Text>
                                                 {
                                                     rowData.image && (

@@ -30,7 +30,6 @@ class NewInternship extends Component {
   }
 
   async componentDidMount() {
-    console.log('montou');
     await this.getData()
   }
 
@@ -89,8 +88,6 @@ class NewInternship extends Component {
     const { value } = event.target;
     const classid = event.target.attributes[1].value;
 
-    console.log(classid);
-    console.log(value);
 
     await this.setState({
       [classid]: value
@@ -101,8 +98,6 @@ class NewInternship extends Component {
 
     const { value } = event.target;
     const classid = event.target.attributes[1].value;
-    console.log(classid);
-    console.log(value);
     await this.setState({
       [classid]: value
     });
@@ -110,8 +105,6 @@ class NewInternship extends Component {
 
   async check(e) {
     e.preventDefault();
-    console.log('====================================');
-    await console.log(this.state);
     const { company, id_student, id_supervisor, id_advisor, description } = this.state
 
     let token = await getToken()
@@ -163,9 +156,9 @@ class NewInternship extends Component {
           {
             this.state.warning && (
               <Alert bsStyle={this.state.color}>
-                <button type="button" aria-hidden="true" className="close">
+                {/* <button type="button" aria-hidden="true" className="close">
                   &#x2715;
-                    </button>
+                    </button> */}
                 <span>
                   <b> {this.state.warning} </b>
                 </span>
@@ -175,9 +168,9 @@ class NewInternship extends Component {
           {
             this.state.studentWarning && (
               <Alert bsStyle={this.state.studentWarningColor}>
-                <button type="button" aria-hidden="true" className="close">
+                {/* <button type="button" aria-hidden="true" className="close">
                   &#x2715;
-                    </button>
+                    </button> */}
                 <span>
                   <b> {this.state.studentWarning} </b>
                 </span>

@@ -9,7 +9,7 @@ export default class Login extends Component {
         super(props);
         //Set default message
         this.state = {
-            message: 'Loading...',
+            message: 'Carregando...',
             email: 'checagem.sistemas@gmail.com',
             password: '12345678',
             error: '',
@@ -33,25 +33,17 @@ export default class Login extends Component {
 
         await api.post('/user/admin/auth', JSON.stringify(this.state), config)
             .then(res => {
-                console.log(res);
                 if (res.status === 200) {
-                    console.log('passou');
-                    // return <Redirect to="/admin" />;
                     login(res.data.token)
 
                     this.props.history.push('/admin/membros');
 
                 } else {
-                    console.log(res)
-                    // this.setState({ error: "Erro: " + res.response.data.message })
 
-                    console.log('não passou');
                     return false
-                    // throw error;
                 }
             })
             .catch(err => {
-                console.log(err.response.data.message);
                 this.setState({ error: "Erro: " + err.response.data.message })
                 return false
             });

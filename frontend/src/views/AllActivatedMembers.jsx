@@ -15,7 +15,6 @@ class AllActivatedMembers extends Component {
   }
 
   async componentDidMount() {
-    console.log('montou');
 
     let token = await getToken()
 
@@ -27,7 +26,6 @@ class AllActivatedMembers extends Component {
     }
 
     const response = await api.get('/users', config)
-    console.log(response);
 
     this.setState({
       users: response.data,

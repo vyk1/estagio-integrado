@@ -35,7 +35,7 @@ module.exports = {
         // store é obrigatório o estágio
 
         // console.log('entrou');
-        // console.log(req.body);
+        console.log(req.body);
 
         // return res.send({message: 'req'}).status(200)
         if (req.file) {
@@ -183,7 +183,7 @@ module.exports = {
         // store é obrigatório o estágio
         // formato do date tem que converter para isostring
         console.log('acionou');
-        // console.log(req.body);
+        console.log(req.body);
         let { date, description, inputTime, outputTime, id_internship } = req.body
 
         // return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });

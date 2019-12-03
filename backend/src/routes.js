@@ -51,8 +51,8 @@ routes.get('/users', withAuth, jsonParser, UserController.index);
 routes.get('/users/notVerified', withAuth, jsonParser, UserController.notVerified);
 routes.get('/user/:id', withAuth, jsonParser, UserController.getById);
 routes.get('/users/:type', withAuth, jsonParser, UserController.getByType)
-routes.delete('/user', withAuth, jsonParser, UserController.remove);
 routes.post('/user/accept', withAuth, jsonParser, UserController.accept);
+routes.post('/user/decline', withAuth, jsonParser, UserController.remove);
 routes.post('/internship', withAuth, jsonParser, InternshipController.store);
 
 module.exports = routes;

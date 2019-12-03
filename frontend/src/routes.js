@@ -2,6 +2,7 @@
 import AllActivatedMembers from "views/AllActivatedMembers.jsx";
 import AllNotActivatedMembers from "views/AllNotActivatedMembers.jsx";
 import NewInternship from "views/NewInternship.jsx";
+import Logout from "views/Logout.jsx";
 
 const dashboardRoutes = [
   {
@@ -16,6 +17,13 @@ const dashboardRoutes = [
     name: "Membros Não Verificados",
     icon: "pe-7s-box1",
     component: AllNotActivatedMembers,
+    layout: "/admin"
+  },
+  {
+    path: "/logout",
+    name: "Logout",
+    icon: "pe-7s-power",
+    component: Logout,
     layout: "/admin"
   },
   {

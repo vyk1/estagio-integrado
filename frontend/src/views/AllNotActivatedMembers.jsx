@@ -16,7 +16,6 @@ class AllNotActivatedMembers extends Component {
   }
 
   async componentDidMount() {
-    console.log('montou');
 
     await this.getNotVerified()
   }
@@ -32,7 +31,6 @@ class AllNotActivatedMembers extends Component {
     }
 
     const response = await api.get('/users/notVerified', config)
-    console.log(response);
 
     this.setState({
       users: response.data,
@@ -57,7 +55,6 @@ class AllNotActivatedMembers extends Component {
   async decline(e) {
     await e.persist()
 
-    await console.log(e.target);
 
     const classid = e.target.attributes[1].value;
     const name = e.target.attributes[2].value
@@ -67,6 +64,10 @@ class AllNotActivatedMembers extends Component {
       this.setState({
         loaded: false
       })
+
+      const body = {
+        id: classid
+      }
       let token = await getToken()
 
       const config = {
@@ -75,11 +76,12 @@ class AllNotActivatedMembers extends Component {
           'x-access-token': token
         }
       }
-  
 
-      const res = await api.delete('/user', { data: { id: classid } }, config)
+
+      // const res = await api.post('/user/accept', body, config)
+
+      const res = await api.post('/user/decline', body, config)
       if (res.status === 200) {
-        console.log(res);
 
         this.setState({
           warning: res.data.message,
@@ -109,7 +111,6 @@ class AllNotActivatedMembers extends Component {
   async accept(e) {
     await e.persist()
 
-    await console.log(e.target);
     const classid = e.target.attributes[1].value;
     const name = e.target.attributes[2].value
 
@@ -130,11 +131,10 @@ class AllNotActivatedMembers extends Component {
           'x-access-token': token
         }
       }
-  
+
 
       const res = await api.post('/user/accept', body, config)
       if (res.status === 200) {
-        console.log(res);
 
         this.setState({
           warning: res.data.message,
@@ -159,9 +159,10 @@ class AllNotActivatedMembers extends Component {
         <div className="content">
           {warning && (
             <Alert bsStyle={this.state.color}>
-              <button type="button" aria-hidden="true" className="close">
+              {/* <button type="button" aria-hidden="true" className="close"> 
                 &#x2715;
                     </button>
+                  */}
               <span>
                 <b> {warning} </b>
               </span>

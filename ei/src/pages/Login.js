@@ -24,9 +24,10 @@ export default class PickerInputExample extends Component {
     };
     constructor(props) {
         super(props);
-        this.initialState = { email: 'victoriabotelho14@gmail.com', password: '12345678', nameError: 'Por favor, preencha todos os campos', formSent: true };
+        // this.initialState = { email: 'victoriabotelho14@gmail.com', password: '12345678', nameError: 'Por favor, preencha todos os campos', formSent: true };
         // this.initialState = { email: 'victoria.martins@aluno.iffar.edu.br', password: '12345678', nameError: 'Por favor, preencha todos os campos', formSent: true };
         // this.initialState = { email: 'v3-14@hotmail.com', password: '12345678', nameError: 'Por favor, preencha todos os campos', formSent: true };
+        this.initialState = { email: 'v14-3@hotmail.com', password: '12345678', nameError: 'Por favor, preencha todos os campos', formSent: true };
         this.state = this.initialState;
     }
     showAlert = () => {

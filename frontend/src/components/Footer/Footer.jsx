@@ -21,23 +21,13 @@ import { Grid } from "react-bootstrap";
 class Footer extends Component {
   render() {
     return (
-      <footer className="footer">
+      <footer className="footer" style={{ backgroundColor: "white" }}>
         <Grid fluid>
-          {/* <nav className="pull-left">
-            <ul>
-              <li>
-                <a href="#pablo">Home</a>
-              </li>
-              <li>
-                <a href="#pablo">Portfolio</a>
-              </li>
-            </ul>
-          </nav> */}
           <p className="copyright pull-right">
             &copy; {new Date().getFullYear()}{" "}
-            Desenvolvido por 
+            Desenvolvido por
             <a href="/#">
-               Victoria Botelho Martins
+              Victoria Botelho Martins
             </a>
           </p>
         </Grid>

@@ -24,7 +24,7 @@ export default class PickerInputExample extends Component {
   };
   constructor(props) {
     super(props);
-    this.initialState = { type: "0", name: 'Luísa Castro', email: 'v3-14@hotmail.com', password: '12345678', phone: '88285522522', nameError: 'Por favor, preencha todos os campos', formSent: true };
+    this.initialState = { type: "0", name: 'Neusa Maria', email: 'v14-3@hotmail.com', password: '12345678', phone: '88285522522', nameError: 'Por favor, preencha todos os campos', formSent: true };
     this.state = this.initialState;
   }
   showAlert = () => {

@@ -250,6 +250,7 @@ export default class App extends Component {
     sendFormWithNoImage = async () => {
 
         const { inputTime, outputTime, date, date2, description, internship } = this.state;
+        const { token } = this.props.navigation.state.params;
 
         await this.setState({ date2: this.state.date.toISOString(), formSent: false })
         const config = await {
@@ -264,6 +265,7 @@ export default class App extends Component {
             }),
             headers: {
                 'Content-Type': 'application/json',
+                'x-access-token': token
             }
         }
 
