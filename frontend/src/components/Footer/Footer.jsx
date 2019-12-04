@@ -26,9 +26,7 @@ class Footer extends Component {
           <p className="copyright pull-right">
             &copy; {new Date().getFullYear()}{" "}
             Desenvolvido por
-            <a href="/#">
-              Victoria Botelho Martins
-            </a>
+            <a href="#"> Victoria Botelho Martins</a>
           </p>
         </Grid>
       </footer>
