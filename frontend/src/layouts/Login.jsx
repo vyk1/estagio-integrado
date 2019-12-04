@@ -3,7 +3,9 @@ import api from "variables/Server.js";
 import image from "assets/img/logo1.png";
 import { login } from "components/auth";
 import './Login.css';
-
+import {
+    Alert
+} from "react-bootstrap"
 export default class Login extends Component {
     constructor(props) {
         super(props);
@@ -55,7 +57,15 @@ export default class Login extends Component {
                 <div className="auth-wrapper">
                     <div className="auth-inner">
                         <form onSubmit={this.onSubmit}>
-                            <span style={{ color: 'red' }}>{this.state.error}</span>
+                            {
+                                this.state.error && (
+                                    <Alert bsStyle="warning">
+                                        <span>
+                                            <b> {this.state.error} </b>
+                                        </span>
+                                    </Alert>
+                                )
+                            }
                             <h3>Login <img src={image} alt="logoEI" height="60px" /></h3>
 
                             <div className="form-group">
@@ -70,7 +80,7 @@ export default class Login extends Component {
 
                             <button type="submit" className="btn btn-primary btn-block">Enviar</button>
                             <p className="forgot-password text-right">
-                                Esqueceu sua <a href="/forgot">Senha?</a>
+                                {/* Esqueceu sua <a href="/forgot">Senha?</a> */}
                             </p>
                         </form>
                     </div>

@@ -75,9 +75,7 @@ module.exports = {
 
                                     } else {
                                         Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
-                                            console.log('entrou para update');
                                             if (err == null) {
-                                                console.log('atividade succes');
                                                 return res.status(201).json({ status: 201, message: "Atividade Cadastrada!" });
                                             }
                                         });

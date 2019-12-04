@@ -42,7 +42,7 @@ module.exports = {
      async remove(req, res) {
           const { id } = req.body;
           console.log(req.body);
-          
+
           if (!id) return res.send(400).send({ status: 400, message: "ID não informado" })
           await User.findByIdAndDelete(id, (err, doc) => {
                if (err) {
@@ -109,6 +109,22 @@ module.exports = {
                }
 
           });
+     },
+     async update(req, res) {
+          const { _id } = req.body;
+
+          await User.findOneAndUpdate(_id, req.body, { new: true, useFindAndModify: false }, (err, doc) => {
+               if (doc) {
+                    // console.log(doc);
+                    // se new é true traz doc updateado
+                    // dá pra por na url e direcionar!
+                    return res.status(200).send({ status: 200, message: "Atualizado com sucesso." })
+
+               } else {
+                    console.log(err);
+                    return res.status(400).send({ status: 400, message: "Erro no update." });
+               }
+          })
      },
      // atribuindo
      async store(req, res) {

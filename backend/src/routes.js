@@ -50,6 +50,7 @@ routes.post('/user/resetpassword', jsonParser, UserController.reset);
 routes.get('/users', withAuth, jsonParser, UserController.index);
 routes.get('/users/notVerified', withAuth, jsonParser, UserController.notVerified);
 routes.get('/user/:id', withAuth, jsonParser, UserController.getById);
+routes.put('/user', withAuth, jsonParser, UserController.update);
 routes.get('/users/:type', withAuth, jsonParser, UserController.getByType)
 routes.post('/user/accept', withAuth, jsonParser, UserController.accept);
 routes.post('/user/decline', withAuth, jsonParser, UserController.remove);

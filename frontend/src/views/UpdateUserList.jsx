@@ -31,36 +31,35 @@ class UpdateUserList extends Component {
 
     async check(e) {
         e.preventDefault();
-        alert('Validar e-mail: regex!')
-        // console.log(e);
+        // alert('Validar e-mail: regex!')
+        let token = await getToken()
 
-        // const { company, id_student, id_supervisor, id_advisor, description } = this.state
+        const { name, email, phone, _id } = this.state.form.user
 
-        // let token = await getToken()
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': token
+            }
+        }
 
-        // const config = {
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //     'x-access-token': token
-        //   }
-        // }
-        // const res = await api.post('/internship', { company, id_student, id_supervisor, id_advisor, description }, config)
-        // if (res.status === 201) {
+        const res = await api.put('/user', { name, email, phone, _id }, config)
+        console.log(res);
 
-        //   this.setState({
-        //     warning: res.data.message,
-        //     company: "",
-        //     description: "",
-        //     color: 'info'
-        //   })
-        //   this.getData();
+        if (res.status === 200) {
 
-        // } else {
-        //   this.setState({ 
-        //     warning: res.data.message,
-        //     color: 'danger'
-        //    })
-        // }
+            this.setState({
+                warning: res.data.message,
+                color: 'info'
+            })
+
+
+        } else {
+            this.setState({
+                warning: res.data.message,
+                color: 'danger'
+            })
+        }
     }
 
     async getUsers() {
@@ -124,21 +123,7 @@ class UpdateUserList extends Component {
         } else {
             // if (form.length > 0) {
             if (id) {
-                console.log(form);
-
-                // if (!loaded) {
-                //         return (
-                //             <div className="content">
-                //                 <Grid fluid>
-                //                     <Row>
-                //                         <Col md={12}>
-                //                             <Card content="Carregando..." legend="Espere..."></Card>
-                //                         </Col>
-                //                     </Row>
-                //                 </Grid>
-                //             </div>
-                //         )
-                //     } else {
+                // console.log(form);
                 return (
                     <div className="content">
                         {
@@ -150,15 +135,7 @@ class UpdateUserList extends Component {
                                 </Alert>
                             )
                         }
-                        {
-                            this.state.studentWarning && (
-                                <Alert bsStyle={this.state.studentWarningColor}>
-                                    <span>
-                                        <b> {this.state.studentWarning} </b>
-                                    </span>
-                                </Alert>
-                            )
-                        }
+
                         <Grid fluid>
                             <Row>
                                 <Col md={12}>
