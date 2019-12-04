@@ -159,10 +159,6 @@ class AllNotActivatedMembers extends Component {
         <div className="content">
           {warning && (
             <Alert bsStyle={this.state.color}>
-              {/* <button type="button" aria-hidden="true" className="close"> 
-                &#x2715;
-                    </button>
-                  */}
               <span>
                 <b> {warning} </b>
               </span>
@@ -227,7 +223,8 @@ class AllNotActivatedMembers extends Component {
                                     xs={6}
                                     className="font-icon-list"
                                   >
-                                    <i className="pe-7s-close-circle" classID={_id} data-info={name} onClick={(e) => this.decline(e)} />
+                                    {/* pe-7s-close-circle */}
+                                    <i className="pe-7s-delete-user" classID={_id} data-info={name} onClick={(e) => this.decline(e)} />
                                     <i className="pe-7s-add-user" classID={_id} data-info={name} onClick={(e) => this.accept(e)} />
                                   </Row>
                                 </td>
