@@ -228,52 +228,56 @@ module.exports = {
     },
     async remove(req, res) {
         const { id } = req.params;
-
         console.log(id);
 
-        // await Activity.findByIdAndDelete(id, (err, act) => {
-        //     if (err) {
-        //         console.log(err);
-        //         return res.status(500).send(err);
-        //     } else {
-        //         console.log(act);
-        //         fs.unlink(`./uploads/${act.filename}`, err => {
-        //             return res.status(500).send({ message: "Ocorreu um erro :(" });
-
-        //         })
-        //         // continuar daqui
-        //         Internship.findByIdAndUpdate(req.body.id_internship, { $pull: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
-        //             if (err) {
-        //                 console.log(err);
-        //                 return res.status(200).send({ status: 200, message: "Estágio apagado com sucesso!" })
-        //             } else {
-        //                 return res.status(500).send(err);
-        //             }
-        //         })
-        //     }
-
-    // });
-},
+        await Activity.findByIdAndDelete(id, (err, act) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send(err);
+            } else {
+                if (!act) { return res.status(404).send({ message: "Não foi encontrada esta atividade", status: 404 }) }
+                // console.log('act');
+                // console.log(act);
+                if (act.image != null) {
+                    // console.log('tem img');
+                    fs.unlink(`./uploads/${act.image}`, err => {
+                        if (err)
+                            return res.status(500).send({ message: "Ocorreu um erro :(" });
+                    })
+                }
+                // continuar daqui
+                Internship.findByIdAndUpdate(act.id_internship, { $pull: { id_activities: act._id } }, { new: true, useFindAndModify: false }, (err, internship) => {
+                    if (err) {
+                        console.log(err);
+                        return res.status(500).send(err);
+                    } else {
+                        console.log(internship);
+                        return res.status(200).send({ status: 200, message: "Estágio apagado com sucesso!" })
+                    }
+                })
+            }
+        });
+    },
     async update(req, res) {
 
-    const { id } = req.params;
-    // validar req.body
-    // para parar de dar erro de deprecation põe o useFindAndModify junto do new!
-    // é possivel colocar junto das configs do mongoose.connect,
+        const { id } = req.params;
+        // validar req.body
+        // para parar de dar erro de deprecation põe o useFindAndModify junto do new!
+        // é possivel colocar junto das configs do mongoose.connect,
 
-    // no update não precisa atualizar o id da internship
-    // e nem a activity id
-    await Activity.findOneAndUpdate({ '_id': id }, req.body, { new: true, useFindAndModify: false }, (err, doc) => {
-        if (doc) {
-            // se new é true traz doc updateado
-            // dá pra por na url e direcionar!
-            return res.status(200).send({ status: 200, message: "Atualizado com sucesso." })
+        // no update não precisa atualizar o id da internship
+        // e nem a activity id
+        await Activity.findOneAndUpdate({ '_id': id }, req.body, { new: true, useFindAndModify: false }, (err, doc) => {
+            if (doc) {
+                // se new é true traz doc updateado
+                // dá pra por na url e direcionar!
+                return res.status(200).send({ status: 200, message: "Atualizado com sucesso." })
 
-        } else {
-            console.log(err);
-            return res.status(400).send({ status: 400, message: "Erro no update." });
-        }
-    })
-}
+            } else {
+                console.log(err);
+                return res.status(400).send({ status: 400, message: "Erro no update." });
+            }
+        })
+    }
 
 };

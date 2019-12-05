@@ -29,9 +29,10 @@ routes.get('/internship/user/:id_student/:id_dvisor', withAuth, jsonParser, Inte
 // post by user (student!)
 routes.post('/activity', withAuth, upload.single('image'), ActivityController.store2);
 routes.post('/activity/noimg', withAuth, jsonParser, ActivityController.storeWithNoImage);
-routes.delete('/activity', withAuth, ActivityController.remove);
+routes.delete('/activity/:id', withAuth, ActivityController.remove);
+
 // made but not used
-// routes.get('/activity',jsonParser, ActivityController.index);
+routes.get('/activity',jsonParser, ActivityController.index);
 // routes.put('/activity/:id', jsonParser, ActivityController.update);
 // routes.post('/user/forgot', jsonParser, UserController.recovery);
 // routes.put('/internship/:id', jsonParser, InternshipController.update);
