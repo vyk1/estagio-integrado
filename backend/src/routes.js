@@ -12,14 +12,13 @@ const UserController = require('./controllers/UserController')
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json();
 
-// routes.get('/', (req, res) => {
-//      // console.log(req);
-//      return res.status(200).send({ status: 200, message: "Ei, DB" });
+routes.get('/', (req, res) => {
+    // console.log(req);
+    return res.status(200).send({ status: 200, message: "Ei, DB" });
+})
 
-// })
-
-routes.get('/internship', InternshipController.index);
-routes.get('/internship/:id', InternshipController.getById);
+routes.get('/internship', withAuth, jsonParser, InternshipController.index);
+routes.get('/internship/:id', withAuth, jsonParser, InternshipController.getById);
 
 routes.get('/internship/user/:id_user', withAuth, jsonParser, InternshipController.getInternshipsByUserId);
 routes.get('/internship/user/:id_dvisor/students', withAuth, jsonParser, InternshipController.getStudentsRelated)
@@ -32,7 +31,7 @@ routes.post('/activity/noimg', withAuth, jsonParser, ActivityController.storeWit
 routes.delete('/activity/:id', withAuth, ActivityController.remove);
 
 // made but not used
-routes.get('/activity',jsonParser, ActivityController.index);
+// routes.get('/activity', jsonParser, ActivityController.index);
 // routes.put('/activity/:id', jsonParser, ActivityController.update);
 // routes.post('/user/forgot', jsonParser, UserController.recovery);
 // routes.put('/internship/:id', jsonParser, InternshipController.update);
