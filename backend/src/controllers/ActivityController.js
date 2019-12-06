@@ -228,7 +228,6 @@ module.exports = {
     },
     async remove(req, res) {
         const { id } = req.params;
-        console.log(id);
 
         await Activity.findByIdAndDelete(id, (err, act) => {
             if (err) {
@@ -236,10 +235,8 @@ module.exports = {
                 return res.status(500).send(err);
             } else {
                 if (!act) { return res.status(404).send({ message: "Não foi encontrada esta atividade", status: 404 }) }
-                // console.log('act');
-                // console.log(act);
+
                 if (act.image != null) {
-                    // console.log('tem img');
                     fs.unlink(`./uploads/${act.image}`, err => {
                         if (err)
                             return res.status(500).send({ message: "Ocorreu um erro :(" });
@@ -252,7 +249,7 @@ module.exports = {
                         return res.status(500).send(err);
                     } else {
                         console.log(internship);
-                        return res.status(200).send({ status: 200, message: "Estágio apagado com sucesso!" })
+                        return res.status(200).send({ status: 200, message: "Atividade apagada com sucesso!" })
                     }
                 })
             }

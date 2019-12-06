@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, View } from 'native-base';
-import { StyleSheet, Image, Linking, ScrollView } from 'react-native';
+import { Container, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, View, Right } from 'native-base';
+import { StyleSheet, Image, Linking, ScrollView, Alert } from 'react-native';
 import server from "../config/server";
 import Esperador from '../components/Esperador';
 import moment from 'moment';
@@ -39,14 +39,14 @@ export default class GenReport extends Component {
 
         const user = await this.props.navigation.state.params.logado;
         console.log(user);
-        
+
         const { token } = await this.props.navigation.state.params;
 
         const config = {
             headers: {
-              'x-access-token': token
+                'x-access-token': token
             }
-          }
+        }
 
         if (user.type == 1) {
             const student_id = user._id;
@@ -66,7 +66,7 @@ export default class GenReport extends Component {
         } else {
             const { student_id, name } = this.props.navigation.state.params;
             console.log(student_id, name);
-            
+
             this.props.navigation.setParams({ title: `Relatório de ${name}` })
 
             await fetch(`${server}/internship/user/${student_id}`, config)
@@ -88,6 +88,11 @@ export default class GenReport extends Component {
         const { id_activities } = this.state.internship.internships[0]
         let arrayDatas = []
         let arrayHoras = []
+
+        if (id_activities.length <= 0) {
+            return this.setState({ nroDias: "-", horasTotais: "-" })
+
+        }
 
         id_activities.forEach(el => {
             var { outputTime } = el;
@@ -115,7 +120,7 @@ export default class GenReport extends Component {
         // console.log('inicial');
         for (let i = 0; i < arrayHoras.length; i++) {
             let h = arrayHoras[i].split(":");
-            console.log(h);            
+            console.log(h);
 
             if (h[1]) {
                 sum = sum.add(h[1], "minutes")
@@ -126,7 +131,44 @@ export default class GenReport extends Component {
         }
 
         this.setState({ nroDias, horasTotais: sum.diff(inicial, 'hours') })
-        console.log(this.state);
+    }
+    async remove(id) {
+        const { token } = await this.props.navigation.state.params;
+
+        try {
+            await fetch(`${server}/activity/${id}`, { method: 'DELETE', headers: { 'x-access-token': token } })
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res);
+
+                    if (res.status == 200) {
+                        Alert.alert(
+                            'Sucesso',
+                            res.message,
+                            [
+                                {
+                                    text: 'OK', onPress: () => {
+                                        this.getInternshipByUID()
+                                    }
+                                }
+                            ])
+                    } else {
+                        Alert.alert(
+                            'Ops...',
+                            res.message,
+                        )
+                    }
+                })
+        }
+        catch (error) {
+            console.log(error)
+            Alert.alert(
+                'Erro',
+                'Ocorreu um erro... Tente novamente.')
+        } finally {
+            this.setState({ formSent: true })
+        }
+
     }
 
     render() {
@@ -150,11 +192,17 @@ export default class GenReport extends Component {
                         <ScrollView>
                             <Content >
                                 <Card key={0}>
-                                    <CardItem header bordered >
+                                    <CardItem header bordered>
                                         <Text note>Empresa</Text>
                                         <Left>
                                             <Text>{internship.internships[0].company}</Text>
                                         </Left>
+                                    </CardItem>
+                                    <CardItem >
+                                        <Body>
+                                            <Text note>Descrição:</Text>
+                                            <Text>{internship.internships[0].description}</Text>
+                                        </Body>
                                     </CardItem>
                                     <CardItem >
                                         <Body>
@@ -212,6 +260,12 @@ export default class GenReport extends Component {
 
                                                 <Text note>Descrição</Text>
                                                 <Text>{rowData.description}</Text>
+                                                <Right>
+                                                    <Button danger onPress={() => this.remove(rowData._id)}>
+                                                        <Text>Apagar</Text>
+                                                    </Button>
+                                                </Right>
+
                                             </Body>
                                         </CardItem>
                                     </Card>
