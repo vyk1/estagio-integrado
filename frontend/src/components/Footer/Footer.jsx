@@ -25,8 +25,7 @@ class Footer extends Component {
         <Grid fluid>
           <p className="copyright pull-right">
             &copy; {new Date().getFullYear()}{" "}
-            Desenvolvido por
-            <a href="#"> Victoria Botelho Martins</a>
+            Desenvolvido por <a href="https://github.com/vyk1">Victoria Botelho Martins</a>
           </p>
         </Grid>
       </footer>

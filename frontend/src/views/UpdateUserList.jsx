@@ -176,13 +176,11 @@ class UpdateUserList extends Component {
                                                         <Col md={12}>
                                                             <FormGroup>
                                                                 <ControlLabel>Telefone</ControlLabel>
-                                                                {/* <FormControl content={ */}
                                                                 <InputMask mask="(99) 99999-9999"
                                                                     style={{ borderColor: 'black' }}
                                                                     value={this.state.form.user.phone}
                                                                     onChange={async (e) => await this.setState({ form: { user: { phone: e.target.value } } })}
                                                                 />
-                                                                {/* } /> */}
                                                             </FormGroup>
                                                         </Col>
                                                     </Row>
@@ -228,7 +226,7 @@ class UpdateUserList extends Component {
                                 <Col md={12}>
                                     <Card
                                         title="Membros"
-                                        category="Aqui estão listados todos os membros pendentes ou não"
+                                        category="Aqui estão listados todos os membros"
                                         ctTableFullWidth
                                         ctAllIcons
                                         ctTableResponsive

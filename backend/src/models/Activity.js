@@ -5,9 +5,6 @@ const ActivitySchema = new mongoose.Schema({
           type: Date,
           required: true
      },
-     // não rola type time
-     // só date, vou deixar como string
-
      description: {
           type: String,
           required: true

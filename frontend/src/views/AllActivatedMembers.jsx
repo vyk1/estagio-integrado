@@ -79,7 +79,7 @@ class AllActivatedMembers extends Component {
                 <Col md={12}>
                   <Card
                     title="Membros"
-                    category="Aqui estão listados todos os membros pendentes ou não"
+                    category="Aqui estão listados todos os membros"
                     ctTableFullWidth
                     ctTableResponsive
                     content={
