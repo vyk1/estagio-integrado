@@ -29,8 +29,8 @@ export default class InfoStage extends Component {
             GridViewItems: [
                 { key: 'Lei de Estágio n° 11788/08', fileName: 'leiEstagio' },
                 { key: 'Passo a Passo para Iniciar o Estágio', fileName: 'fluxograma' },
-                { key: 'Lista dos Locais Conveniados', fileName: 'listaConveniados' },
-                { key: 'Documentos', link: 'https://docs.google.com/spreadsheets/d/1rqA00R7FE5x3sBmt758UTDH7NsnCNn27yMuuWu60sIw' },
+                { key: 'Lista dos Locais Conveniados', link: 'https://docs.google.com/spreadsheets/d/1rqA00R7FE5x3sBmt758UTDH7NsnCNn27yMuuWu60sIw' },
+                { key: 'Documentos', link: 'https://www.iffarroupilha.edu.br/conveniosinstitucionais/item/439-formularios-estagios' },
                 { key: 'Projeto Pedagógico dos Cursos', link: 'https://www.iffarroupilha.edu.br/projeto-pedag%C3%B3gico-de-curso/sobre-os-projetos-pedag%C3%B3gicos-de-cursos' }
             ]
         }

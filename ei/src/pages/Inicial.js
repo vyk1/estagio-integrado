@@ -73,16 +73,15 @@ export default class About extends Component {
                 <Container style={styles.MainContainer}>
                     <Content>
                         <Image source={logo} style={styles.image}></Image>
-                        <Text style={styles.text}>
+                        <Text style={[styles.text, {marginTop: 0}]}>
                             Estágio é a prática profissional em situação real
                             de trabalho. É um momento de formação orientada e
-                            supervisionada, que articula a formação escolar e o mundo do trabalho.
-                    <Text style={styles.text}>
-                                Este trabalho visa tornar a comunicação entre estagiário, supervisor e orientador
-                                mais acessível, fornecendo a ponte necessária para a melhor experiência de estágio.
-                                Quer saber mais?
-                        </Text>
-                            <Text style={[styles.text, { color: 'blue' }]} onPress={() => {
+                            supervisionada, que articula a formação escolar e o mundo do trabalho. </Text>
+                        <Text style={[styles.text, {marginTop: 0}]}>
+                            Este produto visa promover a interação entre o estagiário, o professor orientador e o supervisor da parte concedente, fornecendo a ponte necessária para que ela ocorra de forma prática e eficiente.
+                                </Text>
+                        <Text style={[styles.text, {marginTop: 0}]}>
+                            Quer saber mais? <Text style={[styles.text, { color: 'blue' }]} onPress={() => {
                                 this.props.navigation.navigate('About')
                             }}>Clique aqui</Text>
                         </Text>
@@ -108,8 +107,8 @@ export default class About extends Component {
                                 )
                         }
 
-                    </Content>
-                </Container>
+                    </Content >
+                </Container >
 
             );
         }

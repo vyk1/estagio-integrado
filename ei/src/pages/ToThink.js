@@ -75,15 +75,26 @@ export default class ToThink extends Component {
                 <ScrollView>
 
                     <View style={styles.MainContainer}>
+                        <Text style={[styles.text, { fontWeight: 'bold', textAlign: "center" }]}>
+                            Estudante
+                        </Text>
+                        <Text style={{ textAlign: "center", fontWeight: '700' }} >
+                            Chegou a hora do estágio!
+                        </Text>
+
                         <Image source={student} style={styles.image}></Image>
-                        <CardItem header bordered>
+                        <CardItem>
                             <Text style={styles.text}>O estágio é uma atividade que pode trazer imensos benefícios para a sua formação profissional e cidadã.
+                            </Text>
+                        </CardItem>
+                        <CardItem>
+                            <Text style={styles.text}>
                                 Para tornar este momento significativo, você deve demonstrar o seu conhecimento e realizar as atividades com responsabilidade e ética.
                             </Text>
                         </CardItem>
 
                         <CardItem>
-                            <Text style={styles.text}>Para refletir mais sobre estas questões acesse os links abaixo</Text>
+                            <Text style={styles.text}>Para refletir mais sobre estas questões acesse os links abaixo:</Text>
                         </CardItem>
                         <FlatList
                             data={this.state.GridViewItems1}
@@ -93,7 +104,7 @@ export default class ToThink extends Component {
                             numColumns={1}
                         />
                     </View>
-                </ScrollView>
+                </ScrollView >
             );
         }
         // orientador
@@ -109,12 +120,17 @@ export default class ToThink extends Component {
                             </Body>
                         </Header>
 
-                        <CardItem header bordered>
-                            <Text style={styles.text}>O estagiário é um profissional em formação, e que precisa de orientação para desenvolver melhor as suas atividades, bem como articular, de maneira proativa, a teoria e a prática. Nesse sentido, o professor orientador tem papel fundamental no desenvolvimento pessoal e profissional do estudante durante a realização do estágio.</Text>
+                        <CardItem>
+                            <Text style={styles.text}>O estagiário é um profissional em formação, e que precisa de orientação para desenvolver melhor as suas atividades, bem como articular, de maneira proativa, a teoria e a prática.</Text>
                         </CardItem>
 
                         <CardItem>
-                            <Text style={styles.text}>Para refletir mais sobre estas questões acesse os links abaixo</Text>
+                            <Text style={styles.text}>Nesse sentido, o supervisor tem papel fundamental no desenvolvimento pessoal e profissional do estudante durante a realização do estágio.</Text>
+                        </CardItem>
+
+
+                        <CardItem>
+                            <Text style={styles.text}>Para refletir mais sobre estas questões acesse os links abaixo:</Text>
                         </CardItem>
                         <FlatList
                             data={this.state.GridViewItems2}
@@ -141,12 +157,17 @@ export default class ToThink extends Component {
                             </Body>
                         </Header>
 
-                        <CardItem header bordered>
-                            <Text style={styles.text}>O estagiário é um profissional em formação, e que precisa de orientação para desenvolver melhor as suas atividades, bem como articular, de maneira proativa, a teoria e a prática. Nesse sentido, o supervisor tem papel fundamental no desenvolvimento pessoal e profissional do estudante durante a realização do estágio.</Text>
+                        <CardItem>
+                            <Text style={styles.text}>O estagiário é um profissional em formação, e que precisa de orientação para desenvolver melhor as suas atividades, bem como articular, de maneira proativa, a teoria e a prática.
+                            </Text>
                         </CardItem>
 
                         <CardItem>
-                            <Text style={styles.text}>Para refletir mais sobre estas questões acesse os links abaixo</Text>
+                            <Text style={styles.text}>Nesse sentido, o supervisor tem papel fundamental no desenvolvimento pessoal e profissional do estudante durante a realização do estágio.</Text>
+                        </CardItem>
+
+                        <CardItem>
+                            <Text style={styles.text}>Para refletir mais sobre estas questões acesse os links abaixo:</Text>
                         </CardItem>
                         <FlatList
                             data={this.state.GridViewItems3}

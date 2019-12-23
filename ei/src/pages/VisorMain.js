@@ -32,7 +32,7 @@ export default class VisorMain extends Component {
                 { key: 'Estagiários', page: 'ViewReports' },
                 { key: 'Para Refletir', page: 'ToThink' },
                 { key: 'Contatos', page: 'Contacts', icon: 'contacts' },
-                { key: 'Ei! Fique Ligado', page: 'StayOn' },
+                { key: 'Fique Ligado!', page: 'StayOn' },
                 { key: 'Sobre o App', page: 'About' },
                 { key: 'Logout', page: 'logout' }
             ]

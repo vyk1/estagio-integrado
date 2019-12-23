@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import {
+    View,
+    Image,
     Text,
     StyleSheet,
 } from 'react-native';
 import { Container, Header, Title, Body, Content } from 'native-base';
+import stayon from '../assets/stayon.png'
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default class StayOn extends Component {
     static navigationOptions = {
@@ -35,27 +39,48 @@ export default class StayOn extends Component {
 
     render() {
         return (
-            <Container style={styles.MainContainer}>
-                <Content>
-                    <Header style={styles.header}>
-                        <Body>
-                            <Title>Calendário de Estágios campus Panambi</Title>
-                            {/* <Subtitle> Mostrar a direção; dirigir, guiar, encaminhar, nortear: orientar alguém na direção certa.</Subtitle> */}
-                        </Body>
-                    </Header>
-
-                    <Text style={styles.text}>
-                        <Text style={[styles.text, { fontWeight: "bold" }]}>Atenção Estudante: </Text>
-                        verifique no Setor de Estágio se a sua documentação está em dia!</Text>
-                </Content>
-            </Container>
+            <Container>
+                {/*<Header style={styles.header}>
+                    <Body>
+                        <Title>Calendário de Estágios campus Panambi</Title>
+                         <Title>Calendário de Estágios </Title> <Text style={ fontStyle="italic"}>campus Panambi</Text>
+                         <Subtitle> Mostrar a direção; dirigir, guiar, encaminhar, nortear: orientar alguém na direção certa.</Subtitle> 
+                    </Body>
+                </Header>
+                         */}
+                <View style={styles.MainContainer}>
+                    <ScrollView>
+                        <Text style={styles.text}>
+                            {/* <Text style={[styles.text, { fontWeight: "bold" }]}>Atenção Estudante: </Text> */}
+                            Nenhum estágio pode ser iniciado sem que esteja formalizado, isto é, com o Convênio firmado e o Termo de Compromisso assinado, portanto, verifique junto ao Setor de Estágio se toda a documentação está completa e correta.
+                    </Text>
+                        <Text style={styles.text}>
+                            CALENDÁRIO DE ESTÁGIOS: as datas importantes para a realização dos estágios curriculares encontram-se no Calendário de Estágios, que é divulgado anualmente no  Mural do Setor de Estágios do campus Panambi. Então, fique atento, e não perca os prazos!
+                    </Text>
+                        <Image source={stayon} style={styles.image}></Image>
+                        <Text style={[styles.text, { textAlign: "center" }]}>
+                            Em caso de dúvidas sobre os estágios,  procure a coordenação do curso  ou o Setor de Estágio do IFFar campus Panambi.
+                        </Text>
+                        <Text style={[styles.text, { textAlign: "center", color: "blue" }]} onPress={() => {
+                            Linking.openURL(`(55)3376-8828`)
+                        }}
+                        >(55)3376-8828</Text>
+                        <Text style={[styles.text, { textAlign: "center", color: "blue" }]} onPress={() => {
+                            Linking.openURL(`estagios.pb@iffarroupilha.edu.br`)
+                        }}
+                        >estagios.pb@iffarroupilha.edu.br</Text>
+                    </ScrollView>
+                </View>
+            </Container >
 
         );
     }
 }
 
 const styles = StyleSheet.create({
-
+    header: {
+        fontSize: 6,
+    },
     MainContainer: {
         justifyContent: 'center',
         flex: 1,
@@ -64,8 +89,8 @@ const styles = StyleSheet.create({
     },
     image: {
         alignSelf: 'center',
-        width: 150,
-        height: 150,
+        width: 250,
+        height: 250,
         resizeMode: 'stretch'
     },
     text: {
@@ -73,7 +98,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontFamily: 'RobotoMono-Light',
         textAlign: 'justify',
-        margin: 17,
+        margin: 12,
     },
     GridViewBlockStyle: {
         justifyContent: 'center',

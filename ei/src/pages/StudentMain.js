@@ -31,7 +31,7 @@ export default class StudentMain extends Component {
                 { key: 'Registrar Atividade', page: 'RegisterActivity' },
                 { key: 'Relatório Geral', page: 'GenReport' },
                 { key: 'Contatos', page: 'Contacts' },
-                { key: 'Ei! Fique Ligado', page: 'StayOn' },
+                { key: 'Fique Ligado!', page: 'StayOn' },
                 { key: 'Para Refletir', page: 'ToThink' },
                 { key: "Sobre o App", page: "About" },
                 { key: 'Logout', page: 'logout' }

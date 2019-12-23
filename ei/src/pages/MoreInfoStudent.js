@@ -42,18 +42,20 @@ export default class MoreInfoStudent extends Component {
                             }}
                             > “Entrevista com o estagiário”</Text>
                             <Text>, onde o comediante Murilo Gun interpreta um estagiário politicamente incorreto.</Text>
-                            <Text>
-                            </Text>
-                            Após assistir ao vídeo, reflita:
                         </Text>
+                        <Text style={[styles.text, { marginTop: 0 }]}>
+                            Após assistir ao vídeo, reflita:
+                                </Text>
                         <Text style={styles.text}>1.Quais os comportamentos e atitudes adequadas no ambiente de estágio?</Text>
                         <Text style={styles.text}>2.Quais as características importantes durante a realização do estágio e no mundo do trabalho?</Text>
-                        <Text style={styles.text}>
+                        <Text style={[styles.text, { marginTop: 0 }]}>
                             Atitudes a serem observadas: apresentação pessoal, habilidade de comunicação; ética, responsabilidade, integridade, iniciativa, interesse e proatividade, disciplina e organização, humildade, assiduidade e pontualidade.
-                            E não esqueça, uma boa conduta gera reconhecimento e admiração!
                     </Text>
+                    <Text style={[styles.text, { marginTop: 0 }]}>
+                            E não esqueça, uma boa conduta gera reconhecimento e admiração!
+                                </Text>
                     </View>
-                </ScrollView>
+                </ScrollView >
 
             );
         }
@@ -107,14 +109,7 @@ export default class MoreInfoStudent extends Component {
 
                         <Text style={styles.text}>Acreditamos que transformações na sociedade são possíveis, especialmente por meio de processos educativos que visem a formação humana integral
                                                     Assim, poderemos construir juntos uma nova realidade social, ética, justa, com igualdade de condições e oportunidades para todos.
-                                                    Após assistir ao vídeo, reflita:
                         </Text>
-                        <Text style={styles.text}>1.Quais os comportamentos e atitudes adequadas no ambiente de estágio?</Text>
-                        <Text style={styles.text}>2.Quais as características importantes durante a realização do estágio e no mundo do trabalho?</Text>
-                        <Text style={styles.text}>
-                            Atitudes a serem observadas: apresentação pessoal, habilidade de comunicação; ética, responsabilidade, integridade, iniciativa, interesse e proatividade, disciplina e organização, humildade, assiduidade e pontualidade.
-                            E não esqueça, uma boa conduta gera reconhecimento e admiração!
-                    </Text>
                     </View>
                 </ScrollView>
 
@@ -132,8 +127,8 @@ export default class MoreInfoStudent extends Component {
 
                         <Accordion
                             headerStyle={{ backgroundColor: "#8abfde" }}
-                            contentStyle={{ backgroundColor: "#A9DAD6", textAlign: 'justify'}}
-                            dataArray={dataArray}/>
+                            contentStyle={{ backgroundColor: "#A9DAD6", textAlign: 'justify' }}
+                            dataArray={dataArray} />
                         <Text style={{ textAlign: "center" }}>E aí, gostou? Então, não deixe de assistir esses filmes interessantes e inspiradores.</Text>
 
                     </View>

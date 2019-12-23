@@ -34,6 +34,7 @@ module.exports = {
     async store2(req, res) {
         // store é obrigatório o estágio
         console.log(req.body);
+        console.log('chegou aqui')
 
         if (req.file) {
 
