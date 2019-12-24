@@ -112,8 +112,12 @@ module.exports = {
      },
      async update(req, res) {
           const { _id } = req.body;
+          console.log(req.body);
+          
+          if (!_id)
+               return res.status(403).send({ status: 403, message: "Ocorreu um erro. Tente novamente." });
 
-          await User.findOneAndUpdate(_id, req.body, { new: true, useFindAndModify: false }, (err, doc) => {
+          await User.findOneAndUpdate({ _id }, req.body, { new: true, useFindAndModify: false }, (err, doc) => {
                if (doc) {
                     // console.log(doc);
                     // se new é true traz doc updateado
@@ -122,7 +126,7 @@ module.exports = {
 
                } else {
                     console.log(err);
-                    return res.status(400).send({ status: 400, message: "Erro no update." });
+                    return res.status(400).send({ status: 400, message: "Ocorreu um erro. Tente novamente." });
                }
           })
      },

@@ -19,7 +19,7 @@ class UpdateUserList extends Component {
 
     state = {
         form: [],
-        id: "",
+        _id: "",
         users: [],
         status: "",
         loaded: false
@@ -30,14 +30,11 @@ class UpdateUserList extends Component {
     }
 
     async check(e) {
-        e.preventDefault();
+        await e.preventDefault();
         // alert('Validar e-mail: regex!')
         let token = await getToken()
-        const { name, email, phone, _id } = this.state.form.user
-        console.log(this.state.form.user);
-        return alert(e)
-        return alert('3')
-
+        const { _id } = this.state
+        const { name, email, phone } = await this.state.form.user
 
         const config = {
             headers: {
@@ -47,15 +44,14 @@ class UpdateUserList extends Component {
         }
 
         const res = await api.put('/user', { name, email, phone, _id }, config)
-        console.log(res);
+
+        console.log(res.data);
 
         if (res.status === 200) {
-
             this.setState({
                 warning: res.data.message,
                 color: 'info'
             })
-
 
         } else {
             this.setState({
@@ -87,10 +83,9 @@ class UpdateUserList extends Component {
     async createForm(e) {
 
         await e.persist()
-        const classid = e.target.attributes[1].value;
-        this.setState({ id: classid, loaded: false })
-        // const name = e.target.attributes[2].value
-        console.log(e);
+        const classid = await e.target.attributes[1].value;
+
+        this.setState({ _id: classid, loaded: false })
 
         let token = await getToken()
 
@@ -101,17 +96,19 @@ class UpdateUserList extends Component {
             }
         }
 
+
         const response = await api.get(`/user/${classid}`, config)
+        console.log(response);
+
         this.setState({
             form: response.data,
             status: response.status,
             loaded: true
         })
-        // console.log(response);
 
     }
     render() {
-        const { loaded, users, form, id } = this.state
+        const { loaded, users, _id } = this.state
 
         if (!loaded) {
             return (
@@ -126,9 +123,7 @@ class UpdateUserList extends Component {
                 </div>
             )
         } else {
-            // if (form.length > 0) {
-            if (id) {
-                // console.log(form);
+            if (_id) {
                 return (
                     <div className="content">
                         {
@@ -157,7 +152,7 @@ class UpdateUserList extends Component {
                                                     className="font-icon-list"
                                                 >
 
-                                                    <i className="pe-7s-left-arrow" onClick={() => [this.setState({ id: null }), this.getUsers()]} />
+                                                    <i className="pe-7s-left-arrow" onClick={() => [this.setState({ _id: null, warning: null }), this.getUsers()]} />
                                                 </Col>
                                                 <form onSubmit={this.check.bind(this)}>
                                                     <Row>
@@ -171,7 +166,7 @@ class UpdateUserList extends Component {
                                                                     componentClass="textarea"
                                                                     bsClass="form-control"
                                                                     placeholder="Nome do Usuário"
-                                                                    onChange={async (e) => await this.setState({ form: { user: { name: e.target.value } } })}
+                                                                    onChange={async (e) => this.setState({ form: { user: { ...this.state.form.user, name: e.target.value } } })}
                                                                     value={this.state.form.user.name}
                                                                 />
                                                             </FormGroup>
@@ -184,7 +179,7 @@ class UpdateUserList extends Component {
                                                                 <InputMask mask="(99) 99999-9999"
                                                                     style={{ borderColor: 'black' }}
                                                                     value={this.state.form.user.phone}
-                                                                    onChange={async (e) => await this.setState({ form: { user: { phone: e.target.value } } })}
+                                                                    onChange={async (e) => this.setState({ form: { user: { ...this.state.form.user, phone: e.target.value } } })}
                                                                 />
                                                             </FormGroup>
                                                         </Col>
@@ -200,7 +195,7 @@ class UpdateUserList extends Component {
                                                                     componentClass="textarea"
                                                                     bsClass="form-control"
                                                                     placeholder="E-mail do Usuário"
-                                                                    onChange={async (e) => await this.setState({ form: { user: { email: e.target.value } } })}
+                                                                    onChange={async (e) => this.setState({ form: { user: { ...this.state.form.user, email: e.target.value } } })}
                                                                     value={this.state.form.user.email}
                                                                     type="email"
                                                                 />
