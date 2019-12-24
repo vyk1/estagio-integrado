@@ -11,10 +11,11 @@ export default class Login extends Component {
         super(props);
         //Set default message
         this.state = {
+            disabled: false,
             message: 'Carregando...',
             email: 'checagem.sistemas@gmail.com',
             password: '12345678',
-            error: '',
+            msg: '',
         }
     };
 
@@ -26,6 +27,7 @@ export default class Login extends Component {
     }
 
     onSubmit = async (event) => {
+        this.setState({ disabled: true, msg: "Carregando..." })
         event.preventDefault();
         const config = {
             headers: {
@@ -46,7 +48,7 @@ export default class Login extends Component {
                 }
             })
             .catch(err => {
-                this.setState({ error: "Erro: " + err.response.data.message })
+                this.setState({ msg: "Erro: " + err.response.data.message })
                 return false
             });
     }
@@ -58,10 +60,10 @@ export default class Login extends Component {
                     <div className="auth-inner">
                         <form onSubmit={this.onSubmit}>
                             {
-                                this.state.error && (
+                                this.state.msg && (
                                     <Alert bsStyle="warning">
                                         <span>
-                                            <b> {this.state.error} </b>
+                                            <b> {this.state.msg} </b>
                                         </span>
                                     </Alert>
                                 )
@@ -78,7 +80,7 @@ export default class Login extends Component {
                                 <input type="password" className="form-control" placeholder="Insira senha" name="password" value={this.state.password} required onChange={this.handleInputChange} />
                             </div>
 
-                            <button type="submit" className="btn btn-primary btn-block">Enviar</button>
+                            <button type="submit" className="btn btn-primary btn-block" disabled={this.state.disabled}>Enviar</button>
                             <p className="forgot-password text-right">
                                 {/* Esqueceu sua <a href="/forgot">Senha?</a> */}
                             </p>
