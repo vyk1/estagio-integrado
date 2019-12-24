@@ -1,7 +1,9 @@
+const path = require('path');
 const fs = require('fs')
 const Activity = require('../models/Activity');
 const Internship = require('../models/Internship');
-const filehelper = require('../config/file-helper')
+const tinify = require('tinify')
+const authConfig = require('../config/auth');
 
 module.exports = {
 
@@ -34,7 +36,6 @@ module.exports = {
     async store2(req, res) {
         // store é obrigatório o estágio
         console.log(req.body);
-        console.log('chegou aqui')
 
         if (req.file) {
 
@@ -44,32 +45,35 @@ module.exports = {
                 if (!err) {
                     // se não existir
                     if (!doc.length > 0) {
-                        console.log('tá vago');
 
-                        filehelper.compressImage(req.file, 200)
-                            .then(newPath => {
+                        // const newName = new Date().getTime() + ".webp";
+                        const newName = new Date().getTime() + ".png";
+                        const destination = path.resolve(__dirname, '..', '..', 'uploads', newName);
 
-                                const full = newPath.split('\\');
-                                const caminho = full[full.length - 1]
+                        tinify.key = authConfig.api;
+                        const source = tinify.fromFile(req.file.path);
 
+                        const resized = source.resize({
+                            method: "scale",
+                            width: 250
+                        });
+
+                        resized.toFile(destination)
+                            .then(() => {
                                 const obj = {
                                     date: date2,
                                     description,
                                     inputTime,
                                     outputTime,
                                     id_internship,
-                                    image: caminho
+                                    image: newName
                                 }
-
                                 const activity = new Activity(obj);
 
                                 activity.save((err, activity) => {
                                     if (err) {
-                                        console.log(err);
                                         console.log('deu algo de errado ao salvar');
-                                        // console.log(activity.id);
                                         return res.status(400).json({ status: 400, message: "Erro ao salvar atividade!" });
-
                                     } else {
                                         Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
                                             if (err == null) {
@@ -78,21 +82,20 @@ module.exports = {
                                         });
                                     }
                                 })
-
                             }).catch(err => {
                                 console.log(err);
                                 console.log("erro na compressão");
                                 return res.status(400).json({ status: 400, message: "Ocorreu um erro, por favor tente novamente." });
+                            }).then(() => {
+                                fs.unlink(`./uploads/${req.file.filename}`, err => {
+                                    if (err) console.log(err)
+                                });
                             });
-
                     } else {
+                        console.log('não tá vago, retornando...');
                         fs.unlink(`./uploads/${req.file.filename}`, err => {
-
-                            // Não quero que erros aqui parem todo o sistema, então só vou imprimir o erro, sem throw.
                             if (err) console.log(err)
                         });
-                        console.log('não tá vago, retornando...');
-
                         return res.status(400).json({ status: 400, message: "Já existe uma atividade cadastrada para este dia." });
                     }
                 }

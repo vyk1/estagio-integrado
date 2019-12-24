@@ -1,6 +1,5 @@
 const mail = require('./auxiliars/sendEmails')
 const crypto = require('crypto');
-const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const Token = require('../models/Token');
@@ -22,7 +21,7 @@ module.exports = {
           const { id } = req.body;
           console.log(id);
 
-          if (!id) return res.send(400).send({ status: 400, message: "ID não informado" })
+          if (!id) return res.status(400).send({ status: 400, message: "ID não informado" })
           await User.findOneAndUpdate({ '_id': id }, { verified: true }, { new: true, useFindAndModify: false }, (err, doc) => {
                if (err) {
                     console.log(err);
@@ -44,6 +43,7 @@ module.exports = {
           console.log(req.body);
 
           if (!id) return res.send(400).send({ status: 400, message: "ID não informado" })
+          
           await User.findByIdAndDelete(id, (err, doc) => {
                if (err) {
                     console.log(err);
@@ -113,7 +113,7 @@ module.exports = {
      async update(req, res) {
           const { _id } = req.body;
           console.log(req.body);
-          
+
           if (!_id)
                return res.status(403).send({ status: 403, message: "Ocorreu um erro. Tente novamente." });
 
@@ -147,10 +147,13 @@ module.exports = {
                     const token = new Token({ _id_user: user._id, token: crypto.randomBytes(16).toString('hex') });
                     token.save(function (err) {
                          if (err) {
-                              return res.status(500).send({ msg: err.message });
+                              console.log(err);
+                              return res.status(500).json({ status: 500, message: "Erro ao submeter. Tente novamente." });
                          }
-                         // Send the email
                          const host = req.headers.host
+                         console.log(host);
+                         // verificar se host é isso msm
+                         
                          mail.confirm(host, name, email, token.token)
                          res.status(201).send({ status: 201, message: 'Um e-mail de confimação foi enviado para: ' + email + '.' });
                     })
@@ -166,7 +169,7 @@ module.exports = {
                // If we found a token, find a matching user
                User.findOne({ _id: token._id_user, email: req.params.email }, function (err, user) {
                     if (!token) return res.status(400).send('Não foi possível validar o usuário.');
-                    if (user.emailConfirmed) return res.status(400).send('Este usuário já foi verificado. Por favor, aguarde a confirmação da administração.');
+                    if (user.emailConfirmed) return res.status(400).send('Esta conta já foi verificada. Por favor, aguarde a confirmação da administração.');
 
                     // Verify and save the user
                     user.emailConfirmed = true;
@@ -278,18 +281,11 @@ module.exports = {
                     return res.json({ "AAAA": "ccccc" });
 
                user.password = password;
-
                await user.save();
-
                res.send(200);
-
-
-
           }
           catch (err) {
                return res.status(400).json({ status: 400, message: "cannot reset password. try again" });
           }
      }
-
-
 };

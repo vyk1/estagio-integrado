@@ -80,8 +80,7 @@ module.exports = {
           // mesma lógica do getStudents
           const { id_user } = req.params;
           const { tipo } = req.params;
-          console.log(req.params);
-
+          
           // passar tipo para facilitar query
           let internships
           // estudante
