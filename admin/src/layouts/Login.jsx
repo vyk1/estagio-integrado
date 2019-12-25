@@ -13,8 +13,8 @@ export default class Login extends Component {
         this.state = {
             disabled: false,
             message: 'Carregando...',
-            email: 'checagem.sistemas@gmail.com',
-            password: '12345678',
+            email: '',
+            password: '',
             msg: '',
         }
     };
