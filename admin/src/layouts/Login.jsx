@@ -48,8 +48,13 @@ export default class Login extends Component {
                 }
             })
             .catch(err => {
-                this.setState({ msg: "Erro: " + err.response.data.message })
+                this.setState({ msg: "Ocorreu um Erro. Tente novamente." })
+                console.log(err);
+
+                // this.setState({ msg: "Ocorreu um Erro. Tente novamente." + err.response.data })
                 return false
+            }).finally(() => {
+                this.setState({ disabled: false })
             });
     }
 
