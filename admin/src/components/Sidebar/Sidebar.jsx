@@ -43,7 +43,7 @@ class Sidebar extends Component {
             className="simple-text logo-mini"
           >
             <div className="logo-img">
-              <img src={logo} alt="logo" />
+              <img src={logo} alt="" />
             </div>
           </a>
           <a
