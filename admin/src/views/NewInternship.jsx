@@ -65,23 +65,42 @@ class NewInternship extends Component {
 
     response = await api.get('/users/2', config)
     arrTen = [];
-    this.setState({ id_advisor: response.data[0]._id })
-    for (let k = 0; k < response.data.length; k++) {
-      arrTen.push(<option key={response.data[k]._id} value={response.data[k]._id}> {response.data[k].name} </option>);
+    if (response.data.length === 0) {
+      arrTen.push(<option disabled key={null}>Não há Orientadores a Serem Associados à Estágios</option>)
+      this.setState({
+        advisorWarning: "Não há Orientadores a Serem Associados à Estágios",
+        disabled: true,
+        advisorWarningColor: "danger"
+      });
+    } else {
+      this.setState({ id_advisor: response.data[0]._id })
+      for (let k = 0; k < response.data.length; k++) {
+        arrTen.push(<option key={response.data[k]._id} value={response.data[k]._id}> {response.data[k].name} </option>);
+      }
     }
     this.setState({
       advisors: arrTen
     });
+
     response = await api.get('/users/3', config)
     arrTen = [];
-    this.setState({ id_supervisor: response.data[0]._id })
-    for (let k = 0; k < response.data.length; k++) {
-      arrTen.push(<option key={response.data[k]._id} value={response.data[k]._id}> {response.data[k].name} </option>);
+    if (response.data.length === 0) {
+      arrTen.push(<option disabled key={null}>Não há Supervisores a Serem Associados à Estágios</option>)
+      this.setState({
+        supervisorWarning: "Não há Supervisores a Serem Associados à Estágios",
+        disabled: true,
+        supervisorWarningColor: "danger"
+      });
+    } else {
+      this.setState({ id_supervisor: response.data[0]._id })
+      for (let k = 0; k < response.data.length; k++) {
+        arrTen.push(<option key={response.data[k]._id} value={response.data[k]._id}> {response.data[k].name} </option>);
+      }
     }
     this.setState({
       supervisors: arrTen,
       loaded: true
-    });
+    })
   }
 
   async handleChange(event) {
@@ -127,10 +146,10 @@ class NewInternship extends Component {
       this.getData();
 
     } else {
-      this.setState({ 
+      this.setState({
         warning: res.data.message,
         color: 'danger'
-       })
+      })
     }
   }
 
@@ -156,9 +175,6 @@ class NewInternship extends Component {
           {
             this.state.warning && (
               <Alert bsStyle={this.state.color}>
-                {/* <button type="button" aria-hidden="true" className="close">
-                  &#x2715;
-                    </button> */}
                 <span>
                   <b> {this.state.warning} </b>
                 </span>
@@ -168,11 +184,26 @@ class NewInternship extends Component {
           {
             this.state.studentWarning && (
               <Alert bsStyle={this.state.studentWarningColor}>
-                {/* <button type="button" aria-hidden="true" className="close">
-                  &#x2715;
-                    </button> */}
                 <span>
                   <b> {this.state.studentWarning} </b>
+                </span>
+              </Alert>
+            )
+          }
+          {
+            this.state.advisorWarning && (
+              <Alert bsStyle={this.state.advisorWarningColor}>
+                <span>
+                  <b> {this.state.advisorWarning} </b>
+                </span>
+              </Alert>
+            )
+          }
+          {
+            this.state.supervisorWarning && (
+              <Alert bsStyle={this.state.supervisorWarningColor}>
+                <span>
+                  <b> {this.state.supervisorWarning} </b>
                 </span>
               </Alert>
             )
