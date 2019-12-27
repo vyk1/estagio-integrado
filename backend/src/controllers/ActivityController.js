@@ -233,18 +233,21 @@ module.exports = {
     },
     async remove(req, res) {
         const { id } = req.params;
+        // return res.status(200).send({ message: id });
 
         await Activity.findByIdAndDelete(id, (err, act) => {
+            console.log(act);
+
             if (err) {
                 console.log(err);
-                return res.status(500).send(err);
+                return res.status(500).send({ message: "Ocorreu um erro :(", status: 500 });
             } else {
                 if (!act) { return res.status(404).send({ message: "Não foi encontrada esta atividade", status: 404 }) }
 
                 if (act.image != null) {
                     fs.unlink(`./uploads/${act.image}`, err => {
                         if (err)
-                            return res.status(500).send({ message: "Ocorreu um erro :(" });
+                            return res.status(500).send({ message: "Ocorreu um erro :(", status: 500 });
                     })
                 }
                 // continuar daqui
