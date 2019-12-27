@@ -90,7 +90,6 @@ export default class PickerInputExample extends Component {
   }
   handleSubmit = async () => {
 
-    console.log(this.state);
 
     let checagem = await this.checkInputs();
 
@@ -111,7 +110,6 @@ export default class PickerInputExample extends Component {
         await fetch(`${server}/user/register`, config)
           .then(res => res.json())
           .then(res => {
-            console.log(res);
 
             if (res.status == 201) {
               Alert.alert(

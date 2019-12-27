@@ -10,10 +10,8 @@ export const onLogin = (token, user) => {
 
   try {
     const log = AsyncStorage.multiSet(arrayToAsyncStore)
-    console.log(log);
 
   } catch (error) {
-    console.log(error);
   }
 };
 
@@ -21,8 +19,6 @@ export const getAll = async () => {
 
   try {
     const x = await AsyncStorage.multiGet(['TK', 'U'])
-    console.log(x);
-
   } catch (error) {
     console.log(error);
   }

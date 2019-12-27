@@ -40,18 +40,9 @@ export default class StayOn extends Component {
     render() {
         return (
             <Container>
-                {/*<Header style={styles.header}>
-                    <Body>
-                        <Title>Calendário de Estágios campus Panambi</Title>
-                         <Title>Calendário de Estágios </Title> <Text style={ fontStyle="italic"}>campus Panambi</Text>
-                         <Subtitle> Mostrar a direção; dirigir, guiar, encaminhar, nortear: orientar alguém na direção certa.</Subtitle> 
-                    </Body>
-                </Header>
-                         */}
                 <View style={styles.MainContainer}>
                     <ScrollView>
                         <Text style={styles.text}>
-                            {/* <Text style={[styles.text, { fontWeight: "bold" }]}>Atenção Estudante: </Text> */}
                             Nenhum estágio pode ser iniciado sem que esteja formalizado, isto é, com o Convênio firmado e o Termo de Compromisso assinado, portanto, verifique junto ao Setor de Estágio se toda a documentação está completa e correta.
                     </Text>
                         <Text style={styles.text}>

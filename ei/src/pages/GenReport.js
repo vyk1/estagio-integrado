@@ -11,7 +11,6 @@ export default class GenReport extends Component {
         return {
             title: `${navigation.getParam('title')}`,
             headerStyle: {
-                // backgroundColor: '#5f98e3',
                 backgroundColor: navigation.getParam('backgroundColor'),
             },
             headerTintColor: '#fff',

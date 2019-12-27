@@ -72,7 +72,6 @@ export default class VisorMain extends Component {
             loggedOut = await onLogout()
 
             if (loggedOut) {
-                console.log('delogo');
                 const resetAction = StackActions.reset({
                     index: 0,
                     actions: [NavigationActions.navigate({ routeName: 'Inicial' })],
@@ -92,8 +91,6 @@ export default class VisorMain extends Component {
     renderiza() {
         const { logado, backgroundColor } = this.state;
 
-        console.log(backgroundColor);
-
         if (!Object.keys(logado).length || backgroundColor == null) {
             return (
                 <Esperador />
@@ -105,31 +102,9 @@ export default class VisorMain extends Component {
                         data={this.state.GridViewItems}
                         renderItem={({ item }) =>
                             <View style={[styles.GridViewBlockStyle, { backgroundColor: `${backgroundColor}` }]}>
-                                {/* <View style={[styles.GridViewBlockStyle, { color: `#fff` }]}> */}
-                                {/* {item.icon && (<Icon type={"MaterialIcons"} name={item.icon} />)} */}
                                 <Text style={[styles.GridViewInsideTextItemStyle, styles.text]} onPress={this.GetGridViewItem.bind(this, item.page)} > {item.key} </Text>
                             </View>}
                         numColumns={2} />
-                    {/* <Footer>
-                        <FooterTab>
-                            <Button vertical>
-                                <Icon name="apps" />
-                                <Text>Apps</Text>
-                            </Button>
-                            <Button vertical>
-                                <Icon name="camera" />
-                                <Text>Camera</Text>
-                            </Button>
-                            <Button vertical active>
-                                <Icon name="navigate" />
-                                <Text>Navigate</Text>
-                            </Button>
-                            <Button vertical style={{ color: 'white' }}>
-                                <Icon name="account-circle" type={"MaterialIcons"} />
-                                <Text>Conta</Text>
-                            </Button>
-                        </FooterTab>
-                    </Footer> */}
                 </View>
             );
         }

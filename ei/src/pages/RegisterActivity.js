@@ -51,7 +51,6 @@ export default class App extends Component {
         await fetch(`${server}/internship/user/${user._id}`, config)
             .then((response) => response.json())
             .then((responseJson) => {
-                // console.log(responseJson);
 
                 this.setState({ internship: responseJson, formSent: true })
                 this.props.navigation.setParams({ title: `Registro de Atividade` })
@@ -136,7 +135,6 @@ export default class App extends Component {
                 // Selected hour (0-23), minute (0-59)
                 const m = (minute < 10) ? `0${minute}` : minute;
                 const h = (hour < 10) ? `0${hour}` : hour;
-                console.log(`time: ${hour}:${minute}`);
                 this.setState({ inputTime: `${h}:${m}` });
             }
         } catch ({ code, message }) {
@@ -155,7 +153,6 @@ export default class App extends Component {
                 // Selected hour (0-23), minute (0-59)
                 const m = (minute < 10) ? `0${minute}` : minute;
                 const h = (hour < 10) ? `0${hour}` : hour;
-                console.log(`time: ${hour}:${minute}`);
                 this.setState({ outputTime: `${h}:${m}` });
             }
         } catch ({ code, message }) {
@@ -170,7 +167,6 @@ export default class App extends Component {
             Object.keys(body).forEach(key => {
                 data.append(key, body[key]);
             });
-            console.log(data)
             return data;
         } else {
             data.append("image", {

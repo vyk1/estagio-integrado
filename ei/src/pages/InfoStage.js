@@ -51,7 +51,6 @@ export default class InfoStage extends Component {
                     const DownloadDir = fs.dirs.DownloadDir // this is the Downloads directory.
 
                     const path = DownloadDir + "/" + fileName + '.' + "pdf"
-                    console.log(path);
 
                     if (fs.exists(path)) {
                         fs.unlink(path)
