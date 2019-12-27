@@ -2,12 +2,7 @@ https://blog.rocketseat.com.br/criando-efeito-de-lazy-load-em-imagens-no-react-n
 ------------------------------------------------------
 https://oblador.github.io/react-native-vector-icons/
 
-4. imagens!-> usar sharp para reduzir tamanho!
-
-
 ----------------------
-ao fazer a página de login e cadastro, certificar que o id tem que estar
-no header!
 react-native start --reset-cache
 
 adb -s 80848834048785 install -r ./app/build/outputs/apk/release/app-release.apk 
