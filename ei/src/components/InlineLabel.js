@@ -9,7 +9,7 @@ export default class InlineLabel extends Component {
       <View>
         <Item inlineLabel>
           <Label>{label}</Label>
-          <Input onChangeText={onChangeText} value={value} secureTextEntry={secureTextEntry} />
+          <Input onChangeText={onChangeText} value={value} secureTextEntry={secureTextEntry} {...inputProps} />
         </Item>
       </View>
     );

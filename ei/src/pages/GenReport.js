@@ -29,6 +29,7 @@ export default class GenReport extends Component {
             internship: {},
             horasTotais: '',
             nroDias: '',
+            user: null
         }
     }
     async componentDidMount() {
@@ -38,7 +39,8 @@ export default class GenReport extends Component {
     async getInternshipByUID() {
 
         const user = await this.props.navigation.state.params.logado;
-        console.log(user);
+
+        this.setState({ user })
 
         const { token } = await this.props.navigation.state.params;
 
@@ -59,13 +61,11 @@ export default class GenReport extends Component {
                     }
                 })
                 .catch((error) => {
-                    console.error(error);
                 });
             this.props.navigation.setParams({ title: `Relatório de ${user.name}` })
 
         } else {
             const { student_id, name } = this.props.navigation.state.params;
-            console.log(student_id, name);
 
             this.props.navigation.setParams({ title: `Relatório de ${name}` })
 
@@ -78,7 +78,6 @@ export default class GenReport extends Component {
                     }
                 })
                 .catch((error) => {
-                    console.error(error);
                 });
         }
     }
@@ -105,7 +104,6 @@ export default class GenReport extends Component {
                 .subtract({ 'hours': inputTime[0], 'minutes': inputTime[1] })
                 .format('hh:mm');
 
-            console.log(newTime);
 
             arrayHoras.push(newTime)
             arrayDatas.push(el.date)
@@ -116,11 +114,8 @@ export default class GenReport extends Component {
         let sum = moment(arrayHoras[0], "HH:mm");
 
         let inicial = moment(arrayHoras[0], "HH:mm");
-        // console.log(inicial);
-        // console.log('inicial');
         for (let i = 0; i < arrayHoras.length; i++) {
             let h = arrayHoras[i].split(":");
-            console.log(h);
 
             if (h[1]) {
                 sum = sum.add(h[1], "minutes")
@@ -129,8 +124,10 @@ export default class GenReport extends Component {
                 sum = sum.add(h[0], "hours")
             }
         }
-
-        this.setState({ nroDias, horasTotais: sum.diff(inicial, 'hours') })
+        var ms = moment(sum, "DD/MM/YYYY HH:mm:ss").diff(moment(inicial, "DD/MM/YYYY HH:mm:ss"));
+        var d = moment.duration(ms);
+        var s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm");
+        this.setState({ nroDias, horasTotais: s })
     }
     async remove(id) {
         const { token } = await this.props.navigation.state.params;
@@ -139,7 +136,6 @@ export default class GenReport extends Component {
             await fetch(`${server}/activity/${id}`, { method: 'DELETE', headers: { 'x-access-token': token } })
                 .then(res => res.json())
                 .then(res => {
-                    console.log(res);
 
                     if (res.status == 200) {
                         Alert.alert(
@@ -161,7 +157,6 @@ export default class GenReport extends Component {
                 })
         }
         catch (error) {
-            console.log(error)
             Alert.alert(
                 'Erro',
                 'Ocorreu um erro... Tente novamente.')
@@ -172,8 +167,7 @@ export default class GenReport extends Component {
     }
 
     render() {
-        const { internship, nroDias, horasTotais, formSent } = this.state;
-        console.log(internship);
+        const { internship, nroDias, horasTotais, formSent, user } = this.state;
 
         if (!formSent) {
             return (
@@ -260,11 +254,15 @@ export default class GenReport extends Component {
 
                                                 <Text note>Descrição</Text>
                                                 <Text>{rowData.description}</Text>
-                                                <Right>
-                                                    <Button danger onPress={() => this.remove(rowData._id)}>
-                                                        <Text>Apagar</Text>
-                                                    </Button>
-                                                </Right>
+                                                {
+                                                    user.type == 1 && (
+                                                        <Right>
+                                                            <Button danger onPress={() => this.remove(rowData._id)}>
+                                                                <Text>Apagar</Text>
+                                                            </Button>
+                                                        </Right>
+                                                    )
+                                                }
 
                                             </Body>
                                         </CardItem>

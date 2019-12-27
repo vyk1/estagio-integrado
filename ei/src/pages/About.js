@@ -22,7 +22,17 @@ export default class About extends Component {
       fontSize: 15
     },
   };
+
+  state = {
+    logado: false
+  }
+
+  async componentDidMount() {
+    this.setState({ logado: await isLoggedIn() })
+  }
+
   render() {
+
     return (
       <Container style={styles.MainContainer}>
         <Content>
@@ -36,13 +46,13 @@ export default class About extends Component {
           <Text style={styles.text}>
             Esperamos que este aplicativo seja útil para você. Use e aproveite todas as ferramentas disponíveis.
         </Text>
-          <Text style={styles.text}>
-            Além disso, gostaríamos de conhecer a sua opinião sobre este aplicativo. Por favor, responda ao formulário do link abaixo. Você levará menos de 1 minuto.
-        </Text>
           {
-            isLoggedIn() &&
+            this.state.logado &&
             (
               <>
+                <Text style={styles.text}>
+                  Além disso, gostaríamos de conhecer a sua opinião sobre este aplicativo. Por favor, responda ao formulário do link abaixo. Você levará menos de 1 minuto.
+                </Text>
                 <Button block primary onPress={() => {
                   Linking.openURL(`https://docs.google.com/forms/d/1r9CITN_8QIGXI5uacS8ZMsT3KCC1gkm-Q6vsHfcN3ng/viewform?edit_requested=true`)
                 }}>
@@ -86,18 +96,3 @@ const styles = StyleSheet.create({
     margin: 17,
   },
 })
-//   container: {
-//     flex: 1,
-//     marginTop: 20,
-//     backgroundColor: '#F5FCFF',
-//   },
-//   welcome: {
-//     flex: 1,
-//     margin: 20,
-//     backgroundColor: 'orange',
-//     margin: 10,
-//     textAlign: 'center',
-//     fontSize: 20,
-    // paddingTop: 70,
-//   }
-// });

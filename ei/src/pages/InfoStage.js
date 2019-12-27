@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, FlatList, View, Platform, Linking } from 'react-native';
-import { CardItem, Text} from 'native-base'
+import { StyleSheet, FlatList, View, Platform, Linking, PermissionsAndroid } from 'react-native';
+import { CardItem, Text } from 'native-base'
 import server from "../config/server";
 import RNFetchBlob from 'rn-fetch-blob';
 import Esperador from '../components/Esperador';
@@ -39,39 +39,56 @@ export default class InfoStage extends Component {
     async handleDoc(item) {
         const { fileName, key, page, link } = item
         if (link != null) {
-            // this.GetGridViewItem(page, key, link)
             Linking.openURL(link);
         } else {
             this.setState({ loaded: false })
-            await RNFetchBlob
-                .config({
-                    addAndroidDownloads: {
-                        useDownloadManager: true, // <-- this is the only thing required
-                        // Optional, override notification setting (default to true)
-                        notification: true,
-                        title: `Download De ${fileName}.pdf Pronto`,
-                        // Optional, but recommended since android DownloadManager will fail when
-                        // the url does not contains a file extension, by default the mime type will be text/plain
-                        mime: 'application/pdf',
-                        description: `Arquivo Baixado pelo App EI - ${fileName}.`
+
+            try {
+                const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    const { config, fs } = RNFetchBlob
+
+                    const DownloadDir = fs.dirs.DownloadDir // this is the Downloads directory.
+
+                    const path = DownloadDir + "/" + fileName + '.' + "pdf"
+                    console.log(path);
+
+                    if (fs.exists(path)) {
+                        fs.unlink(path)
                     }
-                })
-                .fetch('GET', `${server}/files/docs/${fileName}.pdf`)
-                .then((resp) => {
-                    // the path of downloaded file
-                    console.log(resp);
-                    resp.path();
-                    this.setState({ loaded: true })
 
-                }).catch((e) => {
-                    console.log('====================================');
-                    console.log(e);
-                    console.log('====================================');
-                    this.setState({ loaded: true })
+                    let options = {
+                        fileCache: true,
+                        addAndroidDownloads: {
+                            useDownloadManager: true,
+                            notification: true,
+                            title: `Download De ${fileName}.pdf Pronto`,
+                            description: `Arquivo Baixado pelo App EI`,
+                            path: path,
+                        }
+                    }
+                    await config(options)
+                        .fetch('GET', `${server}/files/docs/${fileName}.pdf`)
+                        .then((res) => {
+                            this.setState({ msgDownload: `Arquivo Baixado: ${fileName}.pdf` })
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            this.setState({ msgDownload: `Ocorreu um erro ao baixar o arquivo ${fileName}.pdf` })
+                        })
+                } else {
+                    this.setState({ msgDownload: 'Permissão Negada! É necessário que você conceda acesso ao aplicativo para fazer download do arquivo.' })
+                }
+            } catch (err) {
+                console.warn(err);
+            } finally {
+                this.setState({ loaded: true })
 
-                })
+            }
         }
+
     }
+
     GetGridViewItem(page, key, link) {
         this.props.navigation.navigate(page, {
             title: key,
@@ -89,6 +106,13 @@ export default class InfoStage extends Component {
                     <CardItem header bordered>
                         <Text>Toque na opção desejada para fazer download ou acessar documentos</Text>
                     </CardItem>
+                    {
+                        this.state.msgDownload && (
+                            <CardItem>
+                                <Text>{this.state.msgDownload}</Text>
+                            </CardItem>
+                        )
+                    }
                     <FlatList
                         data={this.state.GridViewItems}
                         renderItem={({ item }) => <View style={styles.GridViewBlockStyle}>
@@ -109,8 +133,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flex: 1,
         margin: 10,
-        paddingTop: (Platform.OS) === 'ios' ? 20 : 0
-
+        paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
+        marginBottom: 0
     },
 
     GridViewBlockStyle: {

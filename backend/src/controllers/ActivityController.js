@@ -73,7 +73,8 @@ module.exports = {
                                 activity.save((err, activity) => {
                                     if (err) {
                                         console.log('deu algo de errado ao salvar');
-                                        return res.status(400).json({ status: 400, message: "Erro ao salvar atividade!" });
+                                        console.log(err);
+                                        return res.status(400).json({ status: 400, message: "Erro ao salvar atividade. Tente novamente." });
                                     } else {
                                         Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
                                             if (err == null) {
