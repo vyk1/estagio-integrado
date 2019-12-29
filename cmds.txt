@@ -1,0 +1,4 @@
+pm2 start my-app-pm2.json
+
+ou
+ pm2 serve <path> <port>
