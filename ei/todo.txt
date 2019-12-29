@@ -6,3 +6,7 @@ https://oblador.github.io/react-native-vector-icons/
 react-native start --reset-cache
 
 adb -s 80848834048785 install -r ./app/build/outputs/apk/release/app-release.apk 
+cd android
+./gradlew assembleRelease
+apk path: android\app\build\outputs\apk\debug\app-debug.apk
+explorer app\build\outputs\apk\debug\

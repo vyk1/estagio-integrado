@@ -15,15 +15,18 @@ const InternshipSchema = new mongoose.Schema({
      }],
      id_student: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'User'
+          ref: 'User',
+          required: true
      },
      id_advisor: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'User'
+          ref: 'User',
+          required: true
      },
      id_supervisor: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'User'
+          ref: 'User',
+          required: true
      },
 
 },

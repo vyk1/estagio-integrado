@@ -34,23 +34,22 @@ module.exports = {
         }
     },
     async store2(req, res) {
-        // store é obrigatório o estágio
-        console.log(req.body);
 
         if (req.file) {
 
-            const { date2, description, inputTime, outputTime, id_internship } = req.body
+            const { date, description, inputTime, outputTime, id_internship } = req.body
             // valida data
-            await Activity.find({ date: date2 }, (err, doc) => {
+            await Activity.find({ date }, (err, doc) => {
                 if (!err) {
                     // se não existir
                     if (!doc.length > 0) {
 
                         // const newName = new Date().getTime() + ".webp";
-                        const newName = new Date().getTime() + ".png";
+                        const newName = new Date().getTime() + "_min.png";
                         const destination = path.resolve(__dirname, '..', '..', 'uploads', newName);
 
                         tinify.key = authConfig.api;
+                        // file.path é do disp ou do doc?
                         const source = tinify.fromFile(req.file.path);
 
                         const resized = source.resize({
@@ -61,7 +60,7 @@ module.exports = {
                         resized.toFile(destination)
                             .then(() => {
                                 const obj = {
-                                    date: date2,
+                                    date,
                                     description,
                                     inputTime,
                                     outputTime,
@@ -83,15 +82,15 @@ module.exports = {
                                         });
                                     }
                                 })
-                            }).catch(err => {
+                                fs.unlink(`./uploads/${req.file.filename}`, err => {
+                                    if (err) console.log(err)
+                                })
+                            })
+                            .catch(err => {
                                 console.log(err);
                                 console.log("erro na compressão");
                                 return res.status(400).json({ status: 400, message: "Ocorreu um erro, por favor tente novamente." });
-                            }).then(() => {
-                                fs.unlink(`./uploads/${req.file.filename}`, err => {
-                                    if (err) console.log(err)
-                                });
-                            });
+                            })
                     } else {
                         console.log('não tá vago, retornando...');
                         fs.unlink(`./uploads/${req.file.filename}`, err => {
@@ -233,35 +232,57 @@ module.exports = {
     },
     async remove(req, res) {
         const { id } = req.params;
-        // return res.status(200).send({ message: id });
+        try {
+            const act = await Activity.findById(id)
 
-        await Activity.findByIdAndDelete(id, (err, act) => {
-            console.log(act);
-
-            if (err) {
-                console.log(err);
-                return res.status(500).send({ message: "Ocorreu um erro :(", status: 500 });
-            } else {
-                if (!act) { return res.status(404).send({ message: "Não foi encontrada esta atividade", status: 404 }) }
-
-                if (act.image != null) {
-                    fs.unlink(`./uploads/${act.image}`, err => {
-                        if (err)
-                            return res.status(500).send({ message: "Ocorreu um erro :(", status: 500 });
-                    })
-                }
-                // continuar daqui
-                Internship.findByIdAndUpdate(act.id_internship, { $pull: { id_activities: act._id } }, { new: true, useFindAndModify: false }, (err, internship) => {
-                    if (err) {
-                        console.log(err);
-                        return res.status(500).send(err);
-                    } else {
-                        console.log(internship);
-                        return res.status(200).send({ status: 200, message: "Atividade apagada com sucesso!" })
-                    }
-                })
+            if (act.image != null || "") {
+                fs.unlink(`./uploads/${act.image}`)
             }
-        });
+            Internship.findByIdAndUpdate(act.id_internship, { $pull: { id_activities: act._id } }, { new: true, useFindAndModify: false }, (err, internship) => {
+                act.remove();
+                if (err) {
+                    console.log(err);
+                } else {
+                    return res.status(200).send({ status: 200, message: "Atividade apagada com sucesso!" })
+                }
+            })
+            // return res.status(200).send({ message: act, status: 200 });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send({ message: "Ocorreu um erro :(", status: 500 });
+
+        }
+
+        // await Activity.findByIdAndRemove(id, (err, doc) => {
+        //     console.log(doc);
+        //     const act = doc;
+
+        //     if (err) {
+        //         console.log(err);
+        //         return res.status(500).send({ message: "Ocorreu um erro :(", status: 500 });
+        //     } else {
+        //         if (!act) { return res.status(404).send({ message: "Não foi encontrada esta atividade", status: 404 }) }
+
+        //         if (act.image != null) {
+        //             fs.unlink(`./uploads/${act.image}`, err => {
+        //                 if (err) {
+        //                     console.log(err);
+        //                     return res.status(500).send({ message: "Ocorreu um erro :(", status: 500 });
+        //                 }
+        //             })
+        //         }
+        //         // continuar daqui
+        //         Internship.findByIdAndUpdate(act.id_internship, { $pull: { id_activities: act._id } }, { new: true, useFindAndModify: false }, (err, internship) => {
+        //             if (err) {
+        //                 console.log(err);
+        //                 return res.status(500).send({ message: "Ocorreu um erro :(", status: 500 });
+        //             } else {
+        //                 console.log(internship);
+        //                 return res.status(200).send({ status: 200, message: "Atividade apagada com sucesso!" })
+        //             }
+        //         })
+        //     }
+        // });
     },
     async update(req, res) {
 

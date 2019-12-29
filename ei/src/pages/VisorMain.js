@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, FlatList, Text, View, Alert, Platform } from 'react-native';
-import { Container, Header, Content, Footer, FooterTab, Button, Icon, Item } from 'native-base';
 import Esperador from '../components/Esperador';
 import { readUser, onLogout, readToken } from "../config/auth";
 import { NavigationActions, StackActions } from 'react-navigation';
@@ -31,7 +30,7 @@ export default class VisorMain extends Component {
                 { key: 'Informações Sobre o Estágio', page: 'InfoStage' },
                 { key: 'Estagiários', page: 'ViewReports' },
                 { key: 'Para Refletir', page: 'ToThink' },
-                { key: 'Contatos', page: 'Contacts', icon: 'contacts' },
+                { key: 'Contatos', page: 'Contacts' },
                 { key: 'Fique Ligado!', page: 'StayOn' },
                 { key: 'Sobre o App', page: 'About' },
                 { key: 'Logout', page: 'logout' }
@@ -127,7 +126,6 @@ const styles = StyleSheet.create({
         margin: 10,
         paddingTop: 0,
     },
-
     GridViewBlockStyle: {
         justifyContent: 'center',
         flex: 1,

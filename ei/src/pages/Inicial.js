@@ -73,14 +73,14 @@ export default class About extends Component {
                 <Container style={styles.MainContainer}>
                     <Content>
                         <Image source={logo} style={styles.image}></Image>
-                        <Text style={[styles.text, {marginTop: 0}]}>
+                        <Text style={[styles.text, { marginTop: 0 }]}>
                             Estágio é a prática profissional em situação real
                             de trabalho. É um momento de formação orientada e
                             supervisionada, que articula a formação escolar e o mundo do trabalho. </Text>
-                        <Text style={[styles.text, {marginTop: 0}]}>
+                        <Text style={[styles.text, { marginTop: 0 }]}>
                             Este produto visa promover a interação entre o estagiário, o professor orientador e o supervisor da parte concedente, fornecendo a ponte necessária para que ela ocorra de forma prática e eficiente.
                                 </Text>
-                        <Text style={[styles.text, {marginTop: 0}]}>
+                        <Text style={[styles.text, { marginTop: 0 }]}>
                             Quer saber mais? <Text style={[styles.text, { color: 'blue' }]} onPress={() => {
                                 this.props.navigation.navigate('About')
                             }}>Clique aqui</Text>
@@ -120,8 +120,8 @@ const styles = StyleSheet.create({
     MainContainer: {
         justifyContent: 'center',
         flex: 1,
-        // marginHorizontal: 12,
-        paddingHorizontal: 8
+        paddingHorizontal: 8,
+        paddingRight: 2
     },
     image: {
         alignSelf: 'center',

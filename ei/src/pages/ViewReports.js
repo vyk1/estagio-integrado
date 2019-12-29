@@ -91,7 +91,7 @@ export default class ViewReports extends Component {
                                             <Text>{rowData.name}</Text>
                                         </Left>
                                         <Right>
-                                            <Text>=></Text>
+                                            <Text><Icon type="FontAwesome5" name="arrow-right"/></Text>
                                         </Right>
                                     </ListItem>
                                 ))}

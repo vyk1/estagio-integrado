@@ -75,8 +75,9 @@ const styles = StyleSheet.create({
     MainContainer: {
         justifyContent: 'center',
         flex: 1,
-        // marginHorizontal: 12,
-        paddingHorizontal: 8
+        paddingHorizontal: 8,
+        paddingRight: 2
+
     },
     image: {
         alignSelf: 'center',

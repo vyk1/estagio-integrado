@@ -29,7 +29,7 @@ export default class App extends Component {
 
     constructor(props) {
         super(props);
-        this.initialState = { internship: [], acceptedMIMETypes: ["image/png", "image/jpeg", "image/webp"], formSent: false, companyName: '', nameError: '', date: '', date2: '', file: null, description: '', inputTime: '', outputTime: '' };
+        this.initialState = { internship: [], acceptedMIMETypes: ["image/png", "image/jpeg", "image/webp"], formSent: false, companyName: '', nameError: 'Verifique seus dados.', date: '', date2: '', file: null, description: 'Teste', inputTime: '', outputTime: '' };
 
         this.state = this.initialState;
     }
@@ -70,14 +70,14 @@ export default class App extends Component {
             [{ text: 'OK' }])
 
     }
-    checkInputs = async () => {
+    checkInputs = () => {
         if (this.state.inputTime.trim() === "" || this.state.inputTime === "") {
-            await this.setState({ nameError: "Hora de Entrada Necessária." });
+            this.setState({ nameError: "Hora de Entrada Necessária." });
             this.showAlert();
             return false
         } else {
             if (this.state.outputTime.trim() === "" || this.state.outputTime === "") {
-                await this.setState({ nameError: "Hora de Saída Necessária." });
+                this.setState({ nameError: "Hora de Saída Necessária." });
                 this.showAlert();
                 return false
             } else {
@@ -89,21 +89,21 @@ export default class App extends Component {
 
                 if ((hours === 0 && minutes > 0) || (hours > 0 && minutes >= 0)) {
                     if (this.state.date === "" || null) {
-                        await this.setState({ nameError: "Data da Atividade Necessária." });
+                        this.setState({ nameError: "Data da Atividade Necessária." });
                         this.showAlert();
                         return false
                     } else {
                         if (this.state.description.trim() === "") {
-                            await this.setState({ nameError: "Descrição Necessária." });
+                            this.setState({ nameError: "Descrição Necessária." });
                             this.showAlert();
                             return false
                         } else {
-                            await this.setState({ nameError: "" });
+                            this.setState({ nameError: "" });
                             return true
                         }
                     }
                 } else {
-                    await this.setState({ nameError: "Hora de Saída Menor ou Igual a de Entrada." });
+                    this.setState({ nameError: "Hora de Saída Menor ou Igual a de Entrada." });
                     this.showAlert();
                     return false
                 }
@@ -185,16 +185,15 @@ export default class App extends Component {
 
     sendFormWithImage = async () => {
 
-        const { inputTime, outputTime, date2, file, description, internship } = this.state;
-
-        await this.setState({ date2: this.state.date.toISOString(), formSent: false })
-
+        const { date, inputTime, outputTime, file, description, internship } = this.state;
         const { token } = this.props.navigation.state.params;
 
-        const config = await {
+        this.setState({ formSent: false })
+
+        const config = {
             method: 'POST',
             body: this.createFormData(file, {
-                date2,
+                date: date.toISOString(),
                 description,
                 inputTime,
                 outputTime,
@@ -248,8 +247,8 @@ export default class App extends Component {
         const { inputTime, outputTime, date, date2, description, internship } = this.state;
         const { token } = this.props.navigation.state.params;
 
-        await this.setState({ date2: this.state.date.toISOString(), formSent: false })
-        const config = await {
+        this.setState({ date2: this.state.date.toISOString(), formSent: false })
+        const config = {
             method: 'POST',
             body: JSON.stringify({
                 date,
@@ -307,9 +306,13 @@ export default class App extends Component {
 
         let checagem = this.checkInputs();
 
+        console.log("checagem");
+        console.log(checagem);
+
         if (!checagem) {
             return false
         } else {
+
             if (this.state.file == null) {
                 Alert.alert(
                     'Carregamento de Foto',
@@ -324,6 +327,7 @@ export default class App extends Component {
                     ],
                     { cancelable: true },
                 );
+                return false
             } else {
                 if (!this.state.acceptedMIMETypes.includes(this.state.file.type)) {
                     Alert.alert(
@@ -338,6 +342,7 @@ export default class App extends Component {
                         ],
                         { cancelable: true },
                     );
+                    return false
                 } else {
                     this.sendFormWithImage()
                 }
@@ -397,7 +402,8 @@ export default class App extends Component {
                                             <Text>Foto Carregada:</Text>
                                             <Image
                                                 source={{ uri: file.uri }}
-                                                style={{ width: 300, height: 300, alignSelf: 'center', marginBottom: 15 }}
+                                                // style={{ width: "250",  alignSelf: 'center', marginBottom: 15 }}
+                                                style={styles.image}
                                             />
                                             <BlueButton onPress={() => this.setState({ file: null })}>
                                                 Apagar foto
@@ -429,7 +435,17 @@ const styles = StyleSheet.create({
     MainContainer: {
         justifyContent: 'center',
         flex: 1,
-        marginHorizontal: 10,
+        paddingHorizontal: 8,
+        paddingRight: 2,
         alignContent: "space-between"
+    },
+    image: {
+        alignSelf: 'center',
+        width: 300,
+        height: 300,
+        resizeMode: 'contain',
+        flex: 1,
+        margin: 12
     }
+
 })

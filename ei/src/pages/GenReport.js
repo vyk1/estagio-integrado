@@ -36,6 +36,7 @@ export default class GenReport extends Component {
     }
 
     async getInternshipByUID() {
+        this.setState({ formSent: false })
 
         const user = await this.props.navigation.state.params.logado;
 
@@ -54,29 +55,36 @@ export default class GenReport extends Component {
             await fetch(`${server}/internship/user/${student_id}`, config)
                 .then((response) => response.json())
                 .then((responseJson) => {
-                    this.setState({ internship: responseJson, formSent: true })
+                    this.setState({ internship: responseJson })
                     if (responseJson.status != 404) {
                         this.CALC()
                     }
                 })
                 .catch((error) => {
+                    console.log(error);
+                }).finally(() => {
+                    this.setState({ formSent: true })
+                    this.props.navigation.setParams({ title: `Relatório de ${user.name}` })
                 });
-            this.props.navigation.setParams({ title: `Relatório de ${user.name}` })
 
         } else {
             const { student_id, name } = this.props.navigation.state.params;
 
-            this.props.navigation.setParams({ title: `Relatório de ${name}` })
 
             await fetch(`${server}/internship/user/${student_id}`, config)
                 .then((response) => response.json())
                 .then((responseJson) => {
-                    this.setState({ internship: responseJson, formSent: true })
+                    this.setState({ internship: responseJson })
                     if (responseJson.status != 404) {
                         this.CALC()
                     }
                 })
                 .catch((error) => {
+                    console.log(error);
+                }).finally(() => {
+                    this.setState({ formSent: true })
+                    this.props.navigation.setParams({ title: `Relatório de ${name}` })
+
                 });
         }
     }
@@ -99,9 +107,11 @@ export default class GenReport extends Component {
 
             //h f - h i
             // subraindo horas das atvs
+            // moment HH é 24h format
+            // moment hh é 12h format
             var newTime = moment(outputTime, "HH:mm")
                 .subtract({ 'hours': inputTime[0], 'minutes': inputTime[1] })
-                .format('hh:mm');
+                .format('HH:mm');
 
 
             arrayHoras.push(newTime)
@@ -181,7 +191,7 @@ export default class GenReport extends Component {
                 )
             } else {
                 return (
-                    <Container style={styles.teste}>
+                    <Container style={styles.MainContainer}>
                         <ScrollView>
                             <Content >
                                 <Card key={0}>
@@ -256,7 +266,25 @@ export default class GenReport extends Component {
                                                 {
                                                     user.type == 1 && (
                                                         <Right>
-                                                            <Button danger onPress={() => this.remove(rowData._id)}>
+                                                            <Button danger onPress={() => {
+                                                                Alert.alert(
+                                                                    'Exclusão de Atividade',
+                                                                    'Esta operação é irreversível. Deseja prosseguir mesmo assim?',
+                                                                    [
+                                                                        {
+                                                                            text: 'OK', onPress: () => this.remove(rowData._id)
+                                                                        },
+                                                                        {
+                                                                            text: 'Não',
+                                                                            onPress: () => { return false },
+                                                                            style: 'cancel',
+                                                                        },
+                                                                    ],
+                                                                    { cancelable: true },
+                                                                );
+                                                            }
+                                                            }
+                                                            >
                                                                 <Text>Apagar</Text>
                                                             </Button>
                                                         </Right>
@@ -284,11 +312,13 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         flex: 1
     },
-    teste: {
+    MainContainer: {
         fontSize: 18,
         fontFamily: 'monospace',
         fontFamily: 'RobotoMono-Light',
         textAlign: 'justify',
-        margin: 2,
+        justifyContent: 'center',
+        flex: 1,
+        paddingRight: 2
     }
 })
