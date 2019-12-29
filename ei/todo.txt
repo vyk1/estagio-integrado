@@ -9,4 +9,4 @@ adb -s 80848834048785 install -r ./app/build/outputs/apk/release/app-release.apk
 cd android
 ./gradlew assembleRelease
 apk path: android\app\build\outputs\apk\
-explorer app\build\outputs\apk\
+explorer .\app\build\outputs\apk\
