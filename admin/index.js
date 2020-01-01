@@ -3,13 +3,12 @@ const path = require('path');
 
 const app = express();
 
-// Serve the static files from the React app
-app.use(express.static(path.join(__dirname, './build')));
+app.use('/', express.static(path.join(__dirname + '/build')));
 
-// Handles any requests that don't match the ones above
-app.get('/*', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname + '/build/index.html'));
 });
 
 console.log('ok');
+console.log('http://localhost:21185/');
 app.listen(21185);
