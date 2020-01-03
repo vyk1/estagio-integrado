@@ -1,20 +1,12 @@
 {
-  "files": {
-    "main.css": "./static/css/main.a308f591.chunk.css",
-    "main.js": "./static/js/main.db157f23.chunk.js",
-    "main.js.map": "./static/js/main.db157f23.chunk.js.map",
-    "runtime~main.js": "./static/js/runtime~main.d653cc00.js",
-    "runtime~main.js.map": "./static/js/runtime~main.d653cc00.js.map",
-    "static/css/2.df742036.chunk.css": "./static/css/2.df742036.chunk.css",
-    "static/js/2.3ccf0f3b.chunk.js": "./static/js/2.3ccf0f3b.chunk.js",
-    "static/js/2.3ccf0f3b.chunk.js.map": "./static/js/2.3ccf0f3b.chunk.js.map",
-    "index.html": "./index.html",
-    "precache-manifest.83363aed1b98486eec6901d11bdf5fb6.js": "./precache-manifest.83363aed1b98486eec6901d11bdf5fb6.js",
-    "service-worker.js": "./service-worker.js",
-    "static/css/2.df742036.chunk.css.map": "./static/css/2.df742036.chunk.css.map",
-    "static/css/main.a308f591.chunk.css.map": "./static/css/main.a308f591.chunk.css.map",
-    "static/media/pe-icon-7-stroke.css": "./static/media/Pe-icon-7-stroke.dedf2698.svg",
-    "static/media/bootstrap.min.css": "./static/media/glyphicons-halflings-regular.fa277232.woff",
-    "static/media/logo1.png": "./static/media/logo1.a1a3c86e.png"
-  }
+  "main.css": "static/css/main.c22de44d.css",
+  "main.css.map": "static/css/main.c22de44d.css.map",
+  "main.js": "static/js/main.cd8ead28.js",
+  "main.js.map": "static/js/main.cd8ead28.js.map",
+  "static\\media\\fontawesome-webfont.eot": "static/media/fontawesome-webfont.674f50d2.eot",
+  "static\\media\\fontawesome-webfont.svg?v=4.7.0": "static/media/fontawesome-webfont.912ec66d.svg",
+  "static\\media\\fontawesome-webfont.ttf?v=4.7.0": "static/media/fontawesome-webfont.b06871f2.ttf",
+  "static\\media\\fontawesome-webfont.woff2?v=4.7.0": "static/media/fontawesome-webfont.af7ae505.woff2",
+  "static\\media\\fontawesome-webfont.woff?v=4.7.0": "static/media/fontawesome-webfont.fee66e71.woff",
+  "static\\media\\logo.png": "static/media/logo.6777486e.png"
 }
