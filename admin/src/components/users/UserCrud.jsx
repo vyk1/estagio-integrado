@@ -6,6 +6,7 @@ import Footer from '../template/Footer'
 import { getToken } from '../auth'
 import api from '../../Server'
 import InputMask from "react-input-mask"
+import '../template/Tables.css'
 
 const headerProps = {
     icon: 'edit',
@@ -144,9 +145,9 @@ export default class UserCrud extends Component {
             <table className="table mt-4">
                 <thead>
                     <tr>
-                        <th>Nome</th>
-                        <th>E-mail</th>
-                        <th>Ações</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Editar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -160,9 +161,9 @@ export default class UserCrud extends Component {
         return this.state.list.map(user => {
             return (
                 <tr key={user._id}>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>
+                    <td data-label="Nome">{user.name}</td>
+                    <td data-label="Email">{user.email}</td>
+                    <td data-label="Editar">
                         <button className="btn btn-warning"
                             onClick={() => this.load(user)}>
                             <i className="fa fa-pencil"></i>

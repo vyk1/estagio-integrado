@@ -5,7 +5,7 @@ import Nav from '../template/Nav'
 import Footer from '../template/Footer'
 import { getToken } from '../auth'
 import api from '../../Server'
-// import InputMask from "react-input-mask"
+import '../template/Tables.css'
 
 const headerProps = {
     icon: 'inbox',
@@ -44,6 +44,7 @@ export default class UserCrud extends Component {
         this.setState({
             list: response.data,
             status: response.status,
+            message: ""
         })
     }
 
@@ -142,19 +143,19 @@ export default class UserCrud extends Component {
         return (
             <div>
                 <p><strong>{this.state.message}</strong></p>
-                <table className="table mt-4" >
+                <table>
                     <thead>
                         <tr>
-                            <th>Nome</th>
-                            <th>E-mail</th>
-                            <th>Tipo</th>
-                            <th>Ações</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">E-mail</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.renderRows()}
                     </tbody>
-                </table >
+                </table>
             </div>
         )
     }
@@ -176,10 +177,10 @@ export default class UserCrud extends Component {
         return this.state.list.map(user => {
             return (
                 <tr key={user._id}>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>{this.getType(user.type)}</td>
-                    <td>
+                    <td data-label="Nome">{user.name}</td>
+                    <td data-label="Email">{user.email}</td>
+                    <td data-label="Tipo">{this.getType(user.type)}</td>
+                    <td data-label="Ações">
                         <i style={{ padding: "10px" }} className="fa fa-user-times" classID={user._id} data-info={user.name} onClick={(e) => this.decline(e)} />
                         <i style={{ padding: "10px" }} className="fa fa-user-plus" classID={user._id} data-info={user.name} onClick={(e) => this.accept(e)} />
                     </td>

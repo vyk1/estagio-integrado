@@ -5,7 +5,7 @@ import Nav from '../template/Nav'
 import Footer from '../template/Footer'
 import { getToken } from '../auth'
 import api from '../../Server'
-// import InputMask from "react-input-mask"
+import '../template/Tables.css'
 
 const headerProps = {
     icon: 'users',
@@ -47,24 +47,23 @@ export default class UserCrud extends Component {
 
     renderTable() {
         return (
-            // <div >
-            <div className="col-12">
-                <p> <strong>{this.state.message}</strong></p>
-                <table className="table-striped table mt-4" >
+            <div>
+                <p><strong>{this.state.message}</strong></p>
+                <table>
                     <thead>
                         <tr>
-                            <th>Nome</th>
-                            <th>E-mail</th>
-                            <th>Fone</th>
-                            <th>Tipo</th>
-                            <th>Email Confirmado</th>
-                            <th>Verificado</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">E-mail</th>
+                            <th scope="col">Fone</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">E-Confirmado</th>
+                            <th scope="col">Verificado</th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.renderRows()}
                     </tbody>
-                </table >
+                </table>
             </div>
         )
     }
@@ -86,12 +85,12 @@ export default class UserCrud extends Component {
         return this.state.list.map(user => {
             return (
                 <tr key={user._id}>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>{user.phone}</td>
-                    <td>{this.getType(user.type)}</td>
-                    <td>{user.emailConfirmed ? "Sim" : "Não"}</td>
-                    <td>{user.verified ? "Sim" : "Ainda Não"}</td>
+                    <td data-label="Nome">{user.name}</td>
+                    <td data-label="E-mail">{user.email}</td>
+                    <td data-label="Fone">{user.phone}</td>
+                    <td data-label="Tipo">{this.getType(user.type)}</td>
+                    <td data-label="E-Confirmado">{user.emailConfirmed ? "Sim" : "Não"}</td>
+                    <td data-label="Verificado">{user.verified ? "Sim" : "Ainda Não"}</td>
                 </tr>
             )
         })

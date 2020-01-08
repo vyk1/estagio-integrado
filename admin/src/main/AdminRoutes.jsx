@@ -7,9 +7,9 @@ import Home from '../components/home/Home'
 import UserCrud from '../components/users/UserCrud'
 import AllActMembers from '../components/users/AllActMembers'
 import AllNotActMembers from '../components/users/AllNotActMembers'
-import Login from '../components/login/Login'
 import Logout from '../components/logout/Logout'
 import NewInternship from '../components/internship/NewInternship'
+import { BrowserRouter } from 'react-router-dom'
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
@@ -24,15 +24,15 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
     />
 );
 
+
 export default props =>
-    <Switch>
-        <Route path='/sign-in' component={Login} />
-        <PrivateRoute exact path='/' component={Home} />
-        <PrivateRoute exact path='/admin' component={Home} />
-        <PrivateRoute path='/membros' component={AllActMembers} />
-        <PrivateRoute path='/editar-membro' component={UserCrud} />
-        <PrivateRoute path='/nao-verificados' component={AllNotActMembers} />
-        <PrivateRoute path='/novo-estagio' component={NewInternship} />
-        <PrivateRoute path='/logout' component={Logout} />
-        <Redirect from='/' to='/admin' />
-    </Switch>
+    <BrowserRouter>
+        <Switch>
+            <PrivateRoute exact path={`/`} component={Home} />
+            <PrivateRoute path={`/membros`} component={AllActMembers} />
+            <PrivateRoute path={`/editar-membro`} component={UserCrud} />
+            <PrivateRoute path={`/nao-verificados`} component={AllNotActMembers} />
+            <PrivateRoute path={`/novo-estagio`} component={NewInternship} />
+            <PrivateRoute path={`/logout`} component={Logout} />
+        </Switch>
+    </BrowserRouter>

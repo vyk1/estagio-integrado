@@ -7,13 +7,11 @@ import './Login.css';
 export default class Login extends Component {
     constructor(props) {
         super(props);
-        //Set default message 
         this.state = {
             disabled: false,
-            message: 'Carregando...',
+            message: '',
             email: '',
             password: '',
-            msg: '',
         }
     };
 
@@ -25,9 +23,8 @@ export default class Login extends Component {
     }
 
     onSubmit = async (event) => {
-        console.log('enviou');
-
-        this.setState({ disabled: true, msg: "Carregando..." })
+        const { email, password } = this.state
+        this.setState({ disabled: true, message: "Verificando..." })
         event.preventDefault();
         const config = {
             headers: {
@@ -35,23 +32,21 @@ export default class Login extends Component {
             }
         }
 
-        await api.post('/user/admin/auth', JSON.stringify(this.state), config)
+        await api.post('/user/admin/auth', JSON.stringify({ email, password }), config)
             .then(res => {
+
                 if (res.status === 200) {
                     login(res.data.token)
-
-                    this.props.history.push('/admin/membros');
-
-                } else {
-
-                    return false
+                    this.props.history.push('/admin');
                 }
             })
             .catch(err => {
-                this.setState({ msg: "Ocorreu um Erro. Tente novamente." })
+                if (err.response.status === 401) {
+                    this.setState({ message: err.response.data.message })
+                } else {
+                    this.setState({ message: "Ocorreu um Erro. Tente novamente." })
+                }
                 console.log(err);
-
-                // this.setState({ msg: "Ocorreu um Erro. Tente novamente." + err.response.data })
                 return false
             }).finally(() => {
                 this.setState({ disabled: false })
@@ -63,18 +58,9 @@ export default class Login extends Component {
             <div className="App">
                 <div className="auth-wrapper">
                     <div className="auth-inner">
+                        {this.state.message}
                         <form onSubmit={this.onSubmit}>
-                            {/* {
-                                this.state.msg && (
-                                    <Alert bsStyle="warning">
-                                        <span>
-                                            <b> {this.state.msg} </b>
-                                        </span>
-                                    </Alert>
-                                )
-                            } */}
                             <h3>Login <img src={image} alt="logoEI" height="60px" /></h3>
-                            {/* <h3>Login <Logo/></h3> */}
 
                             <div className="form-group">
                                 <label>Email</label>
@@ -87,9 +73,7 @@ export default class Login extends Component {
                             </div>
 
                             <button type="submit" className="btn btn-primary btn-block" disabled={this.state.disabled}>Enviar</button>
-                            <p className="forgot-password text-right">
-                                {/* Esqueceu sua <a href="/forgot">Senha?</a> */}
-                            </p>
+                            {/* <p className="forgot-password text-right"></p> */}
                         </form>
                     </div>
                 </div>
