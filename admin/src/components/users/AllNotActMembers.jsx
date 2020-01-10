@@ -100,8 +100,8 @@ export default class UserCrud extends Component {
     async accept(e) {
         await e.persist()
 
-        const name = e.target.attributes[3].value;
-        const classid = e.target.attributes[2].value
+        const name = e.target.attributes[2].value;
+        const classid = e.target.attributes[1].value;
 
         if (window.confirm(`Você tem certeza que deseja aceitar o usuário ${name}?`)) {
 
