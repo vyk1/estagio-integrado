@@ -51,13 +51,9 @@ export default class UserCrud extends Component {
 
     async decline(e) {
         await e.persist()
-        console.log(e.target.attributes[3]);
-        console.log(e.target);
 
-        const name = e.target.attributes[3].value;
-        const classid = e.target.attributes[2].value;
-
-
+        const name = e.target.attributes[2].value;
+        const classid = e.target.attributes[1].value;
 
         if (window.confirm(`Você tem certeza que deseja apagar o usuário ${name}?`)) {
 
@@ -186,8 +182,8 @@ export default class UserCrud extends Component {
                     <td data-label="Email">{user.email}</td>
                     <td data-label="Tipo">{this.getType(user.type)}</td>
                     <td data-label="Ações">
-                        <i className="fa fa-user-times" classID={user._id} data-info={user.name} onClick={(e) => this.decline(e)} />
                         <i className="fa fa-user-plus" classID={user._id} data-info={user.name} onClick={(e) => this.accept(e)} />
+                        <i className="fa fa-user-times" classID={user._id} data-info={user.name} onClick={(e) => this.decline(e)} />
                     </td>
                 </tr>
             )
