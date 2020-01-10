@@ -12,7 +12,7 @@ export default props =>
             subtitle="Página Administrativa para o App Estágio Integrado.">
             <div className='display-4'>Bem Vindo!</div>
             <hr />
-            <p className="mb-0">Selecione a operação desejada no menu ao lado.</p>
+            <p className="mb-0">Selecione a operação desejada no menu.</p>
         </Main>
         <Footer />
     </div>
