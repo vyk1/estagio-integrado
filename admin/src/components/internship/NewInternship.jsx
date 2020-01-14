@@ -173,16 +173,16 @@ export default class NewInternship extends Component {
                             <div className="col-12">
                                 <div className="form-group">
                                     <label>Orientador</label>
-                                    <select id="id_supervisor" className="form-control" onChange={this.handleChange.bind(this)}>
-                                        {this.state.supervisors}
+                                    <select id="id_advisor" className="form-control" onChange={this.handleChange.bind(this)}>
+                                        {this.state.advisors}
                                     </select>
                                 </div>
                             </div>
                             <div className="col-12">
                                 <div className="form-group">
                                     <label>Supervisor</label>
-                                    <select id="id_advisor" className="form-control" onChange={this.handleChange.bind(this)}>
-                                        {this.state.advisors}
+                                    <select id="id_supervisor" className="form-control" onChange={this.handleChange.bind(this)}>
+                                        {this.state.supervisors}
                                     </select>
                                 </div>
                             </div>
