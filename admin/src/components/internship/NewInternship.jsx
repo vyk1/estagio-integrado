@@ -13,7 +13,7 @@ const headerProps = {
 }
 
 const initialState = {
-    company: "", description: ""
+    company: "", description: "", message: []
 }
 
 export default class NewInternship extends Component {
@@ -39,7 +39,7 @@ export default class NewInternship extends Component {
         if (response.data.length === 0) {
             arrTen.push(<option disabled key={null}>Não há Estudantes a Serem Associados à Estágios</option>)
             this.setState({
-                message: "Não há Estudantes a Serem Associados à Estágios",
+                message: [...this.state.message, "Não há Estudantes a Serem Associados à Estágios"],
                 disabled: true,
             });
 
@@ -58,7 +58,7 @@ export default class NewInternship extends Component {
         if (response.data.length === 0) {
             arrTen.push(<option disabled key={null}>Não há Orientadores a Serem Associados à Estágios</option>)
             this.setState({
-                message: "Não há Orientadores a Serem Associados à Estágios",
+                message: [...this.state.message, "Não há Orientadores a Serem Associados à Estágios"],
                 disabled: true,
             });
         } else {
@@ -76,7 +76,7 @@ export default class NewInternship extends Component {
         if (response.data.length === 0) {
             arrTen.push(<option disabled key={null}>Não há Supervisores a Serem Associados à Estágios</option>)
             this.setState({
-                message: "Não há Supervisores a Serem Associados à Estágios",
+                message: [...this.state.message, "Não há Supervisores a Serem Associados à Estágios"],
                 disabled: true,
             });
         } else {
@@ -141,9 +141,6 @@ export default class NewInternship extends Component {
             return false
         }
         this.save()
-
-
-
     }
 
     renderForm() {
@@ -225,14 +222,29 @@ export default class NewInternship extends Component {
     }
 
     render() {
+        const { message } = this.state
+
         return (
             <div className="app">
                 <Logo />
                 <Nav />
                 <Main {...headerProps}>
-                    {this.state.message ? (
-                        <p> <strong>{this.state.message}</strong></p>
-                    ) : ""}
+                    <div>
+
+                        {
+                            this.state.message ? (
+                                message.map((element, i) => {
+                                    console.log(element);
+                                    return (
+                                        <div>
+                                            <p>{element}</p>
+                                        </div>
+                                    )
+                                })
+                            ) : ""
+
+                        }
+                    </div>
                     {this.renderForm()}
                 </Main>
                 <Footer />

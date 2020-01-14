@@ -40,13 +40,13 @@ export default class UserCrud extends Component {
 
         if (response.data.length <= 0) {
             this.setState({ message: "Não há membros a serem verificados." })
+        } else {
+            this.setState({
+                list: response.data,
+                status: response.status,
+                message: ""
+            })
         }
-
-        this.setState({
-            list: response.data,
-            status: response.status,
-            message: ""
-        })
     }
 
     async decline(e) {
