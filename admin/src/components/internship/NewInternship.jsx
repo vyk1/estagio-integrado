@@ -247,7 +247,7 @@ export default class NewInternship extends Component {
                     </div>
                     {this.renderForm()}
                 </Main>
-                <Footer />
+                <Footer /> 
             </div>
         )
     }
