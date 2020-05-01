@@ -107,6 +107,7 @@ export default class NewInternship extends Component {
     async save() {
         const { company, id_student, id_supervisor, id_advisor, description } = this.state
 
+        this.setState({ disabled: true })
         let token = getToken()
 
         const config = {
@@ -119,7 +120,7 @@ export default class NewInternship extends Component {
         if (res.status === 201) {
 
             this.setState({
-                message: res.data.message,
+                message: [...this.state.message, res.data.message],
                 company: "",
                 description: "",
             })
@@ -127,7 +128,7 @@ export default class NewInternship extends Component {
 
         } else {
             this.setState({
-                message: res.data.message,
+                message: [...this.state.message, res.data.message],
             })
         }
     }
@@ -137,7 +138,7 @@ export default class NewInternship extends Component {
 
         const { company, id_student, description } = this.state
         if (!(company || description || id_student)) {
-            this.setState({ message: "Por favor, preencha o completamente formulário." })
+            this.setState({ message: ["Por favor, preencha o completamente formulário."] })
             return false
         }
         this.save()
@@ -216,11 +217,6 @@ export default class NewInternship extends Component {
         }
     }
 
-
-    load(user) {
-        this.setState({ user, message: "" })
-    }
-
     render() {
         const { message } = this.state
 
@@ -247,7 +243,7 @@ export default class NewInternship extends Component {
                     </div>
                     {this.renderForm()}
                 </Main>
-                <Footer /> 
+                <Footer />
             </div>
         )
     }

@@ -1,0 +1,19 @@
+
+pm2 stop all
+pm2 delete all
+
+#from appnodejs
+
+cd appnodejs/projetoEi
+
+rm -rf ei/
+
+cd admin/
+pm2 serve ./src/build/ 21185 --name "Static Admin"
+
+cd ../../backend
+pm2 serve ./index.js --name "Server"
+
+cd ../
+
+mv -r releases/. ../../www/.

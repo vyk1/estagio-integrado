@@ -1,0 +1,17 @@
+{
+    "scripts": {
+        "check_nvm": "nvm use 8.11.3",
+        "back": "cd backend/ && yarn dev",
+        "mob": "cd ei/ && yarn start",
+        "web_admin": "cd admin/ && yarn start",
+        "b-m": "start yarn back && start yarn mob",
+        "b-w": "start yarn back && start yarn web_admin",
+        "build_mob": "cd ei/android && ./gradlew assembleRelease && explorer.exe ./app/build/outputs/apk/",
+        "build_web_admin": "cd admin/ && yarn build",
+
+        "predeploy": "pm2 stop all && pm2 delete all && rm -rf ei/",
+        "d_admin": "cp -r ./admin/. ../admin/. && cd ../admin && pm2 serve ./src/build/ 21185 --name 'Static Admin'",
+        "d_backend": "cd ./ backend && pm2 serve ./index.js --name 'Server'",
+        "d_releases": "cd ./ releases && mv -r . ../../../www/."
+    }
+}

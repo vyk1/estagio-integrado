@@ -1,8 +1,9 @@
 footer.footer {
-    display: flex;
     align-items: flex-start;
-    justify-content: space-between;
-    padding: 0 25px;
     background-color: #FFF;
     box-shadow: var(--shadow);
+}
+
+footer.footer i {
+    padding-left: 15px;
 }

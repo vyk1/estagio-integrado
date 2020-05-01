@@ -27,7 +27,6 @@ module.exports = {
      // traz todos os estudantes
      async getStudentsRelated(req, res) {
           const { id_dvisor } = req.params;
-          console.log(req.params);
           
           //busca todos estágios em que este user faça parte
           await Internship.find({ $or: [{ id_advisor: id_dvisor }, { id_supervisor: id_dvisor }] }, (err, internships) => {
@@ -125,7 +124,6 @@ module.exports = {
                     }
                }, (err, contacts) => {
                     if (contacts) {
-                         console.log(contacts);
                          return res.status(200).send({ status: 200, contacts })
                     } else {
                          console.log(err);

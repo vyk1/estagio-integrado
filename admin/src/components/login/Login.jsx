@@ -58,6 +58,10 @@ export default class Login extends Component {
             <div className="App">
                 <div className="auth-wrapper">
                     <div className="auth-inner">
+                        <a href="http://estagiointegrado.kinghost.net">
+                            <i className="fa fa-arrow-left"></i>
+                            Voltar
+                        </a>
                         {this.state.message}
                         <form onSubmit={this.onSubmit}>
                             <h3>Login <img src={image} alt="logoEI" height="60px" /></h3>

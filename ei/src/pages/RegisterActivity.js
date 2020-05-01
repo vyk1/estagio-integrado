@@ -29,7 +29,7 @@ export default class App extends Component {
 
     constructor(props) {
         super(props);
-        this.initialState = { internship: [], acceptedMIMETypes: ["image/png", "image/jpeg", "image/webp"], formSent: false, companyName: '', nameError: 'Verifique seus dados.', date: '', date2: '', file: null, description: 'Teste', inputTime: '', outputTime: '' };
+        this.initialState = { internship: [], acceptedMIMETypes: ["image/png", "image/jpeg", "image/webp"], formSent: false, companyName: '', nameError: 'Verifique seus dados.', date: '', date2: '', file: null, description: '', inputTime: '', outputTime: '' };
 
         this.state = this.initialState;
     }
@@ -286,7 +286,7 @@ export default class App extends Component {
                             res.message,
                             [
                                 {
-                                    text: 'OK', onPress: () => { console.log('res negativa') }
+                                    text: 'OK', onPress: () => { console.log('ops...') }
                                 }
                             ])
                     }
@@ -356,7 +356,7 @@ export default class App extends Component {
         const { internship, formSent, inputTime, outputTime, file, description } = this.state;
         if (!formSent) {
             return (
-                <Esperador />
+                <Esperador critical={true} />
             )
         } else {
             if (internship.status == 404) {

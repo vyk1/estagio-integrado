@@ -15,7 +15,8 @@ const headerProps = {
 
 const initialState = {
     list: [],
-    message: 'Carregando',
+    message: [],
+    loaded: false
 }
 
 export default class UserCrud extends Component {
@@ -27,6 +28,7 @@ export default class UserCrud extends Component {
     }
 
     async getUser() {
+        this.setState({ loaded: false })
         let token = getToken()
 
         const config = {
@@ -39,14 +41,17 @@ export default class UserCrud extends Component {
         const response = await api.get('/users/notVerified', config)
 
         if (response.data.length <= 0) {
-            this.setState({ message: "Não há membros a serem verificados." })
+            this.setState({
+                message: [...this.state.message, "Não há membros a serem verificados."],
+                list: response.data,
+            })
         } else {
             this.setState({
                 list: response.data,
                 status: response.status,
-                message: ""
             })
         }
+        this.setState({ loaded: true })
     }
 
     async decline(e) {
@@ -59,7 +64,6 @@ export default class UserCrud extends Component {
 
             this.setState({
                 loaded: false,
-                message: ""
             })
 
             const body = {
@@ -78,7 +82,7 @@ export default class UserCrud extends Component {
             if (res.status === 200) {
 
                 this.setState({
-                    message: res.data.message,
+                    message: [...this.state.message, res.data.message],
                     color: "success",
                     loaded: true,
 
@@ -87,7 +91,7 @@ export default class UserCrud extends Component {
 
             } else {
                 this.setState({
-                    message: res.data.message,
+                    message: [...this.state.message, res.data.message],
                     color: 'message',
                     loaded: true,
                 })
@@ -107,7 +111,6 @@ export default class UserCrud extends Component {
 
             this.setState({
                 loaded: false,
-                message: ""
             })
 
             const body = {
@@ -126,14 +129,17 @@ export default class UserCrud extends Component {
             if (res.status === 200) {
 
                 this.setState({
-                    message: res.data.message,
+                    message: [...this.state.message, res.data.message],
                     color: "success",
                     loaded: true
                 })
                 this.getUser()
 
             } else {
-                this.setState({ message: res.data.message, color: 'message' })
+                this.setState({
+                    message: [...this.state.message, res.data.message],
+                    color: 'message'
+                })
             }
         } else {
             return false
@@ -143,7 +149,21 @@ export default class UserCrud extends Component {
     renderTable() {
         return (
             <div>
-                <p><strong>{this.state.message}</strong></p>
+                <div>
+                    {
+                        this.state.message ? (
+                            this.state.message.map((element, i) => {
+                                console.log(element);
+                                return (
+                                    <div>
+                                        <p>{element}</p>
+                                    </div>
+                                )
+                            })
+                        ) : ""
+
+                    }
+                </div>
                 <table>
                     <thead>
                         <tr>
@@ -175,6 +195,11 @@ export default class UserCrud extends Component {
     }
 
     renderRows() {
+        if (!this.state.loaded) {
+            return (
+                <p>Carregando...</p>
+            )
+        }
         return this.state.list.map(user => {
             return (
                 <tr key={user._id}>

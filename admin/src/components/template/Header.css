@@ -1,7 +1,8 @@
+/* 576 */
 header.header {
     background-color: #FFF;
     padding: 0px 15px;
-    overflow: hidden;
+    overflow-x: auto;
     white-space: nowrap;
     box-shadow: var(--shadow);
 }

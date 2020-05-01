@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken');
 const authConfig = require('../config/auth.json');
 
-// console.log(authConfig);
-
 // nota-se que:
 // 401 e 403 tem diferença:
 // 401 é que falta informação -> unauthorized

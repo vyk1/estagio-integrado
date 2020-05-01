@@ -67,7 +67,7 @@ module.exports = {
 
                                 activity.save((err, activity) => {
                                     if (err) {
-                                        console.log('deu algo de errado ao salvar');
+                                        console.log('Ocorreu um erro ao salvar...');
                                         console.log(err);
                                         return res.status(400).json({ status: 400, message: "Erro ao salvar atividade. Tente novamente." });
                                     } else {
@@ -84,11 +84,11 @@ module.exports = {
                             })
                             .catch(err => {
                                 console.log(err);
-                                console.log("erro na compressão");
+                                console.log("Ocorreu um erro na compressão");
                                 return res.status(400).json({ status: 400, message: "Ocorreu um erro, por favor tente novamente." });
                             })
                     } else {
-                        console.log('não tá vago, retornando...');
+                        console.log('Não está vago...');
                         fs.unlink(`./uploads/${req.file.filename}`, err => {
                             if (err) console.log(err)
                         });
@@ -98,8 +98,7 @@ module.exports = {
 
             })
         } else {
-
-            console.log('img not recebida');
+            console.log('Imagem não recebida');
             return res.status(400).send({ status: 400, message: "Imagem não recebida." });
         }
 
@@ -133,7 +132,6 @@ module.exports = {
                             Internship.findByIdAndUpdate(id_internship, { $push: { id_activities: activity.id } }, { new: true, useFindAndModify: false }, (err, internship) => {
                                 if (err || internship == null) {
                                     console.log(err);
-                                    console.log(internship);
                                     return res.status(400).send({ status: 400, message: "Erro ao salvar atividade!" });
                                 } else {
                                     return res.status(201).send({ status: 201, message: "Atividade Cadastrada!" });

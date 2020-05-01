@@ -37,9 +37,10 @@ export default class InfoStage extends Component {
     }
 
     async handleDoc(item) {
-        const { fileName, key, page, link } = item
+        const { fileName, key, link } = item
+
         if (link != null) {
-            Linking.openURL(link);
+            return Linking.openURL(link);
         } else {
             this.setState({ loaded: false })
 
@@ -69,14 +70,14 @@ export default class InfoStage extends Component {
                     await config(options)
                         .fetch('GET', `${server}/files/docs/${fileName}.pdf`)
                         .then((res) => {
-                            this.setState({ msgDownload: `Arquivo Baixado: ${fileName}.pdf` })
+                            this.setState({ msgDownload: `Arquivo Baixado: ${fileName}.pdf. Você pode conferí-lo no diretório de Downloads do dispositivo. Ou baixando novamente.` })
                         })
                         .catch((err) => {
                             console.log(err);
                             this.setState({ msgDownload: `Ocorreu um erro ao baixar o arquivo ${fileName}.pdf` })
                         })
                 } else {
-                    this.setState({ msgDownload: 'Permissão Negada! É necessário que você conceda acesso ao aplicativo para fazer download do arquivo.' })
+                    this.setState({ msgDownload: 'Permissão Negada. É necessário que você conceda acesso ao aplicativo para fazer download do arquivo.' })
                 }
             } catch (err) {
                 console.warn(err);
@@ -97,7 +98,7 @@ export default class InfoStage extends Component {
     render() {
         if (this.state.loaded == false) {
             return (
-                <Esperador />
+                <Esperador critical={true} />
             )
         } else {
             return (
@@ -108,7 +109,7 @@ export default class InfoStage extends Component {
                     {
                         this.state.msgDownload && (
                             <CardItem>
-                                <Text>{this.state.msgDownload}</Text>
+                                <Text style={styles.msgDownload}>{this.state.msgDownload}</Text>
                             </CardItem>
                         )
                     }
@@ -127,7 +128,10 @@ export default class InfoStage extends Component {
 }
 
 const styles = StyleSheet.create({
-
+    msgDownload: {
+        color: '#000',
+        fontSize: 11
+    },
     MainContainer: {
         justifyContent: 'center',
         flex: 1,

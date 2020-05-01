@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, FlatList, Text, View, Platform } from 'react-native';
 import server from "../config/server";
 import Esperador from '../components/Esperador';
-import { readUser, onLogout, readToken, teste } from "../config/auth";
+import { readUser, onLogout, readToken } from "../config/auth";
 import { NavigationActions, StackActions } from 'react-navigation';
 
 export default class StudentMain extends Component {

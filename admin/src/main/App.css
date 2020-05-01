@@ -46,7 +46,6 @@ footer.footer {
     grid-area: footer;
 }
 
-
 /* comentar abaixo para virar do lado */
 
 @media(max-width: 768px) {
@@ -57,7 +56,7 @@ footer.footer {
     }
 }
 
-@media(max-width: 526px) {
+@media(max-width: 576px) {
     .app {
         grid-template-rows: var(--logo-height) var(--menu-top-height) 1fr var(--footer-height);
         grid-template-columns: 1fr;

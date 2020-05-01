@@ -13,7 +13,6 @@ var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json();
 
 routes.get('/', (req, res) => {
-    // console.log(req);
     return res.status(200).send({ status: 200, message: "Ei, DB" });
 })
 
