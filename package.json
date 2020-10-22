@@ -10,8 +10,10 @@
         "build_web_admin": "cd admin/ && yarn build",
 
         "predeploy": "pm2 stop all && pm2 delete all && rm -rf ei/",
-        "d_admin": "cp -r ./admin/. ../admin/. && cd ../admin && pm2 serve ./src/build/ 21185 --name 'Static Admin'",
-        "d_backend": "cd ./ backend && pm2 serve ./index.js --name 'Server'",
-        "d_releases": "cd ./ releases && mv -r . ../../../www/."
+        "d_admin": "cp -r ./admin/. ../admin/. && cd ../admin && pm2 serve ./build/ 21185 --name \"Static Admin\"",
+        "d_backend": "cd ./backend && pm2 start ./src/index.js 21089 --name \"Server\"",
+        "d_releases": "cd ./releases && mv -r . ../../../www/.",
+
+        "finalize": "rm -rf ./admin ./releases ./Commands package.json"
     }
 }
