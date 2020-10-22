@@ -153,7 +153,7 @@ module.exports = {
         try {
             const act = await Activity.findById(id)
             console.log(act);
-            debugger
+            // debugger
 
             if (act.image != null || "") {
                 fs.unlink(`./uploads/${act.image}`)
