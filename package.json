@@ -1,6 +1,5 @@
 {
     "scripts": {
-        "check_nvm": "nvm use 8.11.3",
         "back": "cd backend/ && yarn dev",
         "mob": "cd ei/ && yarn start",
         "web_admin": "cd admin/ && yarn start",
