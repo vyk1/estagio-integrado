@@ -1,3 +1,6 @@
 {
-    "appService.showBuildDuringDeployPrompt": false
+    "appService.showBuildDuringDeployPrompt": false,
+    "staticWebApps.appSubpath": "admin/build",
+    "staticWebApps.apiSubpath": "/",
+    "staticWebApps.appArtifactSubpath": "build"
 }
