@@ -156,7 +156,7 @@ module.exports = {
             // debugger
 
             if (act.image != null || "") {
-                fs.unlink(`./uploads/${act.image}`)
+                fs.unlinkSync(`./uploads/${act.image}`)
             }
 
             Internship.findByIdAndUpdate(act.id_internship, { $pull: { id_activities: act._id } }, { new: true, useFindAndModify: false }, (err, internship) => {
