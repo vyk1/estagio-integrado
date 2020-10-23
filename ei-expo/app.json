@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "ei-expo",
+    "slug": "ei-expo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/logo.png",
+    "splash": {
+      "image": "./src/assets/logowritten.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#62D4FF"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "android": {
+      "package": "com.vyk1.eiexpo"
+    }
+  }
+}
