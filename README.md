@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/vyk1/estagio-integrado">
-    <img alt="ESTÁGIO INTEGRADO" src="/src/assets/images/logo.png" width="300" />
+    <img alt="ESTÁGIO INTEGRADO" src="/admin/src/assets/imgs/logo.png" width="300" />
   </a>
 </p>
 
@@ -14,7 +14,7 @@
 |--|--|
 | PO | Desenvolvedora |
 
-
+''
 ## Contatos
 
 Josiana Rita Bazana - josiana.bazana@iffarroupilha.edu.br
