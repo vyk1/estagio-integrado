@@ -6,7 +6,8 @@
 
 > Repositório destinado ao desenvolvimento do aplicativo Estágio Integrado desenvolvido durante o mestrado da Me. Josiana Bazana
 
-  
+## Tutorial?
+Clique [aqui](https://htmlpreview.github.io/?https://github.com/vyk1/projetoEi/blob/master/releases/index.html)
 
 ## 🤝 Equipe
   
